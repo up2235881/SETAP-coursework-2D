@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot-ify</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgb(252, 255, 255);
+            text-align: center;
+        }
+        
+        .title {
+            font-style: italic;
+            font-size: 5em;
+            font-weight: bold;
+            color: #333;
+            height: 100px;
+        }
+        .illustration img {
+            width: 100%;
+            max-width: 250px;
+        }
+        .description {
+            margin-top: 10px;
+            font-size: 1em;
+            color: #555;
+        }
+        .dots {
+            margin-top: 20px;
+        }
+        .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .dot.active {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="title">Slot-ify</h2>
+        <div class="illustration">
+            <img src="/SETAP-coursework/frontend/images/Managers-team-Graphics-17978760-1.jpg" alt="Phone illustration">
+        </div>
+        <p class="description">Get things done with our fast-tracking scheduling app!</p>
+        <div class="dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let dots = document.querySelectorAll(".dot");
+            let activeIndex = 0;
+
+            setInterval(() => {
+                dots[activeIndex].classList.remove("active");
+                activeIndex = (activeIndex + 1) % dots.length;
+                dots[activeIndex].classList.add("active");
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
