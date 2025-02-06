@@ -20,3 +20,7 @@ function clearText() {
 }
 
 typeText();
+// Redirect to login page after 5 seconds
+setTimeout(function () {
+    window.location.href = "/SETAP-coursework/frontend/loginpage/login.html"; // Replace with your login page URL
+}, 8000);
