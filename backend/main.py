@@ -83,3 +83,29 @@ def test_users():
 
 test_users()
 
+
+
+def test_auth():
+    user1 = User("Ram", 'Ram@wee.com', 'bvaecaeik339')
+    user2 = User("Rohit", 'Rohit@wee.com', 'vcwevr9')
+
+    users = UserAccountManager()
+
+    print(users.register_user(user1))  
+    print(users.register_user(user2))  
+    print(users.register_user(user1))  
+
+    print(users)
+
+    print(users.login_user('Ram@wee.com', 'bvaecaeik339'))  
+    print(users.login_user('Rohit@wee.com', 'wrongpassword'))    
+    print(users.login_user('unknown@wee.com', 'password'))       
+
+    print(users.delete_user('Rohit@wee.com'))  
+    print(users.delete_user('Rohit@wee.com'))  
+
+    print(users)
+
+
+test_auth()
+
