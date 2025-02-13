@@ -29,11 +29,10 @@ class UserAccountManager:
         # Check if email already exists
         for existing_user in self.users:
             if existing_user.email == user.email:
-                print("Account already exists")
-                return
+                return "Account already exists"
 
         self.users.append(user)
-        print("Account created successfully")
+        return "Account created successfully"
 
     def login_user(self, user):
         found = False
@@ -41,9 +40,9 @@ class UserAccountManager:
             if existing_user.email == user.email:
                 found = True
                 if existing_user.password == user.password:
-                    print("Logged in")
+                    return "Logged in"
                 else:
-                    print("Password is incorrect")
+                    return "Password is incorrect"
                 return  # Exit after finding a match
 
         if not found:
