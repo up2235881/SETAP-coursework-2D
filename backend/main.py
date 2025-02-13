@@ -84,10 +84,9 @@ def test_users():
 test_users()
 
 
-
 def test_auth():
-    user1 = User("Ram", 'Ram@wee.com', 'bvaecaeik339')
-    user2 = User("Rohit", 'Rohit@wee.com', 'vcwevr9')
+    user1 = User("Ram", 'Ram@wee.com', 'newpassword123')
+    user2 = User("Rohit", 'Rohit@wee.com', 'newpassword456')
 
     users = UserAccountManager()
 
@@ -97,7 +96,7 @@ def test_auth():
 
     print(users)
 
-    print(users.login_user('Ram@wee.com', 'bvaecaeik339'))  
+    print(users.login_user('Ram@wee.com', 'newpassword123'))  
     print(users.login_user('Rohit@wee.com', 'wrongpassword'))    
     print(users.login_user('unknown@wee.com', 'password'))       
 
@@ -108,4 +107,3 @@ def test_auth():
 
 
 test_auth()
-
