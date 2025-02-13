@@ -10,11 +10,9 @@ body {
 }
 
 .container {
-    position: relative;
     width: 100%;
     max-width: 400px;
     text-align: center;
-    margin-bottom: 30px;
 }
 
 .card {
@@ -22,11 +20,10 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2rem;
-    width: 50%;
-    height: 45%;
+    width: 100%;
 }
 
-.h2 {
+h2 {
     font-size: 24px;
     margin-bottom: 1rem;
 }
@@ -38,17 +35,18 @@ form {
 }
 
 input {
-    width:70%;
+    width: 100%;
     padding: 10px;
-    margin: 10px;
+    margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
 }
 
 button {
+    width: 100%;
     padding: 10px;
-    background-color: #b2e6eb;
+    background-color: #00a8cc;
     border: none;
     border-radius: 5px;
     font-size: 16px;
@@ -59,7 +57,7 @@ button {
 }
 
 button:hover {
-    background-color: #86d1d8;
+    background-color: #007a99;
 }
 
 .register-link {
@@ -69,7 +67,6 @@ button:hover {
     text-decoration: none;
 }
 
-
-.register-link a:hover {
+.register-link:hover {
     text-decoration: underline;
 }
