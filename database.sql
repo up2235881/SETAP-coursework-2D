@@ -15,11 +15,11 @@ CREATE TYPE
 CREATE TABLE users (
         user_id SERIAL PRIMARY KEY,
         user_student_id VARCHAR(10) NOT NULL,
-        user_email VARCHAR(150) NOT NULL,
-        user_password VARCHAR(50) NOT NULL,
         user_first_name VARCHAR(50) NOT NULL,
         user_middle_name VARCHAR(50),
         user_surname VARCHAR(50) NOT NULL,
+        user_email VARCHAR(150) NOT NULL,
+        user_password VARCHAR(50) NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
