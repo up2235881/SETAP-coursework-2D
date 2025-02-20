@@ -1,109 +1,78 @@
-class availability():
-   
-    def __init__(self): 
-        pass
-class Meeting(): 
-    def __init__(self): 
-        pass
-class rooms_participant():
-    def __init__(self):
-        pass
+from flask import Flask, jsonify, render_template, request, psycopg2, bcrypt
+#database
+
+app = Flask('__name__')
+app.secret_key = 'setap_app'
+
+#database configuration
+db_pool = psycopg2.pool.SimpleConnectionPool(
+    1, 20,
+    database="setap_db",
+    user="username",
+    password="password",
+    host="localhost"
+)
 
 
-class User:
-    def __init__(self, user_name, email, password):
-        self.user_name = user_name
-        self.email = email
-        self.password = password
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
-    def __str__(self):
-        return f"User(user_name='{self.user_name}', email='{self.email}')"
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+    
+    conn = db_pool.getconn()
+    try:
+        data = request.form  # Changed from request.json to request.form
+        username = data['username']
+        email = data['email']
+        password = data['password']
 
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-class UserAccountManager:
-    def __init__(self):
-        self.users = []
+        with conn.cursor() as cur:
+            cur.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+                        (username, email, hashed_password))
+        conn.commit()
 
-    def register_user(self, user):
-        # Check if email already exists
-        for existing_user in self.users:
-            if existing_user.email == user.email:
-                return "Account already exists"
+        return render_template('login.html', message='User registered successfully!')
+    except psycopg2.Error as e:
+        conn.rollback()
+        return render_template('register.html', error=f'Registration failed: {str(e)}')
+    finally:
+        db_pool.putconn(conn)
 
-        self.users.append(user)
-        return "Account created successfully"
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    
+    conn = db_pool.getconn()
+    try:
+        data = request.form  # Changed from request.json to request.form
+        email = data['email']
+        password = data['password']
 
-    def login_user(self, user):
-        found = False
-        for existing_user in self.users:
-            if existing_user.email == user.email:
-                found = True
-                if existing_user.password == user.password:
-                    return "Logged in"
-                else:
-                    return "Password is incorrect"
-                return  # Exit after finding a match
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+            user = cur.fetchone()
 
-        if not found:
-            print("Account doesn't exist")
+        if user:
+            stored_password = user[3]  # password is at index 3 in the 'users' table
 
-    def delete_user(self, user):
-        if user in self.users:
-            self.users.remove(user)
-            return 'user removed successfully'
+            if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+                return render_template('index.html', message='Login successful!')
+            else:
+                return render_template('login.html', error='Invalid password!')
         else:
-            return "User doesn't exist"
-        
-    def __str__(self):
-        output = ""
-        for user in self.users:
-            output += f"{user},\n"
+            return render_template('login.html', error='User not found!')
+    except psycopg2.Error as e:
+        return render_template('login.html', error=f'Login failed: {str(e)}')
+    finally:
+        db_pool.putconn(conn)
 
-        return output
-
-        
-
-
-def test_users():
-    user1 = User("Jassi", 'jasdeep@wee.com', 'bvaecaeik339')
-    user2 = User("Tannu", 'tannu@wee.com', 'vcwevr9')
-
-    users = UserAccountManager()
-    users.register_user(user1)
-    users.register_user(user2)
-
-    # Print users in a readable format
-    print(users)
-
-    users.delete_user(user2)
-
-    print(users)
-
-
-test_users()
-
-
-def test_auth():
-    user1 = User("Ram", 'Ram@wee.com', 'newpassword123')
-    user2 = User("Rohit", 'Rohit@wee.com', 'newpassword456')
-
-    users = UserAccountManager()
-
-    print(users.register_user(user1))  
-    print(users.register_user(user2))  
-    print(users.register_user(user1))  
-
-    print(users)
-
-    print(users.login_user('Ram@wee.com', 'newpassword123'))  
-    print(users.login_user('Rohit@wee.com', 'wrongpassword'))    
-    print(users.login_user('unknown@wee.com', 'password'))       
-
-    print(users.delete_user('Rohit@wee.com'))  
-    print(users.delete_user('Rohit@wee.com'))  
-
-    print(users)
-
-
-test_auth()
+if __name__ == '__main__':
+    app.run(debug=True)
