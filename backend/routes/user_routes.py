@@ -9,18 +9,15 @@ def register():
     try:
         data = request.json
         username = data.get("username")
-        first_name = data.get('first name')
-        #middle_name = None or data['middle name']
-        surname  = data.get('surname')
         email = data.get('email')
         password = data.get('password')
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        if not all([username, first_name, surname, email, password]):
+        if not all([username, email, password]):
             return jsonify({"error": "Missing required fields"}), 400
         
-        user_id = create_user_service(username, first_name, surname, email, hashed_password)
+        user_id = create_user_service(username, email, hashed_password)
         return jsonify({"message" : "User registred successfully!", "user_id" : user_id}), 201
     except Exception as e:
         return jsonify({"error" : str(e)}), 500
@@ -50,4 +47,5 @@ def login():
     
     except Exception as e:
         return jsonify({"error" : str(e)}), 500
+        
         

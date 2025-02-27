@@ -12,11 +12,11 @@ def get_user_by_email_service(email):
 def get_user_by_username_service(username):
     return get_user_by_username(username)
 
-def create_user_service(username, first_name, middle_name, surname, email, password):
-    return create_user(username, first_name, middle_name, surname, email, password)
+def create_user_service(username, email, password):
+    return create_user(username, email, password)
 
-def update_user_service(user_id, username, first_name, middle_name, surname, email, password):
-    return update_user(user_id, username, first_name, middle_name, surname, email, password)
+def update_user_service(user_id, username, email, password):
+    return update_user(user_id, username, email, password)
 
 def delete_user_service(user_id):
     return delete_user(user_id)
