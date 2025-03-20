@@ -1,30 +1,29 @@
-document.getElementById('login-form').addEventListener('submit', async function(event) {
+document.getElementById('login-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     
     const studentEmailUsername = document.getElementById('student-username-email').value;
     const password = document.getElementById('password').value;
+    try{
+        const response = await fetch ('/login', { 
+            method: "POST",
+            headers: {
+                'Content-type' : 'application/json',
+                'Accept' : 'application/json'
+            },  
+            body: JSON.stringify({ 
+                email: studentEmailUsername.includes(('@')) ? studentEmailUsername : null,
+                username: studentEmailUsername,
+                password : password
+            })
+        });
 
-    const response = await fetch ('http://127.0.0.1:5000/login',{
-        method: 'POST',
-        headers: {'Content-type' : 'application/json' ,
-                  'Accept' : 'application/json'
-                },
-        mode: 'cors',
-        credentials: 'include',
-        body: JSON.stringify({
-            email: studentEmailUsername.includes(('@')) ? studentEmailUsername : null,
-            username: studentEmailUsername.includes('@') ? null : studentEmailUsername,
-            password : password
-        })
-    });
-
-    const result = await response.json();
-
-    if (response.status === 200) {
-        alert(`Login successful! Welcome ${result.studentEmailUsername}`);
-        window.location.href = 'dashboard.html';
-    } else {
-        alert(result.error);
+        const result = await response.json();
+        alert(result.message);
+        if(response.status === 200){
+            window.location.href = 'dashboard.html';
+        } 
+    } catch (error) {
+        alert('An error occured: ' + error.message);
     }
     
 });
