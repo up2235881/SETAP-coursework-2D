@@ -1,4 +1,4 @@
-const db = require('../configs/db.config');
+const db = require('../configs/db_config');
 
 
 const Room = {
