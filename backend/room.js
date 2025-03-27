@@ -19,9 +19,9 @@ app.post('/create-room', async (req, res) => {
             room: newRoom
         });
     } catch (error) {
-        if (error.code === '23505') { // Unique constraint violation
-            return res.status(409).json({ message: "Invite code already exists. Please try again." });
-        }
+        // if (error.code === '23505') { // Unique constraint violation
+        //     return res.status(409).json({ message: "Invite code already exists. Please try again." });
+        // }
         console.error('Error creating room:', error);
         res.status(500).json({ message: "Error creating room" });
     }
