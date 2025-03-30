@@ -1,4 +1,4 @@
-const db = require('../configs/db_config');
+const db = require('../configs/db.config');
 
 const Room = {
     // Get a room by invite code
