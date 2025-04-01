@@ -1,7 +1,7 @@
-const db = require('../configs/db.config');
+const db = require('../configs/db_config');
 
 const Room = {
-    // Get a room by invite code
+    // Get a room by its invite code
     async getByInviteCode(invite_code) {
         const query = 'SELECT room_id, room_name FROM rooms WHERE invite_code = $1';
         const { rows } = await db.query(query, [invite_code]);
@@ -31,8 +31,7 @@ const Room = {
             const message = `You have joined the room "${room_name}"`;
             await client.query(
                 `INSERT INTO notifications 
-                (user_id, message, sent_at, notification_status, expiration_date)
-                VALUES ($1, $2, CURRENT_TIMESTAMP, 'Sent', CURRENT_TIMESTAMP + INTERVAL '7 days')`,
+                (user_id, message, sent_at, notification_status, expiration_date) VALUES ($1, $2, CURRENT_TIMESTAMP, 'Sent', CURRENT_TIMESTAMP + INTERVAL '7 days')`,
                 [user_id, message]
             );
 
@@ -42,7 +41,7 @@ const Room = {
             await client.query('ROLLBACK'); // Rollback transaction in case of an error
             throw error;
         } finally {
-            client.release(); 
+            client.release(); // Release the database connection back to the pool
         }
     }
 };
