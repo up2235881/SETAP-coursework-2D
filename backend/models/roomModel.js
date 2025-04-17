@@ -80,6 +80,14 @@ const Room = {
         const query = 'SELECT room_id, room_name, invite_code FROM rooms WHERE invite_code = $1';
         const { rows } = await pool.query(query, [invite_code]); 
         return rows[0] || null; // Return first room found or null if not found
+const db = require('../configs/db_config');
+
+const Room = {
+    // Get a room by its invite code
+    async getByInviteCode(invite_code) {
+        const query = 'SELECT room_id, room_name FROM rooms WHERE invite_code = $1';
+        const { rows } = await db.query(query, [invite_code]);
+        return rows[0] || null; // Return the room if found, otherwise null
     },
 
     // Check if a user is already in the room
@@ -89,7 +97,7 @@ const Room = {
         return rows.length > 0; // Return true if user is found, false otherwise
     },
 
-    // Add a user to the room and create a notification
+    // Add a user to a room and create a notification
     async addUserToRoom(user_id, room_id, room_name) {
         const client = await pool.connect(); 
         try {
@@ -100,18 +108,18 @@ const Room = {
                 [user_id, room_id]);
             // Create a notification for the user
             await client.query(
-                'INSERT INTO notifications (user_id, notification_type, message, sent_at, notification_status, expiration_date) ' +
-                'VALUES ($1, $2, $3, CURRENT_TIMESTAMP, $4, CURRENT_TIMESTAMP + INTERVAL \'7 days\')',
-                [user_id, 'General', `You have joined the room "${room_name}`, 'Sent']
+                `INSERT INTO notifications 
+                (user_id, message, sent_at, notification_status, expiration_date) VALUES ($1, $2, CURRENT_TIMESTAMP, 'Sent', CURRENT_TIMESTAMP + INTERVAL '7 days')`,
+                [user_id, message]
             );
-            await client.query('COMMIT'); // Commit the transaction if everything is successful
+
+            await client.query('COMMIT'); // Commit the transaction if successful
             return true;
         } catch (error) {
-            await client.query('ROLLBACK'); // Rollback the transaction in case of an error
-            console.error('Error adding user to room:', error);
+            await client.query('ROLLBACK'); // Rollback transaction in case of an error
             throw error;
         } finally {
-            client.release(); 
+            client.release(); // Release the database connection back to the pool
         }
     }
 
