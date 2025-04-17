@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Meeting Note</title>
+  <link rel="stylesheet" href="meetingnotes.css"/>
+</head>
+<body>
+  <button class="backbtn" onclick="window.location.href='meetingnotes.html'">←</button>
+
+  <form id="notesform">
+    <h2>Input meeting notes</h2>
+
+    <label>Date</label>
+    <input type="date" id="date" required />
+
+    <label>Time</label>
+    <input type="time" id="time" required />
+
+    <label>Purpose</label>
+    <input type="text" id="purpose" required />
+
+    <label>Summary</label>
+    <textarea id="summary" required></textarea>
+
+    <button type="submit" class="savebtn">Save</button>
+  </form>
+
+  <script src="meetingnotes.js"></script>
+</body>
+</html>
