@@ -3,7 +3,7 @@ const db = require('../configs/db_config');
 const Room = {
 
     // New function to create a room in the database
-    async createRoom =  (user_id, room_name, invite_code) {
+    async createRoom (user_id, room_name, invite_code) {
     try {
         const results = await pool.query(
             'INSERT INTO rooms (user_id, room_name, invite_code) VALUES ($1, $2, $3) RETURNING *',
