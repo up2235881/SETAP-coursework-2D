@@ -1,14 +1,4 @@
-const { Pool } = require('pg');
-
-const pool = new Pool ({
-    user:'slotify_team',
-    host: 'localhost',
-    database: 'slotify_db',
-    password:'team_password',
-    port: 5432,
-});
-
-module.exports = pool;
+const pool = require('../configs/db_config');
 
 const getUsers = (req, res) => {
     pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
@@ -37,19 +27,20 @@ const getUserByUsernameOrEmail = (req, res) => {
     pool.query('SELECT * FROM users WHERE user_username = $1 OR user_email = $2', [username, email], (error, results) => {
 
         if (error) {
-            return res.status(500).send({message : error.message})
+            return res.status(500).json({message : error.message})
         } 
         if (results.rows.length > 0) {
             const user = results.rows[0];
             if (user.user_password === password) {
-                return res.status(200).send({
-                    message : `You have signed in successfully, welcome back ${user.user_username || user.user_email}!`
+                req.session.user_id = user.user_id;
+                return res.status(200).json({
+                    message : `Welcome back ${user.user_username || user.user_email}!`
                 });
             } else {
-                return res.status(401).send({message : "Invalid credentials. Try again"})
+                return res.status(401).json({message : "Invalid credentials. Try again"})
             }
         } else { 
-            return res.status(401).send({message : "Invalid credentials. Try again"});
+            return res.status(401).json({message : "Invalid credentials. Try again"});
     }});
 };
 
@@ -60,7 +51,7 @@ const createUser = (req, res) => {
         if(error) {
             throw error
         }
-        res.status(201).send(`User added with  ID: ${results.rows[0].id}`)
+        res.status(201).json({message : `User added with  ID: ${results.rows[0]?.user_id}`})
     })
 }
 
@@ -91,25 +82,11 @@ const deleteUser = (req, res) => {
     })
 }
 
-// New function to create a room in the database
-const createRoom = async (user_id, room_name, invite_code) => {
-    try {
-        const results = await pool.query(
-            'INSERT INTO rooms (user_id, room_name, invite_code) VALUES ($1, $2, $3) RETURNING *',
-            [user_id, room_name, invite_code]
-        );
-        return results.rows[0]; // Return the created room data
-    } catch (error) {
-        throw error; // Re-throw the error to be handled in the route
-    }
-};
-
 module.exports = {
     getUsers, 
     getUserById,
     createUser,
     updateUser,
     deleteUser,
-    getUserByUsernameOrEmail,
-    createRoom
+    getUserByUsernameOrEmail
 };
