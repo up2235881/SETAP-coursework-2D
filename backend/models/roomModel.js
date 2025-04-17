@@ -1,6 +1,20 @@
 const db = require('../configs/db_config');
 
 const Room = {
+
+    // New function to create a room in the database
+    async createRoom =  (user_id, room_name, invite_code) {
+    try {
+        const results = await pool.query(
+            'INSERT INTO rooms (user_id, room_name, invite_code) VALUES ($1, $2, $3) RETURNING *',
+            [user_id, room_name, invite_code]
+        );
+        return results.rows[0]; // Return the created room data
+    } catch (error) {
+        throw error; // Re-throw the error to be handled in the route
+    }
+    },
+    
     // Get a room by its invite code
     async getByInviteCode(invite_code) {
         const query = 'SELECT room_id, room_name FROM rooms WHERE invite_code = $1';
