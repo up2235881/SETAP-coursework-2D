@@ -9,11 +9,11 @@ body{
     font-family: Arial, sans-serif;
 }
 
-.container{
+.form-content{
     text-align: center;
 }
 
-.card{
+#create-room-form{
     background: rgba(173, 216, 230, 0.6);
     padding: 30px;
     border-radius: 10px;
@@ -24,6 +24,7 @@ body{
     align-items: center;
     position: relative;
     padding-top: 60px;
+    margin: 0 auto;
 }
 
 .title{

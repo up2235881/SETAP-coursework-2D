@@ -4,7 +4,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
     const studentEmailUsername = document.getElementById('student-username-email').value;
     const password = document.getElementById('password').value;
     try{
-        const response = await fetch ('http://localhost:3000/login', { 
+        const response = await fetch ('http://localhost:3000/api/login', { 
             method: "POST",
             headers: {
                 'Content-type' : 'application/json',
@@ -20,7 +20,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         const result = await response.json();
         alert(result.message);
         if(response.status === 200){
-            window.location.href = 'dashboard.html';
+            window.location.href = 'Dashboard/dashboard.html';
         } 
     } catch (error) {
         alert('An error occured: ' + error.message);
