@@ -80,14 +80,6 @@ const Room = {
         const query = 'SELECT room_id, room_name, invite_code FROM rooms WHERE invite_code = $1';
         const { rows } = await pool.query(query, [invite_code]); 
         return rows[0] || null; // Return first room found or null if not found
-const db = require('../configs/db_config');
-
-const Room = {
-    // Get a room by its invite code
-    async getByInviteCode(invite_code) {
-        const query = 'SELECT room_id, room_name FROM rooms WHERE invite_code = $1';
-        const { rows } = await db.query(query, [invite_code]);
-        return rows[0] || null; // Return the room if found, otherwise null
     },
 
     // Check if a user is already in the room
