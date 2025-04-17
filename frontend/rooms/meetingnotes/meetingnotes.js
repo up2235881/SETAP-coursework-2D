@@ -4,41 +4,45 @@ document.addEventListener("DOMContentLoaded", () => {
   
     if (notesList) {
       const storedNotes = JSON.parse(localStorage.getItem("meetingNotes")) || [];
-      const MAX_NOTES = 3;
+      const MAX_DUMMIES = 3;
   
-      for (let i = 0; i < MAX_NOTES; i++) {
-        const note = storedNotes[i];
+      // Show dummy placeholders only if fewer than 3 notes exist
+      const dummiesToShow = Math.max(0, MAX_DUMMIES - storedNotes.length);
+  
+      for (let i = 0; i < dummiesToShow; i++) {
         const box = document.createElement("div");
         box.className = "note-box";
-  
-        if (note) {
-          box.innerHTML = `
-            <div onclick="window.location.href='addnote.html?index=${i}'" style="text-align: left;">
-              <strong>${note.purpose}</strong><br/>
-              <small>Created on ${note.date} at ${note.time}</small>
-            </div>
-            <button onclick="deleteNote(${i})">🗑️</button>
-          `;
-        } else {
-          box.innerHTML = `
-            <div onclick="window.location.href='addnote.html'" style="text-align: left;">
-              <strong>Meeting Note ${i + 1}</strong><br/>
-              <small>Click to add details</small>
-            </div>
-            <button disabled>🗑️</button>
-          `;
-        }
-  
+        box.innerHTML = `
+          <div onclick="window.location.href='addnote.html'" style="text-align: left;">
+            <strong>Meeting Note ${i + 1}</strong><br/>
+            <small>Click to add details</small>
+          </div>
+          <button disabled>🗑️</button>
+        `;
         notesList.appendChild(box);
       }
+  
+      // Show all real notes
+      storedNotes.forEach((note, index) => {
+        const box = document.createElement("div");
+        box.className = "note-box";
+        box.innerHTML = `
+          <div onclick="window.location.href='addnote.html?index=${index}'" style="text-align: left;">
+            <strong>${note.purpose}</strong><br/>
+            <small>${note.date} at ${note.time}</small>
+          </div>
+          <button onclick="deleteNote(${index})">🗑️</button>
+        `;
+        notesList.appendChild(box);
+      });
     }
   
+    // Handle add/edit form
     if (form) {
       const params = new URLSearchParams(window.location.search);
       const index = params.get("index");
       const existing = JSON.parse(localStorage.getItem("meetingNotes")) || [];
   
-      // If editing, load note into form
       if (index !== null && existing[index]) {
         const note = existing[index];
         document.getElementById("date").value = note.date;
@@ -47,9 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("summary").value = note.summary;
       }
   
-      // Save handler
       form.addEventListener("submit", (e) => {
         e.preventDefault();
+  
         const date = document.getElementById("date").value;
         const time = document.getElementById("time").value;
         const purpose = document.getElementById("purpose").value;
@@ -58,12 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const newNote = { date, time, purpose, summary };
   
         if (index !== null && existing[index]) {
-          existing[index] = newNote; // Edit existing
-        } else if (existing.length < 3) {
-          existing.push(newNote); // Add new
+          existing[index] = newNote;
         } else {
-          alert("Maximum of 3 notes reached!");
-          return;
+          existing.push(newNote);
         }
   
         localStorage.setItem("meetingNotes", JSON.stringify(existing));
@@ -73,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
-  // Delete a note
+  // Delete function
   function deleteNote(index) {
     const storedNotes = JSON.parse(localStorage.getItem("meetingNotes")) || [];
     storedNotes.splice(index, 1);
