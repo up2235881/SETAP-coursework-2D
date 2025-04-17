@@ -1,5 +1,5 @@
 const text = "Get things done with our fast-tracking scheduling app!";
-const typingTextElement = document.getElementById('typing-text');
+const typingTextElement = document.querySelector('#typing-text');
 let index = 0;
 const typingSpeed = 100;
 
@@ -23,4 +23,4 @@ typeText();
 // Redirect to login page after 5 seconds
 setTimeout(function () {
     window.location.href = "/SETAP-coursework/frontend/loginpage/login.html"; // Replace with your login page URL
-}, 8000);
+}, 10000);
