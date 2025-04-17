@@ -92,18 +92,7 @@ const deleteUser = (req, res) => {
     })
 }
 
-// New function to create a room in the database
-const createRoom = async (user_id, room_name, invite_code) => {
-    try {
-        const results = await pool.query(
-            'INSERT INTO rooms (user_id, room_name, invite_code) VALUES ($1, $2, $3) RETURNING *',
-            [user_id, room_name, invite_code]
-        );
-        return results.rows[0]; // Return the created room data
-    } catch (error) {
-        throw error; // Re-throw the error to be handled in the route
-    }
-};
+
 
 module.exports = {
     getUsers, 
@@ -112,5 +101,5 @@ module.exports = {
     updateUser,
     deleteUser,
     getUserByUsernameOrEmail,
-    createRoom
+    // createRoom
 };
