@@ -37,4 +37,29 @@ app.get('/login', (req, res) => {
     })
 })
 
+app.post('/login', (req, res) => {
+
+    const {username, email, password} = req.body;
+
+    console.log('req.body:', req.body)
+    if(!password) {
+        return res.status(400).send({message: "Password is required!"});
+    } 
+    if(!username && !email) {
+        return res.status(400).send({
+            message:"A username/email is required."
+        });
+    } 
+    db.getUserByUsernameOrEmail(req, res);
+    
+});
+
+app.get('/users', db.getUsers)
+app.get('/users/:id', db.getUserById)
+app.post('/users', db.createUser)
+app.put('/users/:id', db.updateUser)
+app.delete('/users/:id', db.deleteUser)
+
+app.use('/api/rooms', roomRoutes);
+
 app.listen(port, () => console.log(`app listening on port ${port}`));
