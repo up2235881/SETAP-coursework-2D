@@ -1,5 +1,16 @@
 const express = require('express');
 const router = express.Router();
+<<<<<<< HEAD
+const { createRoom, getRoomById, getRoomByName, updateRoom, deleteRoom, joinRoom} = require('../models/roomModel');
+const authMiddleware = require('../middleware/authMiddleware');
+
+router.post('/rooms', authMiddleware,createRoom);
+router.get('/rooms/:id', getRoomById);
+router.post('/rooms/by-name', getRoomByName);
+router.put('/rooms/:id', updateRoom);
+router.put('/rooms/:id', deleteRoom);
+router.post('/joinRoom');
+=======
 const Room = require('../models/roomModel');
 
 // Route to join a room
@@ -32,5 +43,6 @@ router.post('/join-room', async (req, res) => {
         res.status(500).json({ error: 'Failed to join the room' });
     }
 });
+>>>>>>> 7a48ab9ab9ab14d38b2b82e717535d08049e340d
 
 module.exports = router;
