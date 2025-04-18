@@ -23,9 +23,11 @@ const getUserById = (req, res) => {
 const getUserByUsernameOrEmail = (req, res) => {
 
     const { username, email, password } = req.body
-    
-    pool.query('SELECT * FROM users WHERE user_username = $1 OR user_email = $2', [username, email], (error, results) => {
+    if(!password) return res.status(400).json({ message : "Password is required"});
+    if(!username && !email) return res.status(400).json({ message : "Username or email required" });
 
+    pool.query('SELECT * FROM users WHERE user_username = $1 OR user_email = $2', 
+        [username, email], (error, results) => {
         if (error) {
             return res.status(500).json({message : error.message})
         } 
@@ -36,12 +38,11 @@ const getUserByUsernameOrEmail = (req, res) => {
                 return res.status(200).json({
                     message : `Welcome back ${user.user_username || user.user_email}!`
                 });
-            } else {
-                return res.status(401).json({message : "Invalid credentials. Try again"})
             }
-        } else { 
-            return res.status(401).json({message : "Invalid credentials. Try again"});
-    }});
+            return res.status(401).json({message : "Invalid credentials. Try again"})
+        }
+        return res.status(401).json({message : "Invalid credentials. Try again"});
+    });
 };
 
 const createUser = (req, res) => {
