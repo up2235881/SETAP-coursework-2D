@@ -10,6 +10,4 @@ router.delete('/users/:id', deleteUser);
 router.post('/register', createUser);
 router.post('/login', getUserByUsernameOrEmail);
 
-
-
 module.exports = router;
