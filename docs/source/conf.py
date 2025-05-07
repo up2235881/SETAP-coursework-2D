@@ -6,8 +6,8 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Slotify-Mine'
-copyright = '2025, Jasdeep'
+project = 'Slot-ify'
+copyright = '2025, 2D'
 author = 'Jasdeep'
 release = '2025'
 
