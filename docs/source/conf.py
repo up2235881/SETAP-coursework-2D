@@ -8,7 +8,7 @@
 
 project = 'Slot-ify'
 copyright = '2025, 2D'
-author = 'Jasdeep'
+author = 'Team 2D'
 release = '2025'
 
 # -- General configuration ---------------------------------------------------
