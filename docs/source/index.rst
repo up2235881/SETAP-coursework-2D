@@ -100,22 +100,7 @@ Discuss the critical components of the project and their roles.
   - **User**: Defines user details like name, email, and role.
   - **Task**: Defines task details like title, description, status, and assignee.
 
-## Additional Themes
-Include any other relevant information depending on the audience.
 
-### Contribution Guidelines
-- Fork the repository and create a feature branch.
-- Write tests for new features.
-- Submit a pull request with a detailed description of your changes.
-
-### License
-Specify the project's license. For example:
-This project is licensed under the MIT License.
-
-### FAQ
-Answer common questions about the project. For example:
-- **Q: How do I reset my password?**
-  A: Use the "Forgot Password" link on the login page.
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
