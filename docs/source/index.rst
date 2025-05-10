@@ -18,7 +18,13 @@ documentation for details.
 
 **User Requirements**
 
-   
+   **Register an Account**
+      - A new user can create an account by providing a unique username, email, and password.
+      - The user's details are stored in the users table, and a user_id is generated.
+
+   **Login*
+      - A registered user can log in using their credentials.
+      - 
 
    **Authentication**
       - A user can only access room-related features if they are logged in.
