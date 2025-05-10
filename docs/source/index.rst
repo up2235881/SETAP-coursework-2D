@@ -16,6 +16,7 @@ documentation for details.
 
    **Goals**: The goal of the project is to address common challenges in teamwork - such as difficulty in aligning schedules and maintaining clear communication by offering an all in one collaborative space. 
 
+
 **User Requirements**
 
    **Register an Account**
@@ -64,6 +65,7 @@ documentation for details.
 
    ##talk about the features maybe
 
+
 **Setup and Running Instructions**
 
    **Installation Instructions**: This section provides a step-by-step guide to set up the project on your local machine. It includes prerequisites, installation steps, and how to run the application.
@@ -110,6 +112,8 @@ documentation for details.
 The app should now be running on http://localhost:3000
 
 6. Open `index.html` in a browser to interact with the frontend.
+
+
 
 **Main Components of the Project**
    Discuss the critical components of the project and their roles.
