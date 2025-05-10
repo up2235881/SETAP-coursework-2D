@@ -10,20 +10,10 @@ Add your content using ``reStructuredText`` syntax. See the
 `reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
 documentation for details.
 
-Scope of the Project
+**Scope of the Project**
 
-Slot-ify is a web - based group scheduling and collaboration application developed to help students coordinate team meetings and manage shared tasks more effectively. The system enables users to register and log in securely, create or join rooms, input their availability, automatically find the best meeting times, and upload or view meeting notes.
-
-The goal of the project is to address common challenges in teamwork - such as difficulty in aligning schedules and maintaining clear communication by offering an all in one collaborative space. 
-
-## Scope of the Project
-This section provides an overview of the project's purpose, goals, and scope.
-
-- **Project Purpose**: Describe the main reason for the project. For example, "This project aims to create a web-based task management tool to help teams collaborate effectively."
-- **Goals**: List the specific goals and objectives. For example:
-  - Allow users to create, assign, and track tasks.
-  - Provide real-time notifications and updates.
-  - Integrate with third-party tools like Slack and Google Calendar.
+- **Project Purpose**: Slot-ify is a web - based group scheduling and collaboration application developed to help students coordinate team meetings and manage shared tasks more effectively. The system enables users to register and log in securely, create or join rooms, input their availability, automatically find the best meeting times, and upload or view meeting notes.
+- **Goals**: The goal of the project is to address common challenges in teamwork - such as difficulty in aligning schedules and maintaining clear communication by offering an all in one collaborative space. 
 
 ## User Requirements
 Outline the needs and expectations of the project's target audience.
