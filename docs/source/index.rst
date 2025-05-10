@@ -22,9 +22,9 @@ documentation for details.
       - A new user can create an account by providing a unique username, email, and password.
       - The user's details are stored in the users table, and a user_id is generated.
 
-   **Login*
+   **Login**
       - A registered user can log in using their credentials.
-      - 
+      - Upon successful login, a session is created (req.session.user_id), which is required for accessing most room functionalities.
 
    **Authentication**
       - A user can only access room-related features if they are logged in.
