@@ -16,13 +16,32 @@ documentation for details.
 
 **Goals**: The goal of the project is to address common challenges in teamwork - such as difficulty in aligning schedules and maintaining clear communication by offering an all in one collaborative space. 
 
-## User Requirements
-Outline the needs and expectations of the project's target audience.
+**User Requirements**
 
-- Users should be able to sign up, log in, and manage their profiles.
-- Tasks should be sortable by priority, due date, and assignee.
-- The system should support team-based collaboration with multiple roles (Admin, Member, Viewer).
-- A responsive design that works well on both desktop and mobile devices.
+   
+
+   **Authentication**
+      - A user can only access room-related features if they are logged in.
+      - Session-based authentication (req.session.user_id) ensures only authenticated users can create or join rooms.
+
+   **Create Room**
+      - A logged-in user can create a new room by providing a room name.
+      - Upon creation, a unique 6-character invite code is automatically generated and stored along with the room.
+
+   **Join Room via Invite Code**
+      - A user can join an existing room by submitting a valid invite code.
+      - The system checks that the room exists and that the user is not already a participant.
+      - Once joined, the user is added to the room’s participant list, and a notification is created.
+
+   **Access Room Information**
+      - A user can retrieve room details either by room ID or by room name.
+   
+   **Update or Delete Room**
+      - Users can update or delete a room they created using the room ID.
+      - Room name updates are validated to ensure data consistency.
+   
+   **Receive Notifications**
+      - When a user joins a room, a notification is automatically generated to confirm the action.
 
 ## Elements of Implementation
 Explain the key technologies or methodologies used to implement the project.
