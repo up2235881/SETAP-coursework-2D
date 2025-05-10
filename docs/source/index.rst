@@ -49,6 +49,7 @@ documentation for details.
    **Receive Notifications**
       - When a user joins a room, a notification is automatically generated to confirm the action.
 
+
 **Elements of Implementation**
    **Technologies Used**: The project was developed using a combination of technologies to ensure a robust and scalable application.
       - *Frontend:* HTML5, CSS3, and vanilla JavaScript were used to build the user interface. The design focuses on simplicity and accessibility for tasks like room creation and joining.
@@ -60,6 +61,8 @@ documentation for details.
       - *Authentication:* Session-based authentication was implemented using express-session to manage user login states securely across requests.
 
       - *Notifications(Planned):* Internal notification logic is implemented, with room to extend to email or push notifications in future iterations.
+
+   ##talk about the features maybe
 
 **Setup and Running Instructions**
 
@@ -94,6 +97,7 @@ documentation for details.
    npm install
 
 4. Configure the database:
+
    - Ensure the database credentials in db_config.js match your local setup.
    - Run the provided database.sql script to create necessary tables.
 
@@ -108,24 +112,24 @@ The app should now be running on http://localhost:3000
 6. Open `index.html` in a browser to interact with the frontend.
 
 **Main Components of the Project**
-Discuss the critical components of the project and their roles.
+   Discuss the critical components of the project and their roles.
 
-### Frontend
-- **Components**: TaskList, TaskForm, UserProfile, etc.
-- **State Management**: Context API for global state.
+    **Frontend**
+      - **Components**: TaskList, TaskForm, UserProfile, etc.
+      - **State Management**: Context API for global state.
 
-### Backend
-- **API Endpoints**:
-  - `POST /api/tasks`: Create a new task.
-  - `GET /api/tasks`: Retrieve tasks.
-  - `PUT /api/tasks/:id`: Update a task.
-  - `DELETE /api/tasks/:id`: Delete a task.
-- **Middleware**: Authentication, logging, and error handling.
+    **Backend**
+      - **API Endpoints**:
+      - `POST /api/tasks`: Create a new task.
+      - `GET /api/tasks`: Retrieve tasks.
+      - `PUT /api/tasks/:id`: Update a task.
+      - `DELETE /api/tasks/:id`: Delete a task.
+      - **Middleware**: Authentication, logging, and error handling.
 
-### Database
-- **Schema**:
-  - **User**: Defines user details like name, email, and role.
-  - **Task**: Defines task details like title, description, status, and assignee.
+    **Database**
+      - **Schema**:
+      - **User**: Defines user details like name, email, and role.
+      - **Task**: Defines task details like title, description, status, and assignee.
 
 
 .. toctree::
