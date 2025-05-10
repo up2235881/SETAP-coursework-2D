@@ -76,26 +76,26 @@ documentation for details.
    **Steps to Set Up**
 
       1. Clone the repository:
-         ```bash
+         ``bash
          git clone https://github.com/up2235881/SETAP-coursework-2D.git
-         ```
+         ``
       2. Navigate to the project directory:
-         ```bash
+         ``bash
          cd SETAP-coursework-2D
-         ```
+         ``
       3. Install dependencies:
-         ```bash
+         ``bash
          npm install
-         ```
+         ``
       4. Configure the database:
-         ```
+         ``bash
          -Ensure the database credentials in db_config.js match your local setup.
          -Run the provided database.sql script to create necessary tables.
-         ```
+         ``
       5. Start the server:
-         ```bash
+         ``bash
          node server.js
-         ```
+         ``
       The app should now be running on http://localhost:3000.
 
       6. Open index.html in a browser to interact with the frontend.
