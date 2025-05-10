@@ -44,60 +44,55 @@ documentation for details.
       - When a user joins a room, a notification is automatically generated to confirm the action.
 
 **Elements of Implementation**
-Explain the key technologies or methodologies used to implement the project.
+   **Technologies Used**: The project was developed using a combination of technologies to ensure a robust and scalable application.
+      - *Frontend:* HTML5, CSS3, and vanilla JavaScript were used to build the user interface. The design focuses on simplicity and accessibility for tasks like room creation and joining.
+      
+      - *Backend:* Node.js with Express.js was used to handle server-side logic, including routing, session handling, and API requests.
+      
+      - *Database:* PostgreSQL was used as the relational database system, managed through the pg Node.js library. It stores user data, room information, participants, and notifications.
 
--Frontend:
-HTML5, CSS3, and vanilla JavaScript were used to build the user interface. The design focuses on simplicity and accessibility for tasks like room creation and joining.
+      - *Authentication:* Session-based authentication was implemented using express-session to manage user login states securely across requests.
 
--Backend:
-Node.js with Express.js was used to handle server-side logic, including routing, session handling, and API requests.
+      - *Notifications(Planned):* Internal notification logic is implemented, with room to extend to email or push notifications in future iterations.
 
--Database:
-PostgreSQL was used as the relational database system, managed through the pg Node.js library. It stores user data, room information, participants, and notifications.
+**Setup and Running Instructions**
 
--Authentication:
-Session-based authentication was implemented using express-session to manage user login states securely across requests.
+   **Installation Instructions**: This section provides a step-by-step guide to set up the project on your local machine. It includes prerequisites, installation steps, and how to run the application.
 
--Notifications (Planned):
-Internal notification logic is implemented, with room to extend to email or push notifications in future iterations.
+   **Prerequisites**
+   Before you begin, ensure you have the following installed on your machine:
+   1. Node.js installed (v16 or later recommended).
+   2. PostgreSQL installed and running locally.
+   3. A PostgreSQL database created (e.g., slotify_db) with correct user credentials.
 
-## Setup and Running Instructions
-Provide detailed instructions for setting up and running the project.
+   **Steps to Set Up**
+   1. Clone the repository:
+      ```bash
+      git clone https://github.com/up2235881/SETAP-coursework-2D.git
+      ```
+   2. Navigate to the project directory:
+      ```bash
+      cd SETAP-coursework-2D
+      ```
+   3. Install dependencies:
+      ```bash
+      npm install
+      ```
+   4. Configure the database:
+      ```
+      -Ensure the database credentials in db_config.js match your local setup.
+      -Run the provided database.sql script to create necessary tables.
+      ```
+   5. Start the server:
+      ```bash
+      node server.js
+      ```
+   The app should now be running on http://localhost:3000.
 
-**Prerequisites**
-Before you begin, ensure you have the following installed on your machine:
-1. Node.js installed (v16 or later recommended).
-2. PostgreSQL installed and running locally.
-3. A PostgreSQL database created (e.g., slotify_db) with correct user credentials.
-
-**Steps to Set Up**
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/up2235881/SETAP-coursework-2D.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd SETAP-coursework-2D
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Configure the database:
-   ```
-   -Ensure the database credentials in db_config.js match your local setup.
-   -Run the provided database.sql script to create necessary tables.
-   ```
-5. Start the server:
-   ```bash
-   node server.js
-   ```
-The app should now be running on http://localhost:3000.
-
-6. Open index.html in a browser to interact with the frontend.
+   6. Open index.html in a browser to interact with the frontend.
 
 
-## Main Components of the Project
+**Main Components of the Project**
 Discuss the critical components of the project and their roles.
 
 ### Frontend
