@@ -9,8 +9,7 @@ const pool = new Pool ({
     port: process.env.DB_PORT,
 });
 
-
-//module.exports = pool;
+module.exports = pool;
 
 const getUsers = (req, res) => {
     pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
@@ -93,8 +92,6 @@ const deleteUser = (req, res) => {
     })
 }
 
-
-
 module.exports = {
     pool,
     getUsers, 
@@ -103,5 +100,7 @@ module.exports = {
     updateUser,
     deleteUser,
     getUserByUsernameOrEmail,
-    //createRoom
+    createRoom
 };
+
+module.exports = pool;
