@@ -1,14 +1,16 @@
+require('dotenv').config();
 const { Pool } = require('pg');
 
 const pool = new Pool ({
-    user:'slotify_team',
-    host: 'localhost',
-    database: 'slotify_db',
-    password:'team_password',
-    port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 });
 
-module.exports = pool;
+
+//module.exports = pool;
 
 const getUsers = (req, res) => {
     pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
@@ -94,11 +96,12 @@ const deleteUser = (req, res) => {
 
 
 module.exports = {
+    pool,
     getUsers, 
     getUserById,
     createUser,
     updateUser,
     deleteUser,
     getUserByUsernameOrEmail,
-    createRoom
+    //createRoom
 };

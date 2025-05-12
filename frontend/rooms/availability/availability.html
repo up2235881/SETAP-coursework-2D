@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Input Availability</title>
     <link rel="stylesheet" href="availability.css">
 </head>
 <body>
@@ -11,9 +11,13 @@
         <div class="back-button">
             <img src="/SETAP-coursework/frontend/icons/left-arrow.png" alt="back">   
         </div>
-        <h2>Input availability</h2>
+        <h2>Input Availability</h2>
+
         <div class="availability-form">
-            <label for="day">When</label>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your name">
+
+            <label for="day">Day</label>
             <div class="select-group">
                 <select id="day">
                     <option value="">Day</option>
@@ -38,8 +42,14 @@
                 </select>
             </div>
         </div>
+
         <button class="save-button">Save</button>
+
+        <p style="margin-top: 10px;">
+            <a href="/SETAP-coursework/frontend/rooms/meetingscheduler/scheduler.html" style="color: #333; text-decoration: underline;">View meeting scheduler</a>
+        </p>
     </div>
+
     <script src="availability.js"></script>
 </body>
 </html>

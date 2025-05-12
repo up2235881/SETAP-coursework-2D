@@ -9,10 +9,10 @@ router.post('/rooms/by-name', getRoomByName);
 router.put('/rooms/:id', updateRoom);
 router.put('/rooms/:id', deleteRoom);
 router.post('/joinRoom');
-const Room = require('../models/roomModel');
+//const Room = require('../models/roomModel');
 const { nanoid } = require('nanoid');
 
-app.post('/create-room', async (req, res) => {
+router.post('/create-room', async (req, res) => {
     const { user_id, room_name } = req.body;
 
     if (!user_id || !room_name) {
