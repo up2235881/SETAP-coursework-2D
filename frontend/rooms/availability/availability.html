@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Availability</title>
-    <link rel="stylesheet" href="availability.css">
-</head>
-<body>
+    <link rel="stylesheet" href="availability.css" />
+  </head>
+  <body>
     <div class="container">
-        <div class="back-button">
-            <img src="/SETAP-coursework/frontend/icons/left-arrow.png" alt="back">   
+      <div class="back-button">
+        <img src="/icons/left-arrow.png" alt="back" />
+      </div>
+      <h2>Input Availability</h2>
+
+      <div class="availability-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Your name" />
+
+        <label for="day">Day</label>
+        <div class="select-group">
+          <select id="day">
+            <option value="">Day</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+          </select>
+          <select id="time">
+            <option value="">Time</option>
+            <option value="09:00 AM">09:00 AM</option>
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="11:00 AM">11:00 AM</option>
+            <option value="12:00 PM">12:00 PM</option>
+            <option value="13:00 PM">13:00 PM</option>
+            <option value="14:00 PM">14:00 PM</option>
+            <option value="15:00 PM">15:00 PM</option>
+            <option value="16:00 PM">16:00 PM</option>
+            <option value="17:00 PM">17:00 PM</option>
+            <option value="18:00 PM">18:00 PM</option>
+          </select>
         </div>
-        <h2>Input Availability</h2>
+      </div>
 
-        <div class="availability-form">
-            <label for="name">Name</label>
-            <input type="text" id="name" placeholder="Your name">
+      <button class="save-button">Save</button>
 
-            <label for="day">Day</label>
-            <div class="select-group">
-                <select id="day">
-                    <option value="">Day</option>
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option> 
-                </select>
-                <select id="time">
-                    <option value="">Time</option>
-                    <option value="09:00 AM">09:00 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="11:00 AM">11:00 AM</option>
-                    <option value="12:00 PM">12:00 PM</option>
-                    <option value="13:00 PM">13:00 PM</option>
-                    <option value="14:00 PM">14:00 PM</option>
-                    <option value="15:00 PM">15:00 PM</option>
-                    <option value="16:00 PM">16:00 PM</option>
-                    <option value="17:00 PM">17:00 PM</option>
-                    <option value="18:00 PM">18:00 PM</option>
-                </select>
-            </div>
-        </div>
-
-        <button class="save-button">Save</button>
-
-        <p style="margin-top: 10px;">
-            <a href="/SETAP-coursework/frontend/rooms/meetingscheduler/scheduler.html" style="color: #333; text-decoration: underline;">View meeting scheduler</a>
-        </p>
+      <p style="margin-top: 10px">
+        <a
+          href="/rooms/meetingscheduler/scheduler.html"
+          style="color: #333; text-decoration: underline"
+          >View meeting scheduler</a
+        >
+      </p>
     </div>
 
     <script src="availability.js"></script>
-</body>
+  </body>
 </html>
