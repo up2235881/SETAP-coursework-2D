@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meeting Notes</title>
-  <link rel="stylesheet" href="meetingnotes.css"/>
-</head>
-<body>
-  <button class="back-btn">←</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meeting Notes</title>
 
-  <div class="notescontainer">
-    <h2 id="heading">Meeting notes</h2>
+    <!-- Fonts & Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
 
-    <div id="noteslist"></div>
+    <!-- Styles -->
+    <link rel="stylesheet" href="meetingnotes.css" />
+  </head>
+  <body>
+    <div class="notes-wrapper">
+      <header class="top-bar">
+        <div class="back-button" onclick="window.history.back()">
+          <span class="material-icons">arrow_back</span> Back
+        </div>
+        <h1>
+          <span class="material-icons gradient-icon">note</span> Meeting Notes
+        </h1>
+      </header>
 
-    <button class="addbtn" onclick="window.location.href='addnote.html'">Add</button>
-  </div>
+      <section class="notes-container">
+        <div id="noteslist" class="notes-list"></div>
+        <button class="add-btn" onclick="window.location.href='addnote.html'">
+          <span class="material-icons">add</span> Add Note
+        </button>
+      </section>
+    </div>
 
-  <script src="meetingnotes.js"></script>
-</body>
+    <script type="module" src="meetingnotes.js"></script>
+  </body>
 </html>

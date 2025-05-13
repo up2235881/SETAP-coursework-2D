@@ -102,13 +102,15 @@ CREATE TABLE availability(
     FOREIGN KEY (meeting_id) REFERENCES meetings (meeting_id)
 );
 
-CREATE TABLE notes(
-    note_id SERIAL PRIMARY KEY NOT NULL,
+DROP TABLE IF EXISTS notes;
+CREATE TABLE notes (
+    note_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
     room_id INT NOT NULL,
-    content TEXT NULL,
-    attachment VARCHAR(100) NULL,
-    created_at TIMESTAMP NOT NULL,
-    updated_by TIMESTAMP NOT NULL,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
 
