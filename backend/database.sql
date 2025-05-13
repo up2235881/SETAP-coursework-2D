@@ -43,6 +43,18 @@ CREATE TABLE user_rooms (
     FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
 
+CREATE TABLE availabilities (
+  availability_id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  room_id INT NOT NULL,
+  day VARCHAR(20) NOT NULL,
+  time VARCHAR(20) NOT NULL,
+  location TEXT NOT NULL,
+  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
+);
+
 CREATE TABLE notifications(
     notification_id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL,

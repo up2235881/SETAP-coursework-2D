@@ -4,56 +4,65 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Availability</title>
+
+    <!-- Fonts & Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
     <link rel="stylesheet" href="availability.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="back-button">
-        <img src="/icons/left-arrow.png" alt="back" />
-      </div>
-      <h2>Input Availability</h2>
-
-      <div class="availability-form">
-        <label for="name">Name</label>
-        <input type="text" id="name" placeholder="Your name" />
-
-        <label for="day">Day</label>
-        <div class="select-group">
-          <select id="day">
-            <option value="">Day</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-          </select>
-          <select id="time">
-            <option value="">Time</option>
-            <option value="09:00 AM">09:00 AM</option>
-            <option value="10:00 AM">10:00 AM</option>
-            <option value="11:00 AM">11:00 AM</option>
-            <option value="12:00 PM">12:00 PM</option>
-            <option value="13:00 PM">13:00 PM</option>
-            <option value="14:00 PM">14:00 PM</option>
-            <option value="15:00 PM">15:00 PM</option>
-            <option value="16:00 PM">16:00 PM</option>
-            <option value="17:00 PM">17:00 PM</option>
-            <option value="18:00 PM">18:00 PM</option>
-          </select>
+    <div class="availability-container">
+      <header class="top-bar">
+        <div class="back-button" onclick="window.history.back()">
+          <span class="material-icons">arrow_back</span> Back
         </div>
-      </div>
+        <h1>
+          <span class="material-icons gradient-icon">calendar_month</span> Input
+          Availability
+        </h1>
+      </header>
 
-      <button class="save-button">Save</button>
+      <form class="availability-form" id="availability-form">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Enter your name" required />
 
-      <p style="margin-top: 10px">
-        <a
-          href="/rooms/meetingscheduler/scheduler.html"
-          style="color: #333; text-decoration: underline"
-          >View meeting scheduler</a
-        >
-      </p>
+        <label for="day">Select Day</label>
+        <select id="day" required>
+          <option value="">Choose a day</option>
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+        </select>
+
+        <label for="time">Select Time</label>
+        <select id="time" required>
+          <option value="">Choose a time</option>
+          <option>09:00 AM</option>
+          <option>10:00 AM</option>
+          <option>11:00 AM</option>
+          <option>12:00 PM</option>
+          <option>01:00 PM</option>
+          <option>02:00 PM</option>
+          <option>03:00 PM</option>
+          <option>04:00 PM</option>
+        </select>
+
+        <button type="submit" class="submit-btn">
+          <span class="material-icons">send</span> Submit
+        </button>
+      </form>
     </div>
 
-    <script src="availability.js"></script>
+    <script type="module" src="availability.js"></script>
   </body>
 </html>

@@ -1,30 +1,140 @@
-.dashboard {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 400px;
-    margin: 20px auto;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.entry {
-    text-align: left;
-    font-size: 14px;
-    margin-bottom: 8px;
+body {
+  font-family: "Rubik", sans-serif;
+  background: linear-gradient(120deg, #ffffff, #ffe3f1, #e1d5f2, #daf3ff);
+  background-size: 400% 400%;
+  animation: dreamyBackground 15s ease infinite;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes dreamyBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.scheduler-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #ffffffee; /* nearly full white */
+  margin: 0 auto;
+  padding: 40px 30px;
+  width: 100%;
+  min-height: 100vh;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.05);
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  color: #444;
+}
+
+.top-bar h1 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.gradient-icon {
+  font-size: 32px;
+  background: linear-gradient(45deg, #ff4081, #7c4dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+label {
+  font-weight: 500;
+  color: #333;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  background-color: #ec407a;
+  color: white;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #d81b60;
+}
+
+/* Dashboard Section */
+.dashboard {
+  background-color: #ffffffcc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
 }
 
 .highlight {
-    font-weight: bold;
-    color: #4CAF50;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #6a1b9a;
 }
 
-.most-common {
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 16px;
-    text-align: center;
-    background: #C4EBF5;
-    padding: 10px;
-    border-radius: 10px;
+.entry {
+  margin-bottom: 12px;
+  padding: 10px;
+  border-left: 4px solid #7c4dff;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.summary-section {
+  margin-top: 30px;
+  font-size: 16px;
 }
