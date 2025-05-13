@@ -38,7 +38,7 @@ router.get('/:roomId/me', async (req, res) => {
 
 // Submit or update user's availability for a room
 router.post('/submit', async (req, res) => {
-  const { roomId, day, time, location } = req.body;
+  const { roomId, day, time, location, name } = req.body;
   const userId = req.session.userId;
 
   try {
@@ -51,13 +51,13 @@ router.post('/submit', async (req, res) => {
       // Update
       await db.query(
         'UPDATE availabilities SET day = $1, time = $2, location = $3 WHERE room_id = $4 AND user_id = $5',
-        [day, time, location, roomId, userId]
+        [name, day, time, location, roomId, userId]
       );
     } else {
       // Insert
       await db.query(
         'INSERT INTO availabilities (user_id, room_id, day, time, location) VALUES ($1, $2, $3, $4, $5)',
-        [userId, roomId, day, time, location]
+        [userId, roomId, name, day, time, location]
       );
     }
 

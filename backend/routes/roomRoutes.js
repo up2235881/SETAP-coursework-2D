@@ -90,4 +90,36 @@ router.post("/join", async (req, res) => {
   }
 });
 
-module.exports = router;
+router.get("/:roomId/users", async (req, res) => {
+  const roomId = req.params.roomId;
+  try {
+    const result = await db.query(
+      "SELECT user_id FROM room_members WHERE room_id = $1",
+      [roomId]
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Error fetching room members:", err);
+    res.status(500).json({ message: "Failed to fetch room members" });
+  }
+});
+
+router.get("/:roomId/creator", async (req, res) => {
+  const roomId = req.params.roomId;
+  try {
+    const result = await db.query(
+      "SELECT creator_id FROM rooms WHERE room_id = $1",
+      [roomId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+    res.status(200).json({ creator_id: result.rows[0].creator_id });
+  } catch (err) {
+    console.error("Error fetching room creator:", err);
+    res.status(500).json({ message: "Failed to fetch room creator" });
+  }
+});
+
+export default router;
+

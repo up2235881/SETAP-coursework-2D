@@ -1,55 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Enter Room</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enter Room</title>
 
-  <!-- Material Icons -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
 
-  <!-- Fun Vibrant Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="enterRooms.css" />
-</head>
-<body>
-  <header class="top-bar">
-    <div class="exit" onclick="window.history.back()">
-      <span class="material-icons">logout</span>
-      <span>Exit</span>
-    </div>
-    <h1>My Room Dashboard</h1>
-  </header>
+    <link rel="stylesheet" href="enterRooms.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="exit" onclick="window.history.back()">
+        <span class="material-icons">logout</span>
+        <span>Exit</span>
+      </div>
+      <h1>My Room Dashboard</h1>
+      <div id="confirmed-meeting-info" class="highlight-bar"></div>
+    </header>
 
-  <main class="menu-container">
-    <button class="menu-item" data-link="/rooms/availability/meeting%20scheduler.html">
-      <span class="material-icons gradient-icon">settings</span>
-      Room Settings
-    </button>
+    <main class="menu-container">
+      <button
+        class="menu-item"
+        data-link="/rooms/availability/meeting%20scheduler.html"
+      >
+        <span class="material-icons gradient-icon">settings</span>
+        Room Settings
+      </button>
 
-    <button class="menu-item" data-link="/rooms/meetingscheduler/scheduler.html">
-      <span class="material-icons gradient-icon">schedule</span>
-      Meeting Scheduler
-    </button>
+      <button
+        class="menu-item"
+        data-link="/rooms/meetingscheduler/scheduler.html"
+      >
+        <span class="material-icons gradient-icon">schedule</span>
+        Meeting Scheduler
+      </button>
 
-    <button class="menu-item" data-link="/rooms/meetingnotes/meetingnotes.html">
-      <span class="material-icons gradient-icon">note</span>
-      Meeting Notes
-    </button>
+      <button
+        class="menu-item"
+        data-link="/rooms/meetingnotes/meetingnotes.html"
+      >
+        <span class="material-icons gradient-icon">note</span>
+        Meeting Notes
+      </button>
 
-    <button class="menu-item" data-link="/rooms/availability/availability.html">
-      <span class="material-icons gradient-icon">calendar_today</span>
-      Availability
-    </button>
+      <button
+        class="menu-item"
+        data-link="/rooms/availability/availability.html"
+      >
+        <span class="material-icons gradient-icon">calendar_today</span>
+        Availability
+      </button>
 
-    <button class="menu-item" data-link="/rooms/availability/addparticipants.html">
-      <span class="material-icons gradient-icon">group_add</span>
-      Add Participants
-    </button>
-  </main>
+      <button
+        class="menu-item"
+        data-link="/rooms/availability/addparticipants.html"
+      >
+        <span class="material-icons gradient-icon">group_add</span>
+        Add Participants
+      </button>
+    </main>
 
-  <script type="module" src="enterRooms.js"></script>
-</body>
+    <script type="module" src="enterRooms.js"></script>
+  </body>
 </html>

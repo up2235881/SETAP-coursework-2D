@@ -1,29 +1,30 @@
 --------- CREATE ENUM TYPES ---------
+CREATE TYPE meeting_status AS ENUM ('Scheduled', 'Cancelled');
 
-CREATE TYPE
-    meeting_status AS ENUM ('Scheduled', 'Cancelled');
+CREATE TYPE day AS ENUM (
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+);
 
-CREATE TYPE
-    day AS ENUM ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+CREATE TYPE notification_status AS ENUM ('Sent', 'Failed');
 
-CREATE TYPE
-    notification_status AS ENUM ('Sent', 'Failed');
-
-CREATE TYPE
-    notification_type AS ENUM ('Meeting Reminder', 'Missed Meeting', 'General');
-
+CREATE TYPE notification_type AS ENUM ('Meeting Reminder', 'Missed Meeting', 'General');
 
 --------- CREATE TABLES ---------
-
 CREATE TABLE users (
-        user_id SERIAL PRIMARY KEY,
-        user_username VARCHAR(50) NOT NULL,
-        user_email VARCHAR(150) NOT NULL,
-        user_password VARCHAR(50) NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
-       
+    user_id SERIAL PRIMARY KEY,
+    user_username VARCHAR(50) NOT NULL,
+    user_email VARCHAR(150) NOT NULL,
+    user_password VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE rooms(
     room_id SERIAL PRIMARY KEY NOT NULL,
     user_id INT NOT NULL,
@@ -44,15 +45,15 @@ CREATE TABLE user_rooms (
 );
 
 CREATE TABLE availabilities (
-  availability_id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  room_id INT NOT NULL,
-  day VARCHAR(20) NOT NULL,
-  time VARCHAR(20) NOT NULL,
-  location TEXT NOT NULL,
-  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
+    availability_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    room_id INT NOT NULL,
+    day VARCHAR(20) NOT NULL,
+    time VARCHAR(20) NOT NULL,
+    location TEXT NOT NULL,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
 
 CREATE TABLE notifications(
@@ -76,6 +77,17 @@ CREATE TABLE meetings (
     FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
 
+CREATE TABLE confirmed_meetings (
+    meeting_id SERIAL PRIMARY KEY,
+    room_id INT NOT NULL UNIQUE,
+    day VARCHAR(20),
+    time VARCHAR(20),
+    location TEXT,
+    confirmed_by INT,
+    confirmed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (room_id) REFERENCES rooms(room_id),
+    FOREIGN KEY (confirmed_by) REFERENCES users(user_id)
+);
 
 CREATE TABLE availability(
     availability_id SERIAL PRIMARY KEY,
@@ -89,7 +101,6 @@ CREATE TABLE availability(
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (meeting_id) REFERENCES meetings (meeting_id)
 );
-
 
 CREATE TABLE notes(
     note_id SERIAL PRIMARY KEY NOT NULL,
@@ -122,18 +133,20 @@ CREATE TABLE room_participants(
 
 --Role creation for database access 
 CREATE ROLE slotify_team WITH LOGIN PASSWORD 'team_password';
+
 ALTER ROLE slotify_team CREATEDB;
+
 ALTER ROLE slotify_team CREATEROLE;
 
 --Creating slotify database
-createdb -U slotify_team slotify_db
-
-
---Granting ownership to setap team
+createdb - U slotify_team slotify_db --Granting ownership to setap team
 ALTER DATABASE slotify_db OWNER TO slotify_team;
+
 GRANT ALL PRIVILEGES ON DATABASE slotify_db TO slotify_team;
 
 --Connect to new databse 
-psql -U slotify_team -d slotify_db
-
-
+psql - U slotify_team - d slotify_db -- Add name field to availability entries
+ALTER TABLE
+    availabilities
+ADD
+    COLUMN IF NOT EXISTS name VARCHAR(100);
