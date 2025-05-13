@@ -1,3 +1,5 @@
+const config = require("../../config");
+
 document.addEventListener("DOMContentLoaded", function () {
   const registerButton = document.querySelector(".register-button");
   const username = document.getElementById("student-username");
@@ -77,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
 
       try {
-        const response = await fetch("http://localhost:3000/api/register", {
+        const response = await fetch(`${config.API_URL}/api/register`, {
           method: "POST",
           headers: {
             "Content-type": "application/json",

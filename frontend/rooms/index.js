@@ -1,3 +1,5 @@
+const config = require("../../config");
+
 console.log("javascript is working!");
 document.addEventListener("DOMContentLoaded", function () {
   const createRoomForm = document.getElementById("create-room-form");
@@ -18,19 +20,18 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-
     roomNameInput.addEventListener("input", validateRoomName);
 
-    createRoomForm.addEventListener('submit', async function (event) {
+    createRoomForm.addEventListener("submit", async function (event) {
       event.preventDefault();
       const roomName = roomNameInput.value.trim();
       if (roomName.length < 3) return;
 
       try {
-        const response = await fetch("http://localhost:3000/api/rooms", {
+        const response = await fetch(`${config.API_URL}/api/rooms`, {
           method: "POST",
-          headers: { "Content-Type" : "application/json" },
-          body: JSON.stringify({ roomName })
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ roomName }),
         });
         const result = await response.json();
         if (response.status == 201) {

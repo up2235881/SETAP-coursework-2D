@@ -77,17 +77,18 @@ const { createUser } = require("./models/userModel");
 
 const app = express();
 const port = 3000;
+app.use(express.json());
 
 const userRoutes = require("./routes/userRoutes");
 app.use("/api", userRoutes);
 
 const roomRoutes = require("./routes/roomRoutes");
+const config = require("../config");
 app.use("/api", roomRoutes);
 
 app.use("/api/rooms", authMiddleware, joinRoomRoutes);
 app.use(express.static(path.join(__dirname, "../frontend")));
-app.use(cors({ origin: "http://localhost:3000" }));
-app.use(express.json());
+app.use(cors({ origin: config.API_URL }));
 
 app.get("/", (req, res) => {
   res.redirect("/landingpage");

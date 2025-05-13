@@ -1,17 +1,16 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
+const config = require("../config");
 
 const pool = new Pool({
-  user: 'slotify_team',
-  host: 'localhost',
-  database: 'slotify_db',
-  password: 'team_password',
-  port: 5432,
+  connectionString: config.DB_URL,
 });
+
+console.log({ config });
 
 pool.connect((err, client, release) => {
   if (err) {
-    return console.error('Connection error', err.stack);
+    return console.error("Connection error", err.stack);
   }
-  console.log('Connected to DB successfully');
+  console.log("Connected to DB successfully");
   release();
 });
