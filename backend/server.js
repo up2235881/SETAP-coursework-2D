@@ -164,10 +164,16 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// Static files
-app.use(express.static(path.join(__dirname, '..')));
+// ✅ Serve static files from /frontend
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Routes
+// ✅ Redirect root "/" to the landing page
+app.get('/', (req, res) => {
+  res.redirect('/landingpage/index.html'); // ✅ correct filename
+});
+
+
+// API Routes
 const userRoutes = require('./routes/userRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
