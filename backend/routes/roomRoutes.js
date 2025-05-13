@@ -1,87 +1,92 @@
 const express = require("express");
 const { nanoid } = require("nanoid");
+const db = require("../configs/db_config");
 
 const router = express.Router();
-const {
-  createRoom,
-  getRoomById,
-  getRoomByName,
-  updateRoom,
-  deleteRoom,
-  joinRoom,
-} = require("../models/roomModel");
-const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/rooms", authMiddleware, createRoom);
-router.get("/rooms/:id", getRoomById);
-router.post("/rooms/by-name", getRoomByName);
-router.put("/rooms/:id", updateRoom);
-router.put("/rooms/:id", deleteRoom);
-router.post("/joinRoom");
-const Room = require("../models/roomModel");
+// Middleware to require login
+router.use((req, res, next) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Not logged in" });
+  }
+  next();
+});
 
-router.post("/create-room", async (req, res) => {
-  const { user_id, room_name } = req.body;
+// Create a new room
+router.post("/create", async (req, res) => {
+  const userId = req.session.userId;
+  const { room_name } = req.body;
 
-  if (!user_id || !room_name) {
-    return res
-      .status(400)
-      .json({ message: "User ID and room name are required" });
+  if (!room_name) {
+    return res.status(400).json({ message: "Room name is required" });
   }
 
-  const invite_code = nanoid(8); // Generate an 8-character invite code
+  const inviteCode = nanoid(8);
 
   try {
-    // Use the createRoom function from db_config.js
-    const newRoom = await db.createRoom(user_id, room_name, invite_code);
+    const createRoomQuery = `
+      INSERT INTO rooms (room_name, invite_code)
+      VALUES ($1, $2)
+      RETURNING room_id;
+    `;
+    const roomResult = await db.query(createRoomQuery, [room_name, inviteCode]);
 
-    res.status(201).json({
-      message: "Room created successfully",
-      room: newRoom,
-    });
+    const roomId = roomResult.rows[0].room_id;
+
+    const linkUserQuery = `
+      INSERT INTO user_rooms (user_id, room_id)
+      VALUES ($1, $2);
+    `;
+    await db.query(linkUserQuery, [userId, roomId]);
+
+    res.status(201).json({ message: "Room created successfully", inviteCode });
   } catch (error) {
-    // if (error.code === '23505') { // Unique constraint violation
-    //     return res.status(409).json({ message: "Invite code already exists. Please try again." });
-    // }
-    console.error("Error creating room:", error);
-    res.status(500).json({ message: "Error creating room" });
+    console.error("Create room error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-// Route to join a room
-router.post("/join-room", async (req, res) => {
-  const { user_id, invite_code } = req.body;
+// Join a room by invite code
+router.post("/join", async (req, res) => {
+  const userId = req.session.userId;
+  const { room_code } = req.body;
 
-  // Validate input
-  if (!user_id || !invite_code) {
-    return res.status(400).json({ error: "Missing user ID or invite code" });
+  if (!room_code) {
+    return res.status(400).json({ message: "Room code is required" });
   }
 
   try {
-    // Check if the room exists using the invite code
-    const room = await Room.getByInviteCode(invite_code);
-    if (!room) {
-      return res
-        .status(404)
-        .json({ error: "Invalid or expired invitation code" });
+    const roomQuery = `
+      SELECT room_id FROM rooms WHERE invite_code = $1;
+    `;
+    const result = await db.query(roomQuery, [room_code]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Room not found" });
     }
 
-    // Check if the user is already in the room
-    const isInRoom = await Room.checkUserInRoom(user_id, room.room_id);
-    if (isInRoom) {
-      return res
-        .status(200)
-        .json({ message: `You are already a member of ${room.room_name}` });
+    const roomId = result.rows[0].room_id;
+
+    // Check if already joined
+    const checkQuery = `
+      SELECT * FROM user_rooms WHERE user_id = $1 AND room_id = $2;
+    `;
+    const check = await db.query(checkQuery, [userId, roomId]);
+
+    if (check.rows.length > 0) {
+      return res.status(400).json({ message: "Already in the room" });
     }
 
-    // Add the user to the room
-    await Room.addUserToRoom(user_id, room.room_id, room.room_name);
-    res
-      .status(200)
-      .json({ message: `You have successfully joined ${room.room_name}` });
+    const joinQuery = `
+      INSERT INTO user_rooms (user_id, room_id)
+      VALUES ($1, $2);
+    `;
+    await db.query(joinQuery, [userId, roomId]);
+
+    res.status(200).json({ message: "Successfully joined the room" });
   } catch (error) {
-    console.error("Error joining room:", error);
-    res.status(500).json({ error: "Failed to join the room" });
+    console.error("Join room error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

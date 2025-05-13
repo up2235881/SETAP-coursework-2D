@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="dashboard.css" />
-  </head>
-  <body>
-    <div class="dashboard-container">
-      <h1>Welcome to Your Dashboard</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Welcome to Your Dashboard</h1>
 
-      <div class="section">
-        <h2>My Meetings</h2>
-        <ul id="my-meetings">
-          <!-- Meetings will be dynamically inserted here -->
-        </ul>
-      </div>
-
-      <div class="section">
-        <h2>My Rooms</h2>
-        <ul id="my-rooms">
-          <!-- Rooms will be dynamically inserted here -->
-        </ul>
-      </div>
-
-      <div class="section actions">
-        <button onclick="window.location.href='/rooms/createroom.html'">
-          Create Room
-        </button>
-        <button onclick="window.location.href='/rooms/joinroom.html'">
-          Join Room
-        </button>
-      </div>
+    <div class="section">
+      <h2>My Rooms</h2>
+      <ul id="my-rooms"></ul>
+      <p id="no-rooms-message" style="display: none;">You have no rooms yet.</p>
     </div>
-    <script src="dashboard.js"></script>
-  </body>
+
+    <div class="section">
+      <h2>My Upcoming Meetings</h2>
+      <ul id="my-meetings"></ul>
+      <p id="no-meetings-message" style="display: none;">No upcoming meetings.</p>
+    </div>
+
+    <div class="section actions">
+      <h3>Create a Room</h3>
+      <form id="create-room-form">
+        <input type="text" id="create-room-name" placeholder="Room Name" required />
+        <button type="submit">Create Room</button>
+      </form>
+
+      <h3>Join a Room</h3>
+      <form id="join-room-form">
+        <input type="text" id="join-room-code" placeholder="Room Code" required />
+        <button type="submit">Join Room</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
 </html>
