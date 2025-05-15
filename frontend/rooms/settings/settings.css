@@ -1,19 +1,50 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap");
 
 body {
-  background: linear-gradient(120deg, #f8f3ff, #fbefff 55%, #e1d5f2 100%);
+  min-height: 100vh;
   font-family: "Rubik", Arial, sans-serif;
   margin: 0;
-  min-height: 100vh;
+  /* No background here; it's on .bg-blur-image */
+}
+
+.bg-blur-image {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  background: url('/SETAP-coursework/frontend/images/settings.jpg') no-repeat center center/cover;
+  filter: blur(5px) brightness(0.75);
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+/* Solid animated gradient card */
+.settings-panel.animated-gradient-bg {
+  background: linear-gradient(120deg, #fff, #ffe3f1, #e1d5f2, #daf3ff);
+  background-size: 400% 400%;
+  animation: dreamyBackground 15s ease infinite;
+  border-radius: 22px;
+  box-shadow: 0 8px 36px 0 rgba(181, 120, 255, 0.13);
+  max-width: 430px;
+  margin: 60px auto 0 auto;
+  padding: 0 0 34px 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes dreamyBackground {
+  0%, 100% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
 }
 
 .top-bar {
   display: flex;
   align-items: center;
-  padding: 20px 36px;
-  background: #a77bfa;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(139, 64, 234, 0.09);
+  padding: 24px 36px 0 36px;
+  background: transparent;
+  color: #722fbb;
   font-size: 1.2rem;
 }
 
@@ -29,42 +60,31 @@ body {
   align-items: center;
   cursor: pointer;
   font-weight: 600;
-  color: #fff;
+  color: #722fbb;
   gap: 7px;
   font-size: 1.05rem;
 }
 
-.settings-panel {
-  background: rgba(255, 255, 255, 0.97);
-  border-radius: 22px;
-  box-shadow: 0 8px 36px 0 rgba(181, 120, 255, 0.13);
-  padding: 44px 38px 34px 38px;
-  max-width: 430px;
-  margin: 50px auto 0 auto;
+main {
+  padding: 0 38px 0 38px;
   display: flex;
   flex-direction: column;
 }
 
-.settings-panel h2 {
+main h2 {
   font-size: 1.45rem;
   color: #722fbb;
   font-weight: 700;
-  margin-bottom: 28px;
+  margin: 28px 0 20px 0;
 }
 
 .setting-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 26px;
   padding-bottom: 8px;
   border-bottom: 1px solid #e3d3fa;
-}
-
-.setting-item label {
-  font-size: 1.1rem;
-  color: #8150b8;
-  font-weight: 600;
 }
 
 .theme-toggle-btn {
@@ -86,43 +106,17 @@ body {
 }
 
 @media (max-width: 600px) {
-  .settings-panel {
-    padding: 18px 8px 16px 8px;
+  .settings-panel.animated-gradient-bg {
+    padding: 0 8px 16px 8px;
     max-width: 97vw;
   }
   .top-bar {
-    padding: 10px 7vw;
+    padding: 10px 7vw 0 7vw;
     font-size: 1rem;
   }
-}
-
-body.dark-theme {
-  background: linear-gradient(120deg, #30214c 0%, #401f3b 55%, #1d1d2f 100%);
-  color: #eee;
-}
-
-body.dark-theme .settings-panel {
-  background: rgba(38, 24, 54, 0.96);
-  box-shadow: 0 8px 36px 0 rgba(66, 24, 120, 0.16);
-}
-
-body.dark-theme .top-bar {
-  background: #32136b;
-  color: #fff;
-}
-
-body.dark-theme .settings-panel h2,
-body.dark-theme .setting-item label {
-  color: #e4cbff;
-}
-
-body.dark-theme .theme-toggle-btn {
-  background: linear-gradient(90deg, #df52d5, #5753c9 90%);
-  color: #fff;
-}
-
-body.dark-theme .theme-toggle-btn:hover {
-  background: linear-gradient(90deg, #5753c9, #df52d5 90%);
+  main {
+    padding: 0 10px 0 10px;
+  }
 }
 
 /* Modal styles */

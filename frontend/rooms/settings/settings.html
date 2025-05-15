@@ -7,37 +7,31 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="settings.css" />
-  <script>
-    // Instantly apply saved theme before content renders
-    if (localStorage.getItem("roomTheme") === "dark") {
-      document.body.classList.add("dark-theme");
-    } else {
-      document.body.classList.remove("dark-theme");
-    }
-  </script>
 </head>
 <body>
-  <header class="top-bar">
-    <div class="exit" onclick="window.history.back()">
-      <span class="material-icons">arrow_back</span>
-      <span>Back</span>
-    </div>
-    <h1>Room Settings</h1>
-  </header>
+  <!-- Blurred background image -->
+  <div class="bg-blur-image"></div>
 
-  <main class="settings-panel">
-    <h2>Preferences</h2>
-    <div class="setting-item">
-      <label for="theme-toggle">Theme</label>
-      <button id="theme-toggle" class="theme-toggle-btn">Toggle Light/Dark</button>
-    </div>
-    <div class="setting-item" style="border-bottom: none; margin-bottom: 0;">
-      <button id="logoutBtn" class="theme-toggle-btn" style="background:linear-gradient(90deg,#f44336,#e57373 90%);margin-top:0;">
-        <span class="material-icons" style="vertical-align:middle;margin-right:7px;">logout</span>
-        Logout
-      </button>
-    </div>
-  </main>
+  <div class="settings-panel animated-gradient-bg">
+    <header class="top-bar">
+      <div class="exit" onclick="window.history.back()">
+        <span class="material-icons">arrow_back</span>
+        <span>Back</span>
+      </div>
+      <h1>Room Settings</h1>
+    </header>
+
+    <main>
+      <h2>Preferences</h2>
+      <!-- You can add settings fields here later -->
+      <div class="setting-item" style="border-bottom: none; margin-bottom: 0;">
+        <button id="logoutBtn" class="theme-toggle-btn" style="background:linear-gradient(90deg,#f44336,#e57373 90%);margin-top:0;">
+          <span class="material-icons" style="vertical-align:middle;margin-right:7px;">logout</span>
+          Logout
+        </button>
+      </div>
+    </main>
+  </div>
 
   <!-- Logout Confirmation Modal -->
   <div id="logoutModal" class="modal-overlay" style="display: none;">

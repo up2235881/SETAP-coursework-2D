@@ -4,30 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Availability</title>
-
     <!-- Fonts & Icons -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <!-- Styles -->
-    <link rel="stylesheet" href="availability.css" />
-    
+    <link rel="stylesheet" href="/SETAP-coursework/frontend/rooms/availability/availability.css" />
   </head>
   <body>
-    <div class="availability-container">
+    <!-- Blurred background image -->
+    <div class="bg-blur-image"></div>
+
+    <div class="availability-container animated-gradient-bg">
       <header class="top-bar">
         <div class="back-button" onclick="window.history.back()">
           <span class="material-icons">arrow_back</span> Back
         </div>
         <h1>
-          <span class="material-icons gradient-icon">calendar_month</span> Input
-          Availability
+          <span class="material-icons gradient-icon">calendar_month</span>
+          Input Availability
         </h1>
       </header>
 
@@ -58,12 +52,14 @@
           <option>04:00 PM</option>
         </select>
 
+        <label for="location">Location</label>
+        <input type="text" id="location" placeholder="Enter location" required />
+
         <button type="submit" class="submit-btn">
           <span class="material-icons">send</span> Submit
         </button>
       </form>
     </div>
-
     <script type="module" src="availability.js"></script>
   </body>
 </html>
