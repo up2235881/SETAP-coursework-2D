@@ -1,5 +1,8 @@
-const { Pool } = require("pg");
-const config = require("../config");
+// backend/test-db.js
+
+import pkg from 'pg';
+const { Pool } = pkg;
+import config from '../config.js';
 
 const pool = new Pool({
   connectionString: config.DB_URL,
@@ -7,10 +10,12 @@ const pool = new Pool({
 
 console.log({ config });
 
-pool.connect((err, client, release) => {
-  if (err) {
-    return console.error("Connection error", err.stack);
+(async () => {
+  try {
+    const client = await pool.connect();
+    console.log('Connected to DB successfully');
+    client.release();
+  } catch (err) {
+    console.error('Connection error', err.stack);
   }
-  console.log("Connected to DB successfully");
-  release();
-});
+})();

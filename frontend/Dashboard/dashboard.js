@@ -1,83 +1,106 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const roomsList = document.getElementById('my-rooms');
-  const meetingsList = document.getElementById('my-meetings');
-  const noRoomsMessage = document.getElementById('no-rooms-message');
-  const noMeetingsMessage = document.getElementById('no-meetings-message');
+const roomsContainer = document.querySelector("#my-rooms");
+const meetingsList = document.querySelector("#my-meetings");
+const noRoomsMsg = document.querySelector("#no-rooms-message");
+const noMeetingsMsg = document.querySelector("#no-meetings-message");
 
-  // Load dashboard data
-  fetch('/api/dashboard', {
-    method: 'GET',
-    credentials: 'include'
+const createForm = document.querySelector("#create-room-form");
+const joinForm = document.querySelector("#join-room-form");
+
+// Load current user, rooms, and confirmed meetings
+fetch("/api/users/me", { credentials: "include" })
+  .then((res) => res.json())
+  .then((user) => {
+    loadRooms(user.user_id);
+    loadMeetings(user.user_id);
   })
-    .then(res => res.json())
-    .then(data => {
-      // Display Rooms
-      if (data.rooms && data.rooms.length > 0) {
-        data.rooms.forEach(room => {
-          const li = document.createElement('li');
-          li.textContent = room.room_name;
-          roomsList.appendChild(li);
-        });
-      } else {
-        noRoomsMessage.style.display = 'block';
+  .catch((err) => {
+    console.error("Error loading user info:", err);
+  });
+
+function loadRooms(userId) {
+  fetch(`/api/rooms/user/${userId}`, { credentials: "include" })
+    .then((res) => res.json())
+    .then((rooms) => {
+      if (!rooms.length) {
+        noRoomsMsg.style.display = "block";
+        return;
       }
 
-      // Display Meetings
-      if (data.upcomingMeetings && data.upcomingMeetings.length > 0) {
-        data.upcomingMeetings.forEach(meeting => {
-          const li = document.createElement('li');
-          li.textContent = `${meeting.meeting_topic} in ${meeting.room_name} at ${new Date(meeting.start_time).toLocaleString()}`;
-          meetingsList.appendChild(li);
-        });
-      } else {
-        noMeetingsMessage.style.display = 'block';
-      }
+      noRoomsMsg.style.display = "none";
+      rooms.forEach((room) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `
+          <h3>${room.room_name}</h3>
+          <p>Code: ${room.room_code}</p>
+          <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}'">
+            <span class="material-icons">meeting_room</span> Enter
+          </button>
+        `;
+        roomsContainer.appendChild(card);
+      });
     })
-    .catch(err => {
-      console.error('Failed to load dashboard data:', err);
+    .catch((err) => console.error("Error loading rooms:", err));
+}
+
+function loadMeetings(userId) {
+  fetch(`/api/users/${userId}/confirmed-meetings`, { credentials: "include" })
+    .then((res) => res.json())
+    .then((meetings) => {
+      if (!meetings.length) {
+        noMeetingsMsg.style.display = "block";
+        return;
+      }
+
+      noMeetingsMsg.style.display = "none";
+      meetings.forEach((m) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${m.room_name}</strong><br>
+          ${m.day} @ ${m.time} — Location: ${m.location}
+        `;
+        meetingsList.appendChild(li);
+      });
+    })
+    .catch((err) => console.error("Error loading meetings:", err));
+}
+
+// Create room form
+createForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.querySelector("#create-room-name").value.trim();
+  if (!name) return;
+
+  fetch("/api/rooms/create", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ roomName: name }),
+  })
+    .then((res) => res.json())
+    .then((room) => {
+      alert(`✅ Room "${room.room_name}" created!`);
+      window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}`;
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("Failed to create room.");
     });
+});
 
-  // Handle Create Room
-  document.getElementById('create-room-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const roomName = document.getElementById('create-room-name').value;
+// Join room form
+joinForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const code = document.querySelector("#join-room-code").value.trim();
+  if (!code) return;
 
-    fetch('/api/rooms/create', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ room_name: roomName })
-    })
-      .then(res => res.json())
-      .then(data => {
-        alert(data.message || 'Room created!');
-        window.location.reload(); 
-      })
-      .catch(err => {
-        console.error('Error creating room:', err);
-        alert('Error creating room');
-      });
-  });
-
-  // Handle Join Room
-  document.getElementById('join-room-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const roomCode = document.getElementById('join-room-code').value;
-
-    fetch('/api/rooms/join', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ room_code: roomCode })
-    })
-      .then(res => res.json())
-      .then(data => {
-        alert(data.message || 'Joined room!');
-        window.location.reload(); 
-      })
-      .catch(err => {
-        console.error('Error joining room:', err);
-        alert('Error joining room');
-      });
-  });
+  fetch("/api/rooms/join", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ roomCode: code }),
+  })
+    .then((res) => res.json())
+    .then(() => location.reload())
+    .catch((err) => alert("Failed to join room."));
 });

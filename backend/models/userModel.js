@@ -1,113 +1,37 @@
-const { pool } = require("../configs/db_config");
+// backend/routes/roomRoutes.js
 
-const getUsers = (req, res) => {
-  pool.query("SELECT * FROM users ORDER BY user_id ASC", (error, results) => {
-    if (error) {
-      throw error;
-    }
-    res.status(200).json(results.rows);
-  });
-};
+import express from "express";
+import {
+  createRoom,
+  getRoomById,
+  getRoomByName,
+  updateRoom,
+  deleteRoom,
+  joinRoom,
+} from "../controllers/roomController.js";
 
-const getUserById = (req, res) => {
-  const id = parseInt(req.params.id);
+const router = express.Router();
 
-  pool.query(
-    "SELECT * FROM users WHERE user_id = $1",
-    [id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200).json(results.rows);
-    }
-  );
-};
+// Protect all of these routes: require a logged-in user
+router.use((req, res, next) => {
+  if (!req.session.user_id) {
+    return res.status(401).json({ message: "Not logged in" });
+  }
+  next();
+});
 
-const getUserByUsernameOrEmail = (req, res) => {
-  const { username, email, password } = req.body;
-  if (!password)
-    return res.status(400).json({ message: "Password is required" });
-  if (!username && !email)
-    return res.status(400).json({ message: "Username or email required" });
+// POST   /rooms/create      → createRoom
+// POST   /rooms/join       → joinRoom
+// GET    /rooms/:id        → getRoomById
+// POST   /rooms/find       → getRoomByName
+// PUT    /rooms/:id        → updateRoom
+// DELETE /rooms/:id        → deleteRoom
 
-  pool.query(
-    "SELECT * FROM users WHERE user_username = $1 OR user_email = $2",
-    [username, email],
-    (error, results) => {
-      if (error) {
-        return res.status(500).json({ message: error.message });
-      }
-      if (results.rows.length > 0) {
-        const user = results.rows[0];
-        if (user.user_password === password) {
-          req.session.user_id = user.user_id;
-          return res.status(200).json({
-            message: `Welcome back ${user.user_username || user.user_email}!`,
-          });
-        }
-        return res
-          .status(401)
-          .json({ message: "Invalid credentials. Try again" });
-      }
-      return res
-        .status(401)
-        .json({ message: "Invalid credentials. Try again" });
-    }
-  );
-};
+router.post("/create", createRoom);
+router.post("/join", joinRoom);
+router.get("/:id", getRoomById);
+router.post("/find", getRoomByName);
+router.put("/:id", updateRoom);
+router.delete("/:id", deleteRoom);
 
-const createUser = (req, res) => {
-  const { username, email, password } = req.body;
-
-  console.log(req.body);
-
-  pool.query(
-    "INSERT INTO users (user_username, user_email, user_password) VALUES ($1, $2, $3) RETURNING *",
-    [username, email, password],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res
-        .status(201)
-        .json({ message: `User added with  ID: ${results.rows[0]?.user_id}` });
-    }
-  );
-};
-
-const updateUser = (req, res) => {
-  const id = parseInt(req.params.id);
-  const { username, email, password } = req.body;
-
-  pool.query(
-    "UPDATE users SET user_username = $1, user_email = $2, user_password = $3 WHERE user_id = $4",
-    [username, email, password, id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200).send(`User modified with id ${id}`);
-    }
-  );
-};
-
-const deleteUser = (req, res) => {
-  const id = parseInt(req.params.id);
-
-  pool.query("DELETE FROM users WHERE user_id = $1", [id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    res.status(200).send(`User deleted with ID: ${id}`);
-  });
-};
-
-module.exports = {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
-  getUserByUsernameOrEmail,
-};
+export default router;

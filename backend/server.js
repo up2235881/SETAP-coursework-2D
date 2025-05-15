@@ -8,7 +8,8 @@ import { fileURLToPath } from "url";
 
 import userRoutes from "./routes/userRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
-import availabilityRoutes from "./routes/availabilityRoutes.js";
+import availabilityRoutes from "./routes/availabilityRoute.js";
+import notesRoutes from "./routes/notesRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -44,6 +45,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/availability", availabilityRoutes);
+app.use("/api/notes", notesRoutes);
 
 import meetingRoutes from "./routes/meetingRoutes.js";
 app.use("/api/meetings", meetingRoutes);
