@@ -16,7 +16,6 @@ Scope of the Project
 
    **Goals**: The goal of the project is to address common challenges in teamwork - such as difficulty in aligning schedules and maintaining clear communication by offering an all in one collaborative space. 
 
-   For user requirements check the :doc:`requirements` page. 
 
 **User Requirements**
 
@@ -65,6 +64,9 @@ Scope of the Project
       - *Notifications(Planned):* Internal notification logic is implemented, with room to extend to email or push notifications in future iterations.
 
    
+
+
+   ##talk about the features maybe
 
 
 **Setup and Running Instructions**
