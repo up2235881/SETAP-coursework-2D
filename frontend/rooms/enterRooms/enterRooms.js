@@ -1,23 +1,50 @@
-document.getElementById("roomsetting").addEventListener("click", function () {
-     window.location.href = "/SETAP-coursework/frontend/rooms/availability/meeting scheduler.html"
-})
+const roomId = new URLSearchParams(window.location.search).get('roomId');
 
-document.getElementById("meetingscheduler").addEventListener("click", function () {
-     window.location.href = "/SETAP-coursework/frontend/rooms/availability/meetingscheduler.html"
-})
+// Dynamic routing to room pages with ?roomId
+document.querySelectorAll('.menu-item').forEach(button => {
+  button.addEventListener('click', () => {
+    const baseLink = button.dataset.link;
+    if (baseLink && roomId) {
+      window.location.href = `${baseLink}?roomId=${roomId}`;
+    }
+  });
+});
 
-document.getElementById("meetingnotes").addEventListener("click", function () {
-    window.location.href = "/SETAP-coursework/frontend/rooms/availability/meetingnotes.html"
-})
+// Show confirmed meeting info for this room
+const confirmedDisplay = document.querySelector("#confirmed-meeting-info");
 
-document.getElementById("mymeetings").addEventListener("click", function () {
-     window.location.href = "/SETAP-coursework/frontend/rooms/availability/mymeetings.html"
-})
+if (roomId && confirmedDisplay) {
+  fetch(`/api/meetings/confirmed?roomId=${roomId}`, { credentials: "include" })
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.day && data.time && data.location) {
+        confirmedDisplay.textContent = `📢 Confirmed Meeting: ${data.day} at ${data.time}, Location: ${data.location}`;
+      }
+    })
+    .catch(() => {
+      console.warn("No confirmed meeting for this room.");
+    });
+}
 
-document.getElementById("availability").addEventListener("click", function () {
-    window.location.href = "/SETAP-coursework/frontend/rooms/availability/availability.html"
-})
+// --- Add Participants Modal Logic ---
+const addBtn = document.getElementById('addParticipantsBtn');
+const modal = document.getElementById('addParticipantsModal');
+const confirmBtn = document.getElementById('confirmAddFriend');
+const cancelBtn = document.getElementById('cancelAddFriend');
+const input = document.getElementById('friend-username');
 
-document.getElementById("addparticipants").addEventListener("click", function () {
-     window.location.href = "/SETAP-coursework/frontend/rooms/availability/addparticipants.html"
-})
+addBtn.onclick = () => {
+  modal.style.display = 'flex';
+  input.value = '';
+  input.focus();
+};
+cancelBtn.onclick = () => modal.style.display = 'none';
+confirmBtn.onclick = () => {
+  // You can add your database logic here later
+  alert("Friend added: " + input.value);
+  modal.style.display = 'none';
+};
+// Optional: close modal on Escape key
+window.addEventListener('keydown', e => {
+  if (modal.style.display === 'flex' && e.key === 'Escape') modal.style.display = 'none';
+});

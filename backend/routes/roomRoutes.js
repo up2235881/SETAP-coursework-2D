@@ -1,13 +1,23 @@
-const express = require('express');
+import express from 'express';
+import {
+  createRoom,
+  joinRoom,
+  listRoomUsers,
+  getRoomCreator
+} from '../Controllers/roomController.js';
+
 const router = express.Router();
-const { createRoom, getRoomById, getRoomByName, updateRoom, deleteRoom, joinRoom} = require('../models/roomModel');
-const authMiddleware = require('../middleware/authMiddleware');
 
-router.post('/rooms', authMiddleware,createRoom);
-router.get('/rooms/:id', getRoomById);
-router.post('/rooms/by-name', getRoomByName);
-router.put('/rooms/:id', updateRoom);
-router.delete('/rooms/:id', deleteRoom);
-router.post('/joinRoom', authMiddleware, joinRoom);
+// Create a room & auto-join creator
+router.post('/create', createRoom);
 
-module.exports = router;
+// Join by invite code
+router.post('/join', joinRoom);
+
+// List members of a room
+router.get('/:roomId/users', listRoomUsers);
+
+// Get the creator of a room
+router.get('/:roomId/creator', getRoomCreator);
+
+export default router;

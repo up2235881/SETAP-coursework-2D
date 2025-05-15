@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slot-ify Landing Page</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Slotify</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="branding">
-            <h1>Slot-ify</h1>
-        </div>
-
-        <div class="illustration">
-            <img src="/SETAP-coursework/images/Managers-team-Graphics-17978760-1.jpg" alt="Illustration of scheduling app">
-        </div>
-
-        <div class="loading-dots">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-        </div>
-
-        <div class="footer-text">
-            <p id="typing-text"></p>
-        </div>
+  <div class="landing-loading">
+    <div class="landing-message">
+      <div class="slotify-title">Slotify</div>
+      <div class="typewriter-wrapper">
+        <div class="typewriter-message" id="typewriter"></div>
+      </div>
     </div>
+  </div>
+  <script>
+    // You can change this message to your slogan or welcome message!
+    const message = "Making scheduling and collaboration effortless for groups...";
+    const typewriter = document.getElementById('typewriter');
+    let i = 0;
 
-    <script src="index.js"></script>
+    function typeWriter() {
+      if (i < message.length) {
+        typewriter.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeWriter, 60);
+      } else {
+        setTimeout(() => {
+          window.location.href = '../loginpage/login.html';
+        }, 900);
+      }
+    }
+    typeWriter();
+  </script>
 </body>
 </html>
