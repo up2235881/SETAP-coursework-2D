@@ -4,6 +4,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import availabilityRoute from './routes/availabilityRoute.js';
 import meetingRoute     from './routes/meetingRoutes.js';
@@ -15,12 +17,18 @@ import userRoute        from './routes/userRoutes.js';
 dotenv.config();
 
 const app = express();
+
+// ─── ES-MODULE __dirname SHIM ───────────────────────────────────────────────
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
+
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 5000;
 
 // ─── MIDDLEWARE ────────────────────────────────────────────────────────────────
 
-// Enable CORS to allow your frontend (e.g. localhost:3000) to talk to this API
+// Enable CORS to allow your frontend to talk to this API
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true
@@ -30,7 +38,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session support (so req.session.user_id is available in your controllers)
+// Session support (so req.session.user_id is available in controllers)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'change_this_secret',
   resave: false,
@@ -41,7 +49,17 @@ app.use(session({
   }
 }));
 
-// ─── ROUTES ───────────────────────────────────────────────────────────────────
+// ─── SERVE FRONTEND ───────────────────────────────────────────────────────────
+
+// Serve all files in your frontend/ folder
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// If you want `/` to always serve landingpage.html explicitly:
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/landingpage.html'));
+});
+
+// ─── API ROUTES ───────────────────────────────────────────────────────────────
 
 // Availability endpoints
 app.use('/availability', availabilityRoute);
@@ -63,6 +81,6 @@ app.use('/users', userRoute);
 
 // ─── START SERVER ─────────────────────────────────────────────────────────────
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://${HOST}:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Server running at http://${HOST}:${PORT}`);
 });
