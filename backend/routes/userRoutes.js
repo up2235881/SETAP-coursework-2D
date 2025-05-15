@@ -18,6 +18,7 @@ router.post("/login", loginUser); // login
 // All other user ops
 router.get("/me", getMe);
 router.get("/", getUsers);
+router.get("/:id/confirmed-meetings", getConfirmedMeetingsByUser);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);

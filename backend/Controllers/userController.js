@@ -189,3 +189,24 @@ export const getMe = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+export const getConfirmedMeetingsByUser = async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+  if (isNaN(userId)) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+  try {
+    const { rows } = await db.query(
+      `SELECT r.room_name, c.day, c.start_time as time, c.location
+         FROM confirmed_meetings c
+         JOIN rooms r ON c.room_id = r.room_id
+         JOIN room_participants rp ON r.room_id = rp.room_id
+        WHERE rp.user_id = $1`,
+      [userId]
+    );
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error("Error fetching confirmed meetings:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

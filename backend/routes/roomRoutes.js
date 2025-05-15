@@ -3,7 +3,8 @@ import {
   createRoom,
   joinRoom,
   listRoomUsers,
-  getRoomCreator
+  getRoomCreator,
+  getRoomsByUser
 } from '../Controllers/roomController.js';
 
 const router = express.Router();
