@@ -1,56 +1,68 @@
-import express from "express";
-import path from "path";
-import cors from "cors";
-import session from "express-session";
-import bodyParser from "body-parser";
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
+// backend/server.js
 
-import userRoutes from "./routes/userRoutes.js";
-import roomRoutes from "./routes/roomRoutes.js";
-import availabilityRoutes from "./routes/availabilityRoute.js";
-import notesRoutes from "./routes/notesRoutes.js";
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import session from 'express-session';
+
+import availabilityRoute from './routes/availabilityRoute.js';
+import meetingRoute     from './routes/meetingRoutes.js';
+import notesRoute       from './routes/notesRoutes.js';
+import dashboardRoute   from './routes/dashboardRoutes.js';
+import roomRoute        from './routes/roomRoutes.js';
+import userRoute        from './routes/userRoutes.js';
 
 dotenv.config();
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT || 5000;
 
-// For __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// ─── MIDDLEWARE ────────────────────────────────────────────────────────────────
 
-// Middleware
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-app.use(bodyParser.urlencoded({ extended: true }));
+// Enable CORS to allow your frontend (e.g. localhost:3000) to talk to this API
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true
+}));
+
+// Parse JSON and URL-encoded bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret_key",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: process.env.NODE_ENV === "production" },
-  })
-);
+// Session support (so req.session.user_id is available in your controllers)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'change_this_secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  }
+}));
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, "../frontend")));
+// ─── ROUTES ───────────────────────────────────────────────────────────────────
 
-// Redirect root to landing page
-app.get("/", (req, res) => {
-  res.redirect("/landingpage/index.html");
-});
+// Availability endpoints
+app.use('/availability', availabilityRoute);
 
-// API routes
-app.use("/api/users", userRoutes);
-app.use("/api/rooms", roomRoutes);
-app.use("/api/availability", availabilityRoutes);
-app.use("/api/notes", notesRoutes);
+// Meeting confirmation endpoints
+app.use('/meeting', meetingRoute);
 
-import meetingRoutes from "./routes/meetingRoutes.js";
-app.use("/api/meetings", meetingRoutes);
+// Notes CRUD endpoints
+app.use('/notes', notesRoute);
 
-// Start server
+// User dashboard (rooms + upcoming meetings)
+app.use('/dashboard', dashboardRoute);
+
+// Room management (create, join, list members, get creator)
+app.use('/rooms', roomRoute);
+
+// User auth & management (register, login, CRUD)
+app.use('/users', userRoute);
+
+// ─── START SERVER ─────────────────────────────────────────────────────────────
+
 app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://${HOST}:${PORT}`);
 });
