@@ -5,6 +5,7 @@ import cors from "cors";
 import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
+import db from "./configs/db_config.js";
 
 import availabilityRoute from "./routes/availabilityRoute.js";
 import meetingRoute from "./routes/meetingRoutes.js";
@@ -62,3 +63,9 @@ app.use("/api/users", userRoute);
 app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running at http://${HOST}:${PORT}`);
 });
+
+setInterval(() => {
+  db.query("SELECT 1").catch((err) => {
+    console.error("Keep-alive DB ping failed:", err.message);
+  });
+}, 100 * 60 * 1000);

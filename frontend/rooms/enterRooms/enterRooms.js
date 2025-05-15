@@ -1,10 +1,14 @@
 const roomId = new URLSearchParams(window.location.search).get("roomId");
-// Update room header with room name
+
+// Update the room name in the header
 const header = document.getElementById("room-header");
 
 if (roomId && header) {
   fetch(`/api/rooms/${roomId}`, { credentials: "include" })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) throw new Error("Room not found");
+      return res.json();
+    })
     .then((data) => {
       if (data.room_name) {
         header.innerHTML = `
@@ -18,7 +22,7 @@ if (roomId && header) {
     });
 }
 
-// Dynamic routing to room pages with ?roomId
+// Dynamic routing for all menu buttons
 document.querySelectorAll(".menu-item").forEach((button) => {
   button.addEventListener("click", () => {
     const baseLink = button.dataset.link;
@@ -28,7 +32,7 @@ document.querySelectorAll(".menu-item").forEach((button) => {
   });
 });
 
-// Show confirmed meeting info for this room
+// Show confirmed meeting info
 const confirmedDisplay = document.querySelector("#confirmed-meeting-info");
 
 if (roomId && confirmedDisplay) {
@@ -58,11 +62,9 @@ addBtn.onclick = () => {
 };
 cancelBtn.onclick = () => (modal.style.display = "none");
 confirmBtn.onclick = () => {
-  // You can add your database logic here later
   alert("Friend added: " + input.value);
   modal.style.display = "none";
 };
-// Optional: close modal on Escape key
 window.addEventListener("keydown", (e) => {
   if (modal.style.display === "flex" && e.key === "Escape")
     modal.style.display = "none";
