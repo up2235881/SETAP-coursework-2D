@@ -2,22 +2,30 @@
 
 body {
   font-family: 'Rubik', Arial, sans-serif;
-  background: linear-gradient(120deg, #ffffff, #ffe3f1, #e1d5f2, #daf3ff);
-  background-size: 400% 400%;
-  animation: dreamyBackground 15s ease infinite;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* No background here—handled by .bg-blur-image */
 }
 
-@keyframes dreamyBackground {
-  0%, 100% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
+/* Blurred background image for the whole viewport */
+.bg-blur-image {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('/SETAP-coursework/frontend/images/loginandregister.jpg') no-repeat center center/cover;
+  filter: blur(5px) brightness(0.75);
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
 }
 
+/* Animated solid gradient for the auth card */
 .auth-container {
-  background: rgba(255,255,255,0.92);
+  background: linear-gradient(120deg, #fff, #ffe3f1, #e1d5f2, #daf3ff);
+  background-size: 400% 400%;
+  animation: dreamyBackground 15s ease infinite;
   padding: 40px 32px;
   border-radius: 22px;
   box-shadow: 0 8px 32px 0 rgba(31,38,135,0.16);
@@ -25,6 +33,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes dreamyBackground {
+  0%, 100% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
 }
 
 .auth-title {
@@ -89,4 +104,13 @@ body {
 .auth-link:hover {
   color: #ec407a;
   text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 22px 7vw;
+    width: 97vw;
+    min-width: unset;
+  }
 }

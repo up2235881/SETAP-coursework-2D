@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-
     <!-- Fonts & Icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
@@ -14,12 +13,15 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-
     <!-- Styles -->
     <link rel="stylesheet" href="dashboard.css" />
   </head>
   <body>
-    <div class="dashboard-wrapper">
+    <!-- Blurred background image slot -->
+    <div class="bg-blur-image"></div>
+
+    <!-- Main animated card -->
+    <div class="dashboard-wrapper animated-gradient-bg">
       <header class="top-bar">
         <h1>
           <span class="material-icons gradient-icon">dashboard</span> My
@@ -58,7 +60,6 @@
             </button>
           </form>
         </div>
-
         <div class="form-block">
           <h3>Join a Room</h3>
           <form id="join-room-form">
@@ -75,7 +76,6 @@
         </div>
       </section>
     </div>
-
     <script src="dashboard.js"></script>
   </body>
 </html>

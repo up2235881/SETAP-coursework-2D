@@ -1,0 +1,183 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap");
+
+body {
+  background: linear-gradient(120deg, #f8f3ff, #fbefff 55%, #e1d5f2 100%);
+  font-family: "Rubik", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  padding: 20px 36px;
+  background: #a77bfa;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(139, 64, 234, 0.09);
+  font-size: 1.2rem;
+}
+
+.top-bar h1 {
+  margin: 0 auto 0 18px;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.exit {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+  gap: 7px;
+  font-size: 1.05rem;
+}
+
+.settings-panel {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 22px;
+  box-shadow: 0 8px 36px 0 rgba(181, 120, 255, 0.13);
+  padding: 44px 38px 34px 38px;
+  max-width: 430px;
+  margin: 50px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-panel h2 {
+  font-size: 1.45rem;
+  color: #722fbb;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e3d3fa;
+}
+
+.setting-item label {
+  font-size: 1.1rem;
+  color: #8150b8;
+  font-weight: 600;
+}
+
+.theme-toggle-btn {
+  background: linear-gradient(90deg, #722fbb, #ec407a 90%);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 10px 28px;
+  font-size: 1.04rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(236, 64, 122, 0.09);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.theme-toggle-btn:hover {
+  background: linear-gradient(90deg, #ec407a, #722fbb 90%);
+  transform: translateY(-1px) scale(1.04);
+}
+
+@media (max-width: 600px) {
+  .settings-panel {
+    padding: 18px 8px 16px 8px;
+    max-width: 97vw;
+  }
+  .top-bar {
+    padding: 10px 7vw;
+    font-size: 1rem;
+  }
+}
+
+body.dark-theme {
+  background: linear-gradient(120deg, #30214c 0%, #401f3b 55%, #1d1d2f 100%);
+  color: #eee;
+}
+
+body.dark-theme .settings-panel {
+  background: rgba(38, 24, 54, 0.96);
+  box-shadow: 0 8px 36px 0 rgba(66, 24, 120, 0.16);
+}
+
+body.dark-theme .top-bar {
+  background: #32136b;
+  color: #fff;
+}
+
+body.dark-theme .settings-panel h2,
+body.dark-theme .setting-item label {
+  color: #e4cbff;
+}
+
+body.dark-theme .theme-toggle-btn {
+  background: linear-gradient(90deg, #df52d5, #5753c9 90%);
+  color: #fff;
+}
+
+body.dark-theme .theme-toggle-btn:hover {
+  background: linear-gradient(90deg, #5753c9, #df52d5 90%);
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(41,32,84,0.23);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+.modal {
+  background: #fff;
+  padding: 30px 38px 22px 38px;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(123, 73, 202, 0.13);
+  min-width: 310px;
+  max-width: 92vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-title {
+  font-size: 1.35rem;
+  color: #a047e7;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.modal-body {
+  color: #432c63;
+  font-size: 1.08rem;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.modal-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+.modal-btn {
+  background: linear-gradient(90deg, #722fbb, #ec407a 90%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 26px;
+  font-size: 1.03rem;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.11s;
+}
+.modal-btn.logout {
+  background: linear-gradient(90deg,#f44336,#e57373 90%);
+}
+.modal-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px) scale(1.04);
+}

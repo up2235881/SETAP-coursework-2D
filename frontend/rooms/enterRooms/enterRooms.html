@@ -4,12 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Enter Room</title>
-
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="enterRooms.css" />
+  <script>
+    // Instantly apply saved theme before content renders
+    if (localStorage.getItem("roomTheme") === "dark") {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+  </script>
 </head>
-
 <body>
   <header class="top-bar">
     <div class="exit" onclick="window.history.back()">
@@ -21,31 +27,42 @@
   </header>
 
   <main class="menu-container">
-    <button class="menu-item" data-link="/rooms/enterRooms/settings.html">
-      <span class="material-icons gradient-icon">settings</span>
-      Room Settings
-    </button>
-
-    <button class="menu-item" data-link="/rooms/meetingscheduler/scheduler.html">
+    <button class="menu-item" onclick="window.location.href='../meetingscheduler/scheduler.html'">
       <span class="material-icons gradient-icon">schedule</span>
       Meeting Scheduler
     </button>
-
-    <button class="menu-item" data-link="/rooms/meetingnotes/meetingnotes.html">
+    <button class="menu-item" onclick="window.location.href='../meetingnotes/meetingnotes.html'">
       <span class="material-icons gradient-icon">note</span>
       Meeting Notes
     </button>
-
-    <button class="menu-item" data-link="/rooms/availability/availability.html">
+    <button class="menu-item" onclick="window.location.href='../availability/availability.html'">
       <span class="material-icons gradient-icon">calendar_today</span>
       Availability
     </button>
-
-    <button class="menu-item" data-link="/rooms/availability/addparticipants.html">
+    <button class="menu-item" id="addParticipantsBtn">
       <span class="material-icons gradient-icon">group_add</span>
       Add Participants
     </button>
+    <button class="menu-item" onclick="window.location.href='../settings/settings.html'">
+      <span class="material-icons gradient-icon">settings</span>
+      Settings
+    </button>
   </main>
+
+  <!-- Add Participants Modal -->
+  <div id="addParticipantsModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-title">Add Friend</div>
+      <div class="modal-body">
+        <label for="friend-username" style="font-size:1rem;font-weight:500;">Friend's Username</label>
+        <input type="text" id="friend-username" class="modal-input" placeholder="Enter username" autocomplete="off" />
+      </div>
+      <div class="modal-actions">
+        <button id="confirmAddFriend" class="modal-btn">Add Friend</button>
+        <button id="cancelAddFriend" class="modal-btn cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="enterRooms.js"></script>
 </body>
