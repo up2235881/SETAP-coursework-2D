@@ -186,3 +186,37 @@ main h2 {
   filter: brightness(1.08);
   transform: translateY(-1px) scale(1.04);
 }
+
+body.dark-theme {
+  background-color: #121212;
+  color: #eeeeee;
+}
+
+body.dark-theme .settings-panel {
+  background: #1f1f1f;
+}
+
+body.dark-theme .modal {
+  background: #2b2b2b;
+  color: white;
+}
+
+body.dark-theme .highlight-bar,
+body.dark-theme .modal-input,
+body.dark-theme .setting-item {
+  background-color: #292929 !important;
+  color: #f0f0f0;
+}
+
+#participantsList {
+  padding-left: 0;
+  margin-top: 10px;
+}
+
+#participantsList li {
+  list-style: none;
+  font-size: 1.05rem;
+  margin: 6px 0;
+  padding-left: 8px;
+  text-align: left;
+}

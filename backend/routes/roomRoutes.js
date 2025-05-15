@@ -5,7 +5,8 @@ import {
   listRoomUsers,
   getRoomCreator,
   getRoomsByUserId,
-  getRoomInfo
+  getRoomInfo,
+  updateRoomTheme
 } from "../Controllers/roomController.js";
 
 const router = express.Router();
@@ -26,4 +27,7 @@ router.get("/:roomId/creator", getRoomCreator);
 
 router.get("/:roomId", getRoomInfo);
 
+router.get("/:roomId/users", listRoomUsers);
+
+router.patch("/:roomId/theme", updateRoomTheme);
 export default router;

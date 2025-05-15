@@ -109,12 +109,7 @@ export const listRoomUsers = async (req, res) => {
        WHERE rp.room_id = $1`,
       [roomId]
     );
-    return res.status(201).json({
-      room_id: roomId,
-      room_name: roomName,
-      invite_code: inviteCode,
-      message: "Room created",
-    });
+    return res.status(200).json(rows); // ✅ return array of users
   } catch (err) {
     console.error("Error fetching room members:", err);
     return res.status(500).json({ message: "Internal server error" });
@@ -176,15 +171,37 @@ export const getRoomInfo = async (req, res) => {
 
   try {
     const result = await db.query(
-      "SELECT room_name FROM rooms WHERE room_id = $1",
+      "SELECT room_id, room_name, invite_code, theme FROM rooms WHERE room_id = $1",
       [roomId]
     );
+
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Room not found" });
     }
-    return res.status(200).json(result.rows[0]);
+
+    return res.status(200).json(result.rows[0]); // ✅ everything the frontend needs
   } catch (err) {
     console.error("Error fetching room info:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateRoomTheme = async (req, res) => {
+  const roomId = parseInt(req.params.roomId, 10);
+  const { theme } = req.body;
+
+  if (isNaN(roomId) || !["light", "dark"].includes(theme)) {
+    return res.status(400).json({ message: "Invalid data" });
+  }
+
+  try {
+    await db.query(
+      "UPDATE rooms SET theme = $1, updated_at = NOW() WHERE room_id = $2",
+      [theme, roomId]
+    );
+    return res.status(200).json({ message: "Theme updated" });
+  } catch (err) {
+    console.error("Error updating room theme:", err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
