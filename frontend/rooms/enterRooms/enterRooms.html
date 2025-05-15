@@ -1,25 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="enterRooms.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enter Room</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="enterRooms.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="exit">
-            <img src="/SETAP-coursework/frontend/icons/room-door.png" alt="exit icon">
-            <span>Exit</span>
-        </div>
-        <div class="buttons">
-            <button id="roomsetting"><img src="/SETAP-coursework/frontend/icons/setting.png" alt="">Room Settings</button>
-            <button id="meetingscheduler"><img src="/SETAP-coursework/frontend/icons/scheduler.png" alt="">Meeting Scheduler</button>
-            <button id="meetingnotes"><img src="/SETAP-coursework/frontend/icons/notes.png" alt="">Meeting Notes</button>
-            <button id="availability"><img src="/SETAP-coursework/frontend/icons/clock.png" alt="">Availability</button>
-            <button id="addparticipants"><img src="/SETAP-coursework/frontend/icons/add.png" alt="">Add Participants</button>
-        </div>
-        <script src="EnterRooms.js"></script>
+  <!-- Blurred background image slot -->
+  <div class="bg-blur-image"></div>
+
+  <div class="dashboard-menu-card animated-gradient-bg">
+    <header class="top-bar">
+      <div class="exit" onclick="window.history.back()">
+        <span class="material-icons">logout</span>
+        <span>Exit</span>
+      </div>
+      <h1>My Room Dashboard</h1>
+      <div id="confirmed-meeting-info" class="highlight-bar"></div>
+    </header>
+
+    <main class="menu-container">
+      <button class="menu-item" onclick="window.location.href='../meetingscheduler/scheduler.html'">
+        <span class="material-icons gradient-icon">schedule</span>
+        Meeting Scheduler
+      </button>
+      <button class="menu-item" onclick="window.location.href='../meetingnotes/meetingnotes.html'">
+        <span class="material-icons gradient-icon">note</span>
+        Meeting Notes
+      </button>
+      <button class="menu-item" onclick="window.location.href='../availability/availability.html'">
+        <span class="material-icons gradient-icon">calendar_today</span>
+        Availability
+      </button>
+      <button class="menu-item" id="addParticipantsBtn">
+        <span class="material-icons gradient-icon">group_add</span>
+        Add Participants
+      </button>
+      <button class="menu-item" onclick="window.location.href='../settings/settings.html'">
+        <span class="material-icons gradient-icon">settings</span>
+        Settings
+      </button>
+    </main>
+  </div>
+
+  <!-- Add Participants Modal -->
+  <div id="addParticipantsModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-title">Add Friend</div>
+      <div class="modal-body">
+        <label for="friend-username" style="font-size:1rem;font-weight:500;">Friend's Username</label>
+        <input type="text" id="friend-username" class="modal-input" placeholder="Enter username" autocomplete="off" />
+      </div>
+      <div class="modal-actions">
+        <button id="confirmAddFriend" class="modal-btn">Add Friend</button>
+        <button id="cancelAddFriend" class="modal-btn cancel">Cancel</button>
+      </div>
     </div>
+  </div>
+
+  <script type="module" src="enterRooms.js"></script>
 </body>
 </html>

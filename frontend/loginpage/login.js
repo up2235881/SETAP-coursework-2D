@@ -1,29 +1,29 @@
-document.getElementById('login-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    
-    const studentEmailUsername = document.getElementById('student-username-email').value;
-    const password = document.getElementById('password').value;
-    try{
-        const response = await fetch ('http://localhost:3000/api/login', { 
-            method: "POST",
-            headers: {
-                'Content-type' : 'application/json',
-                'Accept' : 'application/json'
-            },  
-            body: JSON.stringify({ 
-                email: studentEmailUsername.includes(('@')) ? studentEmailUsername : null,
-                username: studentEmailUsername,
-                password : password
-            })
-        });
+// frontend/loginpage/login.js
 
-        const result = await response.json();
-        alert(result.message);
-        if(response.status === 200){
-            window.location.href = 'Dashboard/dashboard.html';
-        } 
-    } catch (error) {
-        alert('An error occured: ' + error.message);
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const identifier = document.getElementById("student-username-email").value.trim();
+  const password   = document.getElementById("password").value;
+
+  try {
+    // Hit the exact route you mounted: POST /users/login
+    const res = await fetch("/users/login", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier, password })
+    });
+
+    if (res.ok) {
+      // Redirect to your dashboard page (static folder fallback serves Dashboard/...).
+      window.location.href = "/Dashboard/dashboard.html";
+    } else {
+      const err = await res.json();
+      alert(err.message || "Login failed");
     }
-    
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Error logging in");
+  }
 });

@@ -1,84 +1,119 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const notesList = document.getElementById("noteslist");
-    const form = document.getElementById("notesform");
-  
-    if (notesList) {
-      const storedNotes = JSON.parse(localStorage.getItem("meetingNotes")) || [];
-      const MAX_DUMMIES = 3;
-  
-      // Show dummy placeholders only if fewer than 3 notes exist
-      const dummiesToShow = Math.max(0, MAX_DUMMIES - storedNotes.length);
-  
-      for (let i = 0; i < dummiesToShow; i++) {
-        const box = document.createElement("div");
-        box.className = "note-box";
-        box.innerHTML = `
-          <div onclick="window.location.href='addnote.html'" style="text-align: left;">
-            <strong>Meeting Note ${i + 1}</strong><br/>
-            <small>Click to add details</small>
-          </div>
-          <button disabled>🗑️</button>
-        `;
-        notesList.appendChild(box);
-      }
-  
-      // Show all real notes
-      storedNotes.forEach((note, index) => {
-        const box = document.createElement("div");
-        box.className = "note-box";
-        box.innerHTML = `
-          <div onclick="window.location.href='addnote.html?index=${index}'" style="text-align: left;">
-            <strong>${note.purpose}</strong><br/>
-            <small>${note.date} at ${note.time}</small>
-          </div>
-          <button onclick="deleteNote(${index})">🗑️</button>
-        `;
-        notesList.appendChild(box);
-      });
-    }
-  
-    // Handle add/edit form
-    if (form) {
-      const params = new URLSearchParams(window.location.search);
-      const index = params.get("index");
-      const existing = JSON.parse(localStorage.getItem("meetingNotes")) || [];
-  
-      if (index !== null && existing[index]) {
-        const note = existing[index];
-        document.getElementById("date").value = note.date;
-        document.getElementById("time").value = note.time;
-        document.getElementById("purpose").value = note.purpose;
-        document.getElementById("summary").value = note.summary;
-      }
-  
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-  
-        const date = document.getElementById("date").value;
-        const time = document.getElementById("time").value;
-        const purpose = document.getElementById("purpose").value;
-        const summary = document.getElementById("summary").value;
-  
-        const newNote = { date, time, purpose, summary };
-  
-        if (index !== null && existing[index]) {
-          existing[index] = newNote;
-        } else {
-          existing.push(newNote);
-        }
-  
-        localStorage.setItem("meetingNotes", JSON.stringify(existing));
-        alert("Notes saved successfully");
-        window.location.href = "meetingnotes.html";
-      });
-    }
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get("roomId");
+const notesList = document.querySelector("#noteslist");
+
+if (!roomId) {
+  notesList.innerHTML = '<p style="color:red;">Room ID missing.</p>';
+  throw new Error("Missing roomId");
+}
+
+let currentUserId = null;
+
+// Get current user first
+fetch("/api/users/me", { credentials: "include" })
+  .then((res) => res.json())
+  .then((user) => {
+    currentUserId = user.user_id;
+    return fetch(`/api/notes/${roomId}`, { credentials: "include" });
+  })
+  .then((res) => res.json())
+  .then((notes) => {
+    renderNotes(notes);
+  })
+  .catch((err) => {
+    console.error("Error:", err);
+    notesList.innerHTML = '<p style="color:red;">Could not load notes.</p>';
   });
-  
-  // Delete function
-  function deleteNote(index) {
-    const storedNotes = JSON.parse(localStorage.getItem("meetingNotes")) || [];
-    storedNotes.splice(index, 1);
-    localStorage.setItem("meetingNotes", JSON.stringify(storedNotes));
-    location.reload();
-  }
-  
+
+function renderNotes(notes) {
+  notesList.innerHTML = "";
+  notes.forEach((note) => {
+    const div = document.createElement("div");
+    div.classList.add("note-item");
+
+    const created = formatDate(note.created_at);
+    const edited = note.edited_at
+      ? `<br><em>Edited at ${formatDate(note.edited_at)} by ${
+          note.edited_by
+        }</em>`
+      : "";
+
+    const noteContent = document.createElement("div");
+    noteContent.innerHTML = `
+      <h3>${note.title}</h3>
+      <p>${note.content}</p>
+      <small>Created at ${created} by ${note.created_by}${edited}</small>
+    `;
+
+    const editBtn = document.createElement("button");
+    editBtn.className = "add-btn edit-btn";
+    editBtn.innerHTML = `<span class="material-icons">edit</span> Edit`;
+    editBtn.onclick = () => enableInlineEdit(note, div);
+
+    div.appendChild(noteContent);
+    div.appendChild(editBtn);
+    notesList.appendChild(div);
+  });
+}
+
+function enableInlineEdit(note, container) {
+  container.innerHTML = ""; // clear existing
+
+  const titleInput = document.createElement("input");
+  titleInput.type = "text";
+  titleInput.value = note.title;
+  titleInput.className = "edit-input";
+
+  const contentInput = document.createElement("textarea");
+  contentInput.value = note.content;
+  contentInput.className = "edit-input";
+
+  const saveBtn = document.createElement("button");
+  saveBtn.className = "add-btn";
+  saveBtn.innerHTML = `<span class="material-icons">save</span> Save`;
+  saveBtn.onclick = () => {
+    const updatedTitle = titleInput.value.trim();
+    const updatedContent = contentInput.value.trim();
+
+    if (!updatedTitle || !updatedContent) {
+      alert("Fields cannot be empty.");
+      return;
+    }
+
+    fetch(`/api/notes/${note.note_id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        roomId,
+        title: updatedTitle,
+        content: updatedContent,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        // Refresh notes
+        return fetch(`/api/notes/${roomId}`, { credentials: "include" });
+      })
+      .then((res) => res.json())
+      .then((notes) => renderNotes(notes))
+      .catch((err) => {
+        console.error("Update failed:", err);
+        alert("Failed to update note.");
+      });
+  };
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.className = "add-btn";
+  cancelBtn.innerHTML = `<span class="material-icons">close</span> Cancel`;
+  cancelBtn.onclick = () => renderNotes([note]); // reset this note only
+
+  container.appendChild(titleInput);
+  container.appendChild(contentInput);
+  container.appendChild(saveBtn);
+  container.appendChild(cancelBtn);
+}
+
+function formatDate(timestamp) {
+  return new Date(timestamp).toLocaleString();
+}
