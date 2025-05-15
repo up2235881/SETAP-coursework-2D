@@ -24,8 +24,7 @@
     <div class="dashboard-wrapper animated-gradient-bg">
       <header class="top-bar">
         <h1>
-          <span class="material-icons gradient-icon">dashboard</span> My
-          Dashboard
+          <span class="material-icons gradient-icon">dashboard</span> My Dashboard
         </h1>
       </header>
 
@@ -55,11 +54,18 @@
               placeholder="Room Name"
               required
             />
+            <!-- ✅ Moved the error span here -->
+            <span
+              class="error"
+              id="roomNameError"
+              style="display: none; margin-top: 5px; display: block; color: #e53935"
+            ></span>
             <button type="submit" class="submit-btn">
               <span class="material-icons">add</span> Create
             </button>
           </form>
         </div>
+
         <div class="form-block">
           <h3>Join a Room</h3>
           <form id="join-room-form">
@@ -76,6 +82,7 @@
         </div>
       </section>
     </div>
+
     <!-- Welcome Modal -->
     <div id="welcomeModal" class="modal-overlay" style="display: none">
       <div class="modal">
@@ -97,13 +104,8 @@
         </div>
       </div>
     </div>
-    <!-- Validation error for room creation -->
-    <span
-      class="error"
-      id="roomNameError"
-      style="display: none; margin-left: 10px; color: #e53935"
-    ></span>
 
+    <!-- JavaScript -->
     <script src="dashboard.js"></script>
   </body>
 </html>

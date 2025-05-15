@@ -147,7 +147,7 @@ export const getRoomCreator = async (req, res) => {
 };
 
 // GET /rooms/user/:id — get all rooms for a user
-export const getRoomsByUser = async (req, res) => {
+export const getRoomsByUserId = async (req, res) => {
   const userId = parseInt(req.params.id, 10);
   if (isNaN(userId)) {
     return res.status(400).json({ message: "Invalid user ID" });
@@ -165,5 +165,26 @@ export const getRoomsByUser = async (req, res) => {
   } catch (err) {
     console.error("Error fetching rooms:", err);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getRoomInfo = async (req, res) => {
+  const roomId = parseInt(req.params.roomId, 10);
+  if (isNaN(roomId)) {
+    return res.status(400).json({ message: "Invalid room ID" });
+  }
+
+  try {
+    const result = await db.query(
+      "SELECT room_name FROM rooms WHERE room_id = $1",
+      [roomId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+    return res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error fetching room info:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

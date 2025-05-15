@@ -7,6 +7,7 @@ import {
   updateUser,
   deleteUser,
   getMe,
+  getConfirmedMeetingsByUser
 } from "../Controllers/userController.js";
 
 const router = express.Router();

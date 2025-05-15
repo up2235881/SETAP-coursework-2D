@@ -34,8 +34,6 @@ roomNameInput.addEventListener("input", () => {
 fetch("/api/users/me", { credentials: "include" })
   .then((res) => res.json())
   .then((user) => {
-    console.log("user from /api/users/me:", user); // For debugging
-
     const username = user.user_username || user.username || "";
     const userId = user.user_id || user.id;
 
@@ -52,52 +50,41 @@ fetch("/api/users/me", { credentials: "include" })
       return;
     }
 
-    // Welcome modal logic
     const welcomeKey = "slotify-welcomed-" + userId;
     const firstVisit = !localStorage.getItem(welcomeKey);
     if (firstVisit) {
       welcomeModalTitle.textContent = `Welcome to Slotify, ${username}!`;
       welcomeModalBody.textContent = `We hope you enjoy.`;
       localStorage.setItem(welcomeKey, "1");
-      welcomeModal.style.display = "flex";
     } else {
       welcomeModalTitle.textContent = `Welcome back to Slotify, ${username}!`;
       welcomeModalBody.textContent = "";
-      welcomeModal.style.display = "flex";
     }
+    welcomeModal.style.display = "flex";
     if (welcomeModalOk) {
       welcomeModalOk.onclick = () => (welcomeModal.style.display = "none");
     }
 
-    // Save userId globally for later calls
     window.SLOTIFY_USER_ID = userId;
-
     loadRooms(userId);
     loadMeetings(userId);
   })
   .catch((err) => {
     console.error("Error loading user info:", err);
-    if (
-      welcomeModalTitle &&
-      welcomeModalBody &&
-      welcomeModal &&
-      welcomeModalOk
-    ) {
-      welcomeModalTitle.textContent = "Session expired. Please log in again.";
-      welcomeModalBody.textContent = "";
-      welcomeModal.style.display = "flex";
-      welcomeModalOk.onclick = () => {
-        welcomeModal.style.display = "none";
-        window.location.href = "/loginpage/login.html";
-      };
-    }
+    welcomeModalTitle.textContent = "Session expired. Please log in again.";
+    welcomeModalBody.textContent = "";
+    welcomeModal.style.display = "flex";
+    welcomeModalOk.onclick = () => {
+      welcomeModal.style.display = "none";
+      window.location.href = "/loginpage/login.html";
+    };
   });
 
 function loadRooms(userId) {
   fetch(`/api/rooms/user/${userId}`, { credentials: "include" })
     .then((res) => res.json())
     .then((rooms) => {
-      roomsContainer.innerHTML = ""; // Clear previous
+      roomsContainer.innerHTML = "";
       if (!rooms.length) {
         noRoomsMsg.style.display = "block";
         return;
@@ -109,7 +96,7 @@ function loadRooms(userId) {
         card.classList.add("card");
         card.innerHTML = `
           <h3>${room.room_name}</h3>
-          <p>Code: ${room.room_code || room.invite_code || ""}</p>
+          <p>Code: ${room.invite_code || ""}</p>
           <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${
             room.room_id
           }'">
@@ -128,7 +115,7 @@ function loadMeetings(userId) {
   fetch(`/api/users/${userId}/confirmed-meetings`, { credentials: "include" })
     .then((res) => res.json())
     .then((meetings) => {
-      meetingsList.innerHTML = ""; // Clear previous
+      meetingsList.innerHTML = "";
       if (!meetings.length) {
         noMeetingsMsg.style.display = "block";
         return;
@@ -170,7 +157,6 @@ createForm.addEventListener("submit", (e) => {
   })
     .then((res) => res.json())
     .then((room) => {
-      // Modal pops up with the room name
       roomCreatedModalTitle.textContent = "Room created successfully!";
       roomCreatedModalBody.textContent = `Room "${room.room_name}" has been created.`;
       roomCreatedModal.style.display = "flex";
@@ -189,7 +175,7 @@ createForm.addEventListener("submit", (e) => {
     });
 });
 
-// JOIN ROOM HANDLING
+// JOIN ROOM HANDLING (Improved)
 joinForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const code = document.querySelector("#join-room-code").value.trim();
@@ -199,9 +185,29 @@ joinForm.addEventListener("submit", (e) => {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ roomCode: code }),
+    body: JSON.stringify({ inviteCode: code }),
   })
-    .then((res) => res.json())
-    .then(() => location.reload())
-    .catch((err) => alert("Failed to join room."));
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then((err) => {
+          throw new Error(err.message || "Failed to join room.");
+        });
+      }
+      return res.json();
+    })
+    .then((data) => {
+      roomCreatedModalTitle.textContent = "Room Joined!";
+      roomCreatedModalBody.textContent = `You've successfully joined a room with code "${code}".`;
+      roomCreatedModal.style.display = "flex";
+      if (roomCreatedModalOk) {
+        roomCreatedModalOk.onclick = () => {
+          roomCreatedModal.style.display = "none";
+          loadRooms(window.SLOTIFY_USER_ID);
+          document.querySelector("#join-room-code").value = "";
+        };
+      }
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
 });
