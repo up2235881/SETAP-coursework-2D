@@ -1,37 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Slotify</title>
-  <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-  <div class="landing-loading">
-    <div class="landing-message">
-      <div class="slotify-title">Slotify</div>
-      <div class="typewriter-wrapper">
-        <div class="typewriter-message" id="typewriter"></div>
-      </div>
-    </div>
-  </div>
-  <script>
-    // You can change this message to your slogan or welcome message!
-    const message = "Making scheduling and collaboration effortless for groups...";
-    const typewriter = document.getElementById('typewriter');
-    let i = 0;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
 
-    function typeWriter() {
-      if (i < message.length) {
-        typewriter.innerHTML += message.charAt(i);
-        i++;
-        setTimeout(typeWriter, 60);
-      } else {
-        setTimeout(() => {
-          window.location.href = '../loginpage/login.html';
-        }, 900);
-      }
-    }
-    typeWriter();
-  </script>
-</body>
+    <!-- Fonts & Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-wrapper">
+      <header class="top-bar">
+        <h1>
+          <span class="material-icons gradient-icon">dashboard</span> My
+          Dashboard
+        </h1>
+      </header>
+
+      <section class="section">
+        <h2>My Rooms</h2>
+        <div id="my-rooms" class="card-grid"></div>
+        <p id="no-rooms-message" class="empty-msg" style="display: none">
+          You have no rooms yet.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>My Upcoming Meetings</h2>
+        <ul id="my-meetings" class="meeting-list"></ul>
+        <p id="no-meetings-message" class="empty-msg" style="display: none">
+          No upcoming meetings.
+        </p>
+      </section>
+
+      <section class="section actions">
+        <div class="form-block">
+          <h3>Create a Room</h3>
+          <form id="create-room-form">
+            <input
+              type="text"
+              id="create-room-name"
+              placeholder="Room Name"
+              required
+            />
+            <button type="submit" class="submit-btn">
+              <span class="material-icons">add</span> Create
+            </button>
+          </form>
+        </div>
+
+        <div class="form-block">
+          <h3>Join a Room</h3>
+          <form id="join-room-form">
+            <input
+              type="text"
+              id="join-room-code"
+              placeholder="Room Code"
+              required
+            />
+            <button type="submit" class="submit-btn">
+              <span class="material-icons">login</span> Join
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <script src="dashboard.js"></script>
+  </body>
 </html>
