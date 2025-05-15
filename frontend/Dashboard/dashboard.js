@@ -12,13 +12,30 @@ const welcomeModalTitle = document.getElementById("welcomeModalTitle");
 const welcomeModalBody = document.getElementById("welcomeModalBody");
 const welcomeModalOk = document.getElementById("welcomeModalOk");
 
+// Room created modal elements
+const roomNameInput = document.querySelector("#create-room-name");
+const roomNameError = document.getElementById("roomNameError");
+const roomCreatedModal = document.getElementById("roomCreatedModal");
+const roomCreatedModalTitle = document.getElementById("roomCreatedModalTitle");
+const roomCreatedModalBody = document.getElementById("roomCreatedModalBody");
+const roomCreatedModalOk = document.getElementById("roomCreatedModalOk");
+
+// Validate room name: at least 4 letters, no numbers or special chars
+function isRoomNameValid(name) {
+  return /^[A-Za-z]{4,}$/.test(name);
+}
+
+// Hide error on typing
+roomNameInput.addEventListener("input", () => {
+  roomNameError.style.display = "none";
+});
+
 // Load current user, rooms, and confirmed meetings
 fetch("/api/users/me", { credentials: "include" })
   .then((res) => res.json())
   .then((user) => {
     console.log("user from /api/users/me:", user); // For debugging
 
-    // Check for valid session/user object
     const username = user.user_username || user.username || "";
     const userId = user.user_id || user.id;
 
@@ -35,7 +52,7 @@ fetch("/api/users/me", { credentials: "include" })
       return;
     }
 
-    // Welcome modal logic (localStorage tracks if seen)
+    // Welcome modal logic
     const welcomeKey = "slotify-welcomed-" + userId;
     const firstVisit = !localStorage.getItem(welcomeKey);
     if (firstVisit) {
@@ -52,13 +69,20 @@ fetch("/api/users/me", { credentials: "include" })
       welcomeModalOk.onclick = () => (welcomeModal.style.display = "none");
     }
 
+    // Save userId globally for later calls
+    window.SLOTIFY_USER_ID = userId;
+
     loadRooms(userId);
     loadMeetings(userId);
   })
   .catch((err) => {
     console.error("Error loading user info:", err);
-    // Show modal and force redirect to login on OK
-    if (welcomeModalTitle && welcomeModalBody && welcomeModal && welcomeModalOk) {
+    if (
+      welcomeModalTitle &&
+      welcomeModalBody &&
+      welcomeModal &&
+      welcomeModalOk
+    ) {
       welcomeModalTitle.textContent = "Session expired. Please log in again.";
       welcomeModalBody.textContent = "";
       welcomeModal.style.display = "flex";
@@ -85,8 +109,10 @@ function loadRooms(userId) {
         card.classList.add("card");
         card.innerHTML = `
           <h3>${room.room_name}</h3>
-          <p>Code: ${room.room_code}</p>
-          <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}'">
+          <p>Code: ${room.room_code || room.invite_code || ""}</p>
+          <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${
+            room.room_id
+          }'">
             <span class="material-icons">meeting_room</span> Enter
           </button>
         `;
@@ -123,11 +149,18 @@ function loadMeetings(userId) {
     });
 }
 
-// Create room form
+// CREATE ROOM HANDLING
 createForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const name = document.querySelector("#create-room-name").value.trim();
-  if (!name) return;
+  const name = roomNameInput.value.trim();
+
+  if (!isRoomNameValid(name)) {
+    roomNameError.textContent =
+      "Room name must be at least 4 letters, with no numbers or special characters.";
+    roomNameError.style.display = "block";
+    return;
+  }
+  roomNameError.style.display = "none";
 
   fetch("/api/rooms/create", {
     method: "POST",
@@ -137,16 +170,26 @@ createForm.addEventListener("submit", (e) => {
   })
     .then((res) => res.json())
     .then((room) => {
-      alert(`✅ Room "${room.room_name}" created!`);
-      window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}`;
+      // Modal pops up with the room name
+      roomCreatedModalTitle.textContent = "Room created successfully!";
+      roomCreatedModalBody.textContent = `Room "${room.room_name}" has been created.`;
+      roomCreatedModal.style.display = "flex";
+      if (roomCreatedModalOk) {
+        roomCreatedModalOk.onclick = () => {
+          roomCreatedModal.style.display = "none";
+          loadRooms(window.SLOTIFY_USER_ID);
+          roomNameInput.value = "";
+        };
+      }
     })
     .catch((err) => {
       console.error(err);
-      alert("Failed to create room.");
+      roomNameError.textContent = "Failed to create room. Please try again.";
+      roomNameError.style.display = "block";
     });
 });
 
-// Join room form
+// JOIN ROOM HANDLING
 joinForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const code = document.querySelector("#join-room-code").value.trim();
