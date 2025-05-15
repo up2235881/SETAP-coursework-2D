@@ -1,33 +1,29 @@
-document.getElementById("login-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
+// frontend/loginpage/login.js
 
-  const studentEmailUsername = document.getElementById("student-username-email").value;
-  const password = document.getElementById("password").value;
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  const loginData = {
-    email: studentEmailUsername.includes("@") ? studentEmailUsername : null,
-    username: studentEmailUsername,
-    password: password,
-  };
+  const identifier = document.getElementById("student-username-email").value.trim();
+  const password   = document.getElementById("password").value;
 
   try {
-    const response = await fetch("/api/users/login", {
+    // Hit the exact route you mounted: POST /users/login
+    const res = await fetch("/users/login", {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier, password })
     });
 
-    if (response.ok) {
-      window.location.href = "/frontend/Dashboard/dashboard.html";
+    if (res.ok) {
+      // Redirect to your dashboard page (static folder fallback serves Dashboard/...).
+      window.location.href = "/Dashboard/dashboard.html";
     } else {
-      const result = await response.json();
-      alert(result.message || "Login failed");
+      const err = await res.json();
+      alert(err.message || "Login failed");
     }
-  } catch (error) {
-    console.error("Login error:", error);
+  } catch (err) {
+    console.error("Login error:", err);
     alert("Error logging in");
   }
 });

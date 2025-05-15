@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap');
+
+body {
+  font-family: 'Rubik', Arial, sans-serif;
+  background: linear-gradient(120deg, #ffffff, #ffe3f1, #e1d5f2, #daf3ff);
+  background-size: 400% 400%;
+  animation: dreamyBackground 15s ease infinite;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes dreamyBackground {
+  0%, 100% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+}
+
+.auth-container {
+  background: rgba(255,255,255,0.92);
+  padding: 40px 32px;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.16);
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #722fbb;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.auth-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-form input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #d3bffa;
+  font-size: 1rem;
+  outline: none;
+  background: #f6f3fa;
+  transition: border 0.2s;
+}
+
+.auth-form input:focus {
+  border-color: #a181fa;
+  background: #f3eaff;
+}
+
+.auth-button {
+  margin-top: 10px;
+  background: linear-gradient(90deg, #722fbb, #ec407a 90%);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(236, 64, 122, 0.08);
+  transition: background 0.2s, transform 0.1s;
+}
+
+.auth-button:hover {
+  background: linear-gradient(90deg, #ec407a, #722fbb 90%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.auth-link {
+  display: block;
+  margin: 12px 0 0 0;
+  text-align: center;
+  color: #7e57c2;
+  text-decoration: none;
+  font-size: 0.98rem;
+  transition: color 0.18s;
+}
+
+.auth-link:hover {
+  color: #ec407a;
+  text-decoration: underline;
+}

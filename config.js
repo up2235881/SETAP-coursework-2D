@@ -1,8 +1,18 @@
-require("dotenv").config({
-  path: require("path").resolve(__dirname, "./.env"),
+// /setapCourseWork/config.js
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// For __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Loads .env from root (same folder as config.js)
+dotenv.config({
+  path: path.resolve(__dirname, "./.env"),
 });
 
-module.exports = {
+const config = {
   DB_URL: process.env.DATABASE_URL || process.env.DATABASE_PUBLIC_URL,
   DB_USER: process.env.DB_USER,
   DB_HOST: process.env.DB_HOST,
@@ -11,3 +21,5 @@ module.exports = {
   DB_PORT: process.env.DB_PORT,
   API_URL: process.env.API_URL,
 };
+
+export default config;

@@ -1,5 +1,4 @@
 // backend/server.js
-
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -16,71 +15,50 @@ import userRoute        from './routes/userRoutes.js';
 
 dotenv.config();
 
-const app = express();
-
-// ─── ES-MODULE __dirname SHIM ───────────────────────────────────────────────
+// ES‐module __dirname shim
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const app  = express();
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 5000;
 
 // ─── MIDDLEWARE ────────────────────────────────────────────────────────────────
-
-// Enable CORS to allow your frontend to talk to this API
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true
 }));
-
-// Parse JSON and URL-encoded bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Session support (so req.session.user_id is available in controllers)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'change_this_secret',
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
-  }
+  cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production' }
 }));
 
-// ─── SERVE FRONTEND ───────────────────────────────────────────────────────────
+// ─── SERVE FRONTEND STATIC ASSETS ─────────────────────────────────────────────
+app.use(
+  express.static(
+    path.join(__dirname, '../frontend/landingpage'),
+    { index: 'index.html' }
+  )
+);
+app.use(
+  express.static(
+    path.join(__dirname, '../frontend')
+  )
+);
 
-// Serve all files in your frontend/ folder
-app.use(express.static(path.join(__dirname, '../frontend')));
-
-// If you want `/` to always serve landingpage.html explicitly:
-app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/landingpage.html'));
-});
-
-// ─── API ROUTES ───────────────────────────────────────────────────────────────
-
-// Availability endpoints
+// ─── API ROUTES ────────────────────────────────────────────────────────────────
 app.use('/availability', availabilityRoute);
-
-// Meeting confirmation endpoints
-app.use('/meeting', meetingRoute);
-
-// Notes CRUD endpoints
-app.use('/notes', notesRoute);
-
-// User dashboard (rooms + upcoming meetings)
-app.use('/dashboard', dashboardRoute);
-
-// Room management (create, join, list members, get creator)
-app.use('/rooms', roomRoute);
-
-// User auth & management (register, login, CRUD)
-app.use('/users', userRoute);
+app.use('/meeting',     meetingRoute);
+app.use('/notes',       notesRoute);
+app.use('/dashboard',   dashboardRoute);
+app.use('/rooms',       roomRoute);
+app.use('/users',       userRoute);
 
 // ─── START SERVER ─────────────────────────────────────────────────────────────
-
 app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running at http://${HOST}:${PORT}`);
 });

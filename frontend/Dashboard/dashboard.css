@@ -1,162 +1,90 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap');
 
 body {
-  font-family: "Rubik", sans-serif;
-  background: linear-gradient(120deg, #ffffff, #ffe3f1, #e1d5f2, #daf3ff);
-  background-size: 400% 400%;
-  animation: dreamyBackground 15s ease infinite;
-  display: flex;
-  justify-content: center;
   min-height: 100vh;
+  margin: 0;
+  font-family: 'Rubik', Arial, sans-serif;
+  background: url('/SETAP-coursework/frontend/landingpage/4381.jpg') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
 }
 
-@keyframes dreamyBackground {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: inherit;
+  filter: blur(8px) brightness(0.72);
+  z-index: 0;
 }
 
-.dashboard-wrapper {
-  width: 100%;
-  max-width: 1100px;
-  background-color: #ffffffee;
-  margin: 40px 20px;
-  padding: 40px;
-  border-radius: 18px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
-}
-
-.top-bar {
-  margin-bottom: 35px;
+.landing-loading {
+  min-height: 100vh;
+  min-width: 100vw;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
-.top-bar h1 {
-  font-size: 28px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.gradient-icon {
-  font-size: 30px;
-  background: linear-gradient(45deg, #ff4081, #7c4dff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.section {
-  margin-bottom: 40px;
-}
-
-.section h2 {
-  font-size: 22px;
-  margin-bottom: 16px;
-  color: #4a148c;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  padding: 18px 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
-  border-left: 5px solid #7c4dff;
-  transition: transform 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-}
-
-.card h3 {
-  font-size: 18px;
-  margin-bottom: 6px;
-  color: #333;
-}
-
-.card p {
-  font-size: 14px;
-  color: #555;
-}
-
-.meeting-list {
-  list-style: none;
+.landing-message {
+  background: rgba(246, 240, 255, 0.96); /* lighter purple, close to screenshot */
+  color: #431a85;
+  border-radius: 2.2rem;
+  padding: 48px 50px 36px 50px;
+  box-shadow: 0 8px 36px 0 rgba(181,120,255,0.14);
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.meeting-list li {
-  background-color: #fefefe;
-  padding: 14px 18px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);
-  font-size: 15px;
-}
-
-.form-block {
-  background: #f6f6f6;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 24px;
-}
-
-.form-block h3 {
-  font-size: 18px;
-  margin-bottom: 14px;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  font-size: 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.submit-btn {
-  background-color: #ec407a;
-  color: white;
-  font-weight: bold;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 15px;
-  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s ease;
+  min-width: 390px;
+  max-width: 410px;
+  min-height: 360px;
+  max-height: 410px;
 }
 
-.submit-btn:hover {
-  background-color: #d81b60;
+.slotify-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #8c38e7;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-bottom: 36px;
+  line-height: 1.1;
 }
 
-.empty-msg {
-  font-style: italic;
-  color: #777;
-  font-size: 14px;
-  padding: 10px 0;
+.typewriter-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  min-height: 80px; /* creates space at the bottom */
+}
+
+.typewriter-message {
+  font-size: 1.22rem;
+  color: #7b42bb;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.45;
+  margin-bottom: 6px;
+  min-height: 1.7em;
+  letter-spacing: 0.3px;
+  width: 100%;
+  max-width: 90%;
+}
+
+@media (max-width: 600px) {
+  .landing-message {
+    padding: 32px 12px 28px 12px;
+    min-width: 90vw;
+    max-width: 96vw;
+  }
+  .slotify-title {
+    font-size: 2.0rem;
+  }
+  .typewriter-message {
+    font-size: 1rem;
+  }
 }

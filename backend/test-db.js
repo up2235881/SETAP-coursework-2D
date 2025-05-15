@@ -1,14 +1,5 @@
-// backend/test-db.js
-
-import pkg from 'pg';
-const { Pool } = pkg;
-import config from '../config.js';
-
-const pool = new Pool({
-  connectionString: config.DB_URL,
-});
-
-console.log({ config });
+// /setapCourseWork/SETAP-coursework/backend/test-db.js
+import pool from './configs/db_config.js'; // Relative path from backend to configs
 
 (async () => {
   try {
