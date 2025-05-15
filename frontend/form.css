@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap");
 
 body {
-  font-family: 'Rubik', Arial, sans-serif;
+  font-family: "Rubik", Arial, sans-serif;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -12,8 +12,11 @@ body {
 /* Blurred background image for the whole viewport */
 .bg-blur-image {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: url('/SETAP-coursework/frontend/images/loginandregister.jpg') no-repeat center center/cover;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("/images/loginandregister.jpg") no-repeat center center/cover;
   filter: blur(5px) brightness(0.75);
   z-index: 0;
   width: 100vw;
@@ -28,7 +31,7 @@ body {
   animation: dreamyBackground 15s ease infinite;
   padding: 40px 32px;
   border-radius: 22px;
-  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.16);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.16);
   width: 350px;
   display: flex;
   flex-direction: column;
@@ -38,8 +41,13 @@ body {
 }
 
 @keyframes dreamyBackground {
-  0%, 100% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .auth-title {

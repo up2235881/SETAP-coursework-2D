@@ -8,7 +8,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 
   try {
     // Hit the exact route you mounted: POST /users/login
-    const res = await fetch("/users/login", {
+    const res = await fetch("/api/users/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

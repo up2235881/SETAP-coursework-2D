@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Register</title>
-  <link rel="stylesheet" href="/SETAP-coursework/frontend/form.css">
-</head>
-<body>
-  <!-- Blurred background -->
-  <div class="bg-blur-image"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link rel="stylesheet" href="/form.css" />
+  </head>
+  <body>
+    <!-- Blurred background -->
+    <div class="bg-blur-image"></div>
 
-  <div class="auth-container">
-    <div class="auth-title">Create Account</div>
-    <form class="auth-form" id="registerForm">
-      <input type="text" id="username" placeholder="Username" required />
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-      <button type="submit" class="auth-button">Register</button>
-    </form>
-    <a href="/SETAP-coursework/frontend/loginpage/login.html" class="auth-link">Already have an account? Login</a>
-  </div>
-  <script src="register.js"></script>
-</body>
+    <div class="auth-container">
+      <div class="auth-title">Create Account</div>
+      <form class="auth-form" id="registerForm">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          required
+        />
+        <button type="submit" class="auth-button">Register</button>
+      </form>
+      <a href="/loginpage/login.html" class="auth-link"
+        >Already have an account? Login</a
+      >
+    </div>
+    <script src="/registerpage/register.js"></script>
+  </body>
 </html>

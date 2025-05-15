@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Slotify</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="landing-loading">
-    <div class="landing-message">
-      <div class="slotify-title">Slotify</div>
-      <div class="typewriter-wrapper">
-        <div class="typewriter-message" id="typewriter"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Slotify</title>
+    <link rel="stylesheet" href="/landingpage/style.css" />
+  </head>
+  <body>
+    <div class="landing-loading">
+      <div class="landing-message">
+        <div class="slotify-title">Slotify</div>
+        <div class="typewriter-wrapper">
+          <div class="typewriter-message" id="typewriter"></div>
+        </div>
       </div>
     </div>
-  </div>
-  <script>
-    // You can change this message to your slogan or welcome message!
-    const message = "Making scheduling and collaboration effortless for groups...";
-    const typewriter = document.getElementById('typewriter');
-    let i = 0;
+    <script>
+      // You can change this message to your slogan or welcome message!
+      const message =
+        "Making scheduling and collaboration effortless for groups...";
+      const typewriter = document.getElementById("typewriter");
+      let i = 0;
 
-    function typeWriter() {
-      if (i < message.length) {
-        typewriter.innerHTML += message.charAt(i);
-        i++;
-        setTimeout(typeWriter, 60);
-      } else {
-        setTimeout(() => {
-          window.location.href = '../loginpage/login.html';
-        }, 900);
+      function typeWriter() {
+        if (i < message.length) {
+          typewriter.innerHTML += message.charAt(i);
+          i++;
+          setTimeout(typeWriter, 60);
+        } else {
+          setTimeout(() => {
+            window.location.href = "../loginpage/login.html";
+          }, 900);
+        }
       }
-    }
-    typeWriter();
-  </script>
-</body>
+      typeWriter();
+    </script>
+  </body>
 </html>

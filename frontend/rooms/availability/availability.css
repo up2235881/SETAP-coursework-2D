@@ -13,9 +13,12 @@ body {
 /* Blurred background image for the whole page */
 .bg-blur-image {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 0;
-  background: url('/SETAP-coursework/frontend/images/availability.jpg') no-repeat center center/cover;
+  background: url("/images/availability.jpg") no-repeat center center/cover;
   filter: blur(5px) brightness(0.75);
   width: 100vw;
   height: 100vh;
@@ -28,7 +31,7 @@ body {
   background-size: 400% 400%;
   animation: dreamyBackground 15s ease infinite;
   border-radius: 18px;
-  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.13);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.13);
   margin: 50px auto;
   padding: 40px 28px 36px 28px;
   width: 100%;
@@ -41,9 +44,15 @@ body {
 }
 
 @keyframes dreamyBackground {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Top Bar */

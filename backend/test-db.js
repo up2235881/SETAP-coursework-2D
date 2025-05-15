@@ -1,12 +1,15 @@
-// /setapCourseWork/SETAP-coursework/backend/test-db.js
-import pool from './configs/db_config.js'; // Relative path from backend to configs
+import { Pool } from "pg";
+import config from "../config.js";
 
-(async () => {
-  try {
-    const client = await pool.connect();
-    console.log('Connected to DB successfully');
-    client.release();
-  } catch (err) {
-    console.error('Connection error', err.stack);
+const pool = new Pool({
+  connectionString: config.DB_URL,
+});
+
+pool.connect((err, client, release) => {
+  if (err) {
+    return console.error("Connection error", err.stack);
   }
-})();
+  console.log("Connected to DB successfully");
+  release();
+});
+

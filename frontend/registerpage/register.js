@@ -3,11 +3,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const API_URL = window.location.origin;              // e.g. http://localhost:5000
   const form = document.getElementById("registerForm");
-  const username       = document.getElementById("student-username");
-  const email          = document.getElementById("student-email");
+  const username       = document.getElementById("username");
+  const email          = document.getElementById("email");
   const password       = document.getElementById("password");
-  const confirmPass    = document.getElementById("confirm-password");
-  const registerButton = document.querySelector(".register-button");
+  const confirmPass    = document.getElementById("confirmPassword");
+  const registerButton = document.querySelector(".auth-button");
 
   // error spans
   const usernameError       = document.getElementById("usernameError");
@@ -64,17 +64,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Wire up live validation
-  [username, email, password, confirmPass].forEach((el) =>
-    el.addEventListener("input", checkInputs)
-  );
+  // [username, email, password, confirmPass].forEach((el) =>
+  //   el.addEventListener("input", checkInputs)
+  // );
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    checkInputs();
+    // checkInputs();
     if (registerButton.disabled) return;
 
     try {
-      const res = await fetch(`${API_URL}/users`, {
+      const res = await fetch(`/api/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -99,5 +99,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initial check
-  checkInputs();
+  // checkInputs();
 });
