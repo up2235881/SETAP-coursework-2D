@@ -13,7 +13,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "cd ./backend && node --watch server.js"
+    "start": "cd ./backend && node server.js"
   },
   "author": "",
   "license": "ISC",
