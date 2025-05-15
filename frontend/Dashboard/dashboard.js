@@ -6,21 +6,74 @@ const noMeetingsMsg = document.querySelector("#no-meetings-message");
 const createForm = document.querySelector("#create-room-form");
 const joinForm = document.querySelector("#join-room-form");
 
+// Welcome modal elements
+const welcomeModal = document.getElementById("welcomeModal");
+const welcomeModalTitle = document.getElementById("welcomeModalTitle");
+const welcomeModalBody = document.getElementById("welcomeModalBody");
+const welcomeModalOk = document.getElementById("welcomeModalOk");
+
 // Load current user, rooms, and confirmed meetings
 fetch("/api/users/me", { credentials: "include" })
   .then((res) => res.json())
   .then((user) => {
-    loadRooms(user.user_id);
-    loadMeetings(user.user_id);
+    console.log("user from /api/users/me:", user); // For debugging
+
+    // Check for valid session/user object
+    const username = user.user_username || user.username || "";
+    const userId = user.user_id || user.id;
+
+    if (!userId || !username) {
+      welcomeModalTitle.textContent = "Session expired. Please log in again.";
+      welcomeModalBody.textContent = "";
+      welcomeModal.style.display = "flex";
+      if (welcomeModalOk) {
+        welcomeModalOk.onclick = () => {
+          welcomeModal.style.display = "none";
+          window.location.href = "/loginpage/login.html";
+        };
+      }
+      return;
+    }
+
+    // Welcome modal logic (localStorage tracks if seen)
+    const welcomeKey = "slotify-welcomed-" + userId;
+    const firstVisit = !localStorage.getItem(welcomeKey);
+    if (firstVisit) {
+      welcomeModalTitle.textContent = `Welcome to Slotify, ${username}!`;
+      welcomeModalBody.textContent = `We hope you enjoy.`;
+      localStorage.setItem(welcomeKey, "1");
+      welcomeModal.style.display = "flex";
+    } else {
+      welcomeModalTitle.textContent = `Welcome back to Slotify, ${username}!`;
+      welcomeModalBody.textContent = "";
+      welcomeModal.style.display = "flex";
+    }
+    if (welcomeModalOk) {
+      welcomeModalOk.onclick = () => (welcomeModal.style.display = "none");
+    }
+
+    loadRooms(userId);
+    loadMeetings(userId);
   })
   .catch((err) => {
     console.error("Error loading user info:", err);
+    // Show modal and force redirect to login on OK
+    if (welcomeModalTitle && welcomeModalBody && welcomeModal && welcomeModalOk) {
+      welcomeModalTitle.textContent = "Session expired. Please log in again.";
+      welcomeModalBody.textContent = "";
+      welcomeModal.style.display = "flex";
+      welcomeModalOk.onclick = () => {
+        welcomeModal.style.display = "none";
+        window.location.href = "/loginpage/login.html";
+      };
+    }
   });
 
 function loadRooms(userId) {
   fetch(`/api/rooms/user/${userId}`, { credentials: "include" })
     .then((res) => res.json())
     .then((rooms) => {
+      roomsContainer.innerHTML = ""; // Clear previous
       if (!rooms.length) {
         noRoomsMsg.style.display = "block";
         return;
@@ -40,13 +93,16 @@ function loadRooms(userId) {
         roomsContainer.appendChild(card);
       });
     })
-    .catch((err) => console.error("Error loading rooms:", err));
+    .catch((err) => {
+      console.error("Error loading rooms:", err);
+    });
 }
 
 function loadMeetings(userId) {
   fetch(`/api/users/${userId}/confirmed-meetings`, { credentials: "include" })
     .then((res) => res.json())
     .then((meetings) => {
+      meetingsList.innerHTML = ""; // Clear previous
       if (!meetings.length) {
         noMeetingsMsg.style.display = "block";
         return;
@@ -62,7 +118,9 @@ function loadMeetings(userId) {
         meetingsList.appendChild(li);
       });
     })
-    .catch((err) => console.error("Error loading meetings:", err));
+    .catch((err) => {
+      console.error("Error loading meetings:", err);
+    });
 }
 
 // Create room form
