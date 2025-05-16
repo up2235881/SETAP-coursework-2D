@@ -8,6 +8,8 @@ import db from "./configs/db_config.js";
 import config from "../config.js";
 
 import availabilityRoute from "./routes/availabilityRoute.js";
+import meetingRoute from "./routes/meetingRoutes.js";
+import notesRoute from "./routes/notesRoutes.js";
 import dashboardRoute from "./routes/dashboardRoutes.js";
 import roomRoute from "./routes/roomRoutes.js";
 import userRoute from "./routes/userRoutes.js";
@@ -51,13 +53,15 @@ app.use(
 
 // ─── API ROUTES ────────────────────────────────────────────────────────────────
 app.use("/api/availability", availabilityRoute);
+app.use("/api/meeting", meetingRoute);
+app.use("/api/notes", notesRoute);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/rooms", roomRoute);
 app.use("/api/users", userRoute);
 
 // ─── START SERVER ─────────────────────────────────────────────────────────────
 app.listen(PORT, HOST, () => {
-  console.log(`Server running at http://${HOST}:${PORT}`);
+  console.log`(Server running at http://${HOST}:${PORT})`;
 });
 
 // ─── DB Keep Alive ─────────────────────────────────────────────────────────────
