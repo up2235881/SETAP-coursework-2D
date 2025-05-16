@@ -206,15 +206,23 @@ export const updateRoomTheme = async (req, res) => {
   }
 };
 export async function leaveRoom(req, res) {
-  const userId = req.session.userId;
-  const roomId = req.params.roomId;
+  const userId = req.session.user_id;
+  const roomId = req.params.id; // ✅ CORRECTED
+
+  console.log("LEAVING ROOM", { userId, roomId });
 
   try {
-    await db.query(
+    const result = await db.query(
       "DELETE FROM room_participants WHERE user_id = $1 AND room_id = $2",
       [userId, roomId]
     );
-    res.status(200).json({ message: "Left room successfully" });
+
+    console.log("DELETE result:", result);
+
+    res.status(200).json({
+      message: "Left room successfully",
+      deletedCount: result.rowCount,
+    });
   } catch (error) {
     console.error("Error leaving room:", error);
     res.status(500).json({ message: "Error leaving room" });

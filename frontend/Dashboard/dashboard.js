@@ -85,28 +85,30 @@ function loadRooms(userId) {
     .then((res) => res.json())
     .then((rooms) => {
       roomsContainer.innerHTML = "";
-      if (!rooms.length) {
+
+      if (!rooms || rooms.length === 0) {
         noRoomsMsg.style.display = "block";
         return;
       }
 
       noRoomsMsg.style.display = "none";
+
       rooms.forEach((room) => {
         const card = document.createElement("div");
         card.classList.add("card");
-        card.classList.add("room-card"); // for delete targeting
+        card.classList.add("room-card");
 
         card.innerHTML = `
-    <h3>${room.room_name}</h3>
-    <div class="room-actions">
-      <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}'">
-        <span class="material-icons">meeting_room</span> Enter
-      </button>
-      <button class="submit-btn delete-room-btn" data-room-id="${room.room_id}">
-        <span class="material-icons">delete</span> Delete
-      </button>
-    </div>
-  `;
+          <h3>${room.room_name}</h3>
+          <div class="room-actions">
+            <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}'">
+              <span class="material-icons">meeting_room</span> Enter
+            </button>
+            <button class="submit-btn delete-room-btn" data-room-id="${room.room_id}">
+              <span class="material-icons">delete</span> Delete
+            </button>
+          </div>
+        `;
 
         roomsContainer.appendChild(card);
       });
@@ -115,6 +117,7 @@ function loadRooms(userId) {
       console.error("Error loading rooms:", err);
     });
 }
+
 
 function loadMeetings(userId) {
   fetch(`/api/users/${userId}/confirmed-meetings`, { credentials: "include" })
@@ -240,24 +243,6 @@ window.confirmLogout = function () {
     window.location.href = "../../landingpage/index.html";
   }, 2000);
 };
-
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete-room-btn")) {
-    const roomId = e.target.dataset.roomId;
-    fetch(`/api/rooms/${roomId}/leave`, {
-      method: "DELETE",
-      credentials: "include",
-    })
-      .then((res) => {
-        if (res.ok) {
-          e.target.closest(".room-card").remove();
-        } else {
-          alert("Failed to leave room.");
-        }
-      })
-      .catch(() => alert("An error occurred."));
-  }
-});
 
 let selectedRoomId = null;
 let selectedRoomCard = null;
