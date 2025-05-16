@@ -16,7 +16,7 @@ dotenv.config();
 
 // ES-module __dirname shim
 const __filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(_filename);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const HOST = config.HOST || "localhost";
@@ -51,8 +51,6 @@ app.use(
 
 // ─── API ROUTES ────────────────────────────────────────────────────────────────
 app.use("/api/availability", availabilityRoute);
-app.use("/api/meeting", meetingRoute);
-app.use("/api/notes", notesRoute);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/rooms", roomRoute);
 app.use("/api/users", userRoute);
