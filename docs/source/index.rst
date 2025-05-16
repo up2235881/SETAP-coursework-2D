@@ -26,7 +26,6 @@ Scope of the Project
    requirements
    implementation
    usage
-   components
 
 
   

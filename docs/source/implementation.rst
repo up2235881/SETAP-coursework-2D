@@ -23,7 +23,15 @@ Elements of Implementation
 
       - *Notifications(Planned):* Internal notification logic is implemented, with room to extend to email or push notifications in future iterations.
 
-  
+      More detail about this in the "Core Components of the Project" section below.
+
+   **Development Tools:**
+      
+      - *Version Control:* Git was used for version control, with a repository hosted on GitHub to facilitate collaboration and code management.
+      
+      - *Testing:* Basic unit tests were written using Jest to ensure the functionality of critical components, especially in the backend.
+
+
 
 Core Components of the Project
 ------------------------------
@@ -46,7 +54,11 @@ Core Components of the Project
       - *Styling:*
 
          - styling.css: Provides consistent and responsive styling for all pages using custom layout and UI classes.
-
+      
+      - *Implementation:*
+         
+         The frontend is built using plain HTML, CSS, and JavaScript without any frameworks. Forms like room creation and joining use JavaScript to validate user input and send requests to the server using fetch(). This approach keeps things simple and lightweight, making it easy to understand and maintain.
+   
    **Backend Structure**
       - *Routing Modules:*
 
@@ -61,7 +73,11 @@ Core Components of the Project
       - *Middleware:*
 
          - authMiddleware.js: Restricts access to certain API routes based on user session authentication.
+      
+      - *Implementation:*
 
+         The backend is created using Node.js and Express. All API routes are organized into separate files (userRoutes.js and roomRoutes.js) for clarity. The actual logic for handling data and interacting with the database is written inside userModel.js and roomModel.js. While these files mix controller logic and database queries, it helped keep the code compact and easier to manage for this project. Middleware like authMiddleware.js is used to protect certain routes so only logged-in users can access them. Session management is handled using express-session.
+         
    **Database Structure**
       - *Schema Overview (database.sql):*
 
@@ -72,3 +88,8 @@ Core Components of the Project
          - room_participants: Records user-room associations and join timestamps.
 
          - notifications: Logs messages related to user actions (e.g., joining rooms), prepared for future integration with external notification services.
+
+      - *Implementation:*
+
+         The database uses PostgreSQL, with a schema defined in the database.sql file. It includes tables for users, rooms, participants, and notifications. Each table has a primary key and foreign keys where necessary to maintain relationships. SQL queries are written directly in the model files and use placeholders to protect against SQL injection. While the notifications table is not fully used yet, it's set up for future features like reminders or alerts when users join rooms.
+         
