@@ -1,4 +1,4 @@
-import db from '../configs/db_config.js';
+import db from "../configs/db_config.js";
 
 /**
  * POST /meeting/confirm
@@ -9,20 +9,24 @@ export const confirmMeeting = async (req, res) => {
   const userId = req.session.user_id;
 
   if (!userId || !roomId || !day || !time || !location) {
-    return res.status(400).json({ message: 'Missing meeting data or not logged in' });
+    return res
+      .status(400)
+      .json({ message: "Missing meeting data or not logged in" });
   }
 
   try {
     // Verify room exists and the user is its creator
     const roomRes = await db.query(
-      'SELECT user_id AS creator_id FROM rooms WHERE room_id = $1',
+      "SELECT user_id AS creator_id FROM rooms WHERE room_id = $1",
       [roomId]
     );
     if (roomRes.rows.length === 0) {
-      return res.status(404).json({ message: 'Room not found' });
+      return res.status(404).json({ message: "Room not found" });
     }
     if (roomRes.rows[0].creator_id !== userId) {
-      return res.status(403).json({ message: 'Only the creator can confirm the meeting' });
+      return res
+        .status(403)
+        .json({ message: "Only the creator can confirm the meeting" });
     }
 
     // Upsert into confirmed_meetings
@@ -39,10 +43,10 @@ export const confirmMeeting = async (req, res) => {
       [roomId, day, time, location, userId]
     );
 
-    return res.status(200).json({ message: 'Meeting confirmed' });
+    return res.status(200).json({ message: "Meeting confirmed" });
   } catch (err) {
-    console.error('Error confirming meeting:', err);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Error confirming meeting:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -51,22 +55,45 @@ export const confirmMeeting = async (req, res) => {
  * Retrieve the confirmed meeting for a room.
  */
 export const getConfirmedMeeting = async (req, res) => {
-  const roomId = parseInt(req.params.roomId, 10);
-  if (isNaN(roomId)) {
-    return res.status(400).json({ message: 'Invalid room ID' });
-  }
+  const roomId = parseInt(req.params.roomId);
+  const { rows } = await db.query(
+    `SELECT * FROM confirmed_meetings WHERE room_id = $1`,
+    [roomId]
+  );
+  res.status(200).json(rows[0] || null);
+};
+
+export const getUpcomingMeetingsForUser = async (req, res) => {
+  const userId = parseInt(req.params.userId);
 
   try {
     const { rows } = await db.query(
-      'SELECT day, time, location FROM confirmed_meetings WHERE room_id = $1',
+      `SELECT cm.day, cm.start_time, cm.location, cm.room_id, r.room_name
+       FROM confirmed_meetings cm
+       JOIN room_participants rp ON cm.room_id = rp.room_id
+       JOIN rooms r ON r.room_id = cm.room_id
+       WHERE rp.user_id = $1
+       ORDER BY cm.confirmed_at DESC`,
+      [userId]
+    );
+
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error("Error loading upcoming meetings:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getConfirmedMeetingForRoom = async (req, res) => {
+  const roomId = parseInt(req.params.roomId);
+  try {
+    const { rows } = await db.query(
+      `SELECT * FROM confirmed_meetings WHERE room_id = $1`,
       [roomId]
     );
-    if (rows.length === 0) {
-      return res.status(404).json({ message: 'No confirmed meeting' });
-    }
-    return res.status(200).json(rows[0]);
+    res.status(200).json(rows[0] || null);
   } catch (err) {
-    console.error('Error fetching confirmed meeting:', err);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Error fetching confirmed meeting:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

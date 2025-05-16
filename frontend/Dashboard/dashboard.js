@@ -79,6 +79,29 @@ fetch("/api/users/me", { credentials: "include" })
       window.location.href = "/loginpage/login.html";
     };
   });
+function loadUpcomingMeetings(userId) {
+  fetch(`/meeting/upcoming/${userId}`, { credentials: "include" })
+    .then((res) => res.json())
+    .then((meetings) => {
+      const container = document.getElementById("upcomingContainer");
+      if (!meetings.length) {
+        container.innerHTML = "<p>No upcoming meetings.</p>";
+        return;
+      }
+
+      container.innerHTML = "";
+      meetings.forEach((m) => {
+        const div = document.createElement("div");
+        div.classList.add("upcoming-item");
+        div.innerHTML = `
+          <span class="material-icons">calendar_month</span>
+          <div><strong>${m.room_name}</strong><br>
+          ${m.day} at ${m.start_time} — @ ${m.location}</div>
+        `;
+        container.appendChild(div);
+      });
+    });
+}
 
 function loadRooms(userId) {
   fetch(`/api/rooms/user/${userId}`, { credentials: "include" })
@@ -117,7 +140,6 @@ function loadRooms(userId) {
       console.error("Error loading rooms:", err);
     });
 }
-
 
 function loadMeetings(userId) {
   fetch(`/api/users/${userId}/confirmed-meetings`, { credentials: "include" })

@@ -64,6 +64,7 @@ app.listen(PORT, HOST, () => {
   console.log(`🚀 Server running at http://${HOST}:${PORT}`);
 });
 
+// ─── DB Keep Alive ─────────────────────────────────────────────────────────────
 setInterval(() => {
   db.query("SELECT 1").catch((err) => {
     console.error("Keep-alive DB ping failed:", err.message);

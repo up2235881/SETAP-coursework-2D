@@ -536,3 +536,34 @@ body.dark-theme .modal-btn {
   font-weight: 600;
   cursor: pointer;
 }
+.upcoming-meetings {
+  background: #f3e5f5;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.upcoming-meetings h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6a1b9a;
+}
+
+.upcoming-item {
+  background: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  font-size: 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.upcoming-item .material-icons {
+  color: #6a1b9a;
+}

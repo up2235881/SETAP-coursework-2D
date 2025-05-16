@@ -52,6 +52,17 @@ function fetchAvailabilities() {
     .catch((err) => {
       console.error("Error fetching entries:", err);
     });
+  fetch(`/api/meeting/${roomId}/confirmed`, {
+    credentials: "include",
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("No confirmed meeting");
+      return res.json();
+    })
+
+    .catch((err) => {
+      console.error("No confirmed meeting:", err);
+    });
 }
 
 // ✅ Render each entry with user names
@@ -128,16 +139,41 @@ confirmCancelBtn.onclick = () => {
 
 confirmOkBtn.onclick = () => {
   const location = confirmLocationInput.value || mostCommonPlace;
-  confirmModal.style.display = "none";
-  confirmedModal.style.display = "flex";
+  const [day, start_time] = mostCommonTime.split(" ");
 
-  // You would normally also send this to the backend
-  confirmedBanner.style.display = "flex";
-  document.getElementById(
-    "confirmedText"
-  ).textContent = `✅ Meeting at ${mostCommonTime} @ ${location}`;
+  fetch("/meeting/confirm", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      room_id: roomId,
+      day: day,
+      start_time: start_time,
+      location: location,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to confirm meeting.");
+      return res.json();
+    })
+    .then((confirmedMeeting) => {
+      confirmModal.style.display = "none";
+      confirmedModal.style.display = "flex";
+
+      confirmedBanner.style.display = "flex";
+      document.getElementById(
+        "confirmedText"
+      ).textContent = `✅ Meeting at ${confirmedMeeting.day} ${confirmedMeeting.start_time} @ ${confirmedMeeting.location}`;
+    })
+    .catch((err) => {
+      console.error("Confirm failed:", err);
+      alert("Something went wrong confirming the meeting.");
+    });
 };
 
 confirmedCloseBtn.onclick = () => {
   confirmedModal.style.display = "none";
+};
+document.getElementById("exit-btn").onclick = () => {
+  window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
 };
