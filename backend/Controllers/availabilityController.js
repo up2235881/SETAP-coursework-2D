@@ -31,13 +31,29 @@ export const createAvailability = async (req, res) => {
   if (!userId) return res.status(401).json({ message: "Not logged in" });
 
   try {
-    await db.query(
-      `INSERT INTO availability (user_id, room_id, day, start_time, end_time, location)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [userId, roomId, day, start_time, end_time, location]
+    // check if this user already has availability for this room
+    const { rowCount } = await db.query(
+      `SELECT 1 FROM availability WHERE user_id = $1 AND room_id = $2`,
+      [userId, roomId]
     );
 
-    res.status(201).json({ message: "Availability saved" });
+    if (rowCount > 0) {
+      // update
+      await db.query(
+        `UPDATE availability SET day = $1, start_time = $2, end_time = $3, location = $4, updated_at = NOW()
+         WHERE user_id = $5 AND room_id = $6`,
+        [day, start_time, end_time, location, userId, roomId]
+      );
+    } else {
+      // insert
+      await db.query(
+        `INSERT INTO availability (user_id, room_id, day, start_time, end_time, location)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [userId, roomId, day, start_time, end_time, location]
+      );
+    }
+
+    res.status(200).json({ message: "Availability saved" });
   } catch (err) {
     console.error("Create error:", err);
     res.status(500).json({ message: "Error saving availability" });

@@ -24,7 +24,7 @@ body {
   right: 0;
   bottom: 0;
   z-index: 0;
-  background: url("/images/availability.jpg") no-repeat center center/cover;
+  background: url("/images/timer.jpg") no-repeat center center/cover;
   filter: blur(5px) brightness(0.75);
   width: 100vw;
   height: 100vh;
@@ -181,4 +181,23 @@ select {
   .dashboard h2 {
     font-size: 18px;
   }
+}
+.edit-btn {
+  margin-top: 1rem;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  background-color: #ec407a;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #d81b60;
 }

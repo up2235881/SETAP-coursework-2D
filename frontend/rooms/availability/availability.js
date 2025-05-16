@@ -43,16 +43,23 @@ function showSuccessModal() {
 sessionStorage.removeItem("justLoggedIn");
 
 // Load existing availability
-fetch(`/api/availability/${roomId}/me`, { credentials: "include" })
-  .then((res) => res.json())
-  .then((data) => {
-    if (data) {
-      daySelect.value = data.day;
-      startSelect.value = data.start_time;
-      endSelect.value = data.end_time;
-      locationInput.value = data.location;
-    }
-  });
+const isEditMode = urlParams.get("edit") === "true";
+
+if (isEditMode) {
+  fetch(`/api/availability/${roomId}/me`, { credentials: "include" })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data) {
+        daySelect.value = data.day;
+        startSelect.value = data.start_time;
+        endSelect.value = data.end_time;
+        locationInput.value = data.location;
+      }
+    })
+    .catch((err) => {
+      console.error("Error loading availability:", err);
+    });
+}
 
 // Submit
 form.addEventListener("submit", (e) => {
@@ -69,9 +76,11 @@ form.addEventListener("submit", (e) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ day, start_time, end_time, location }),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) throw new Error("Server responded with error");
+      return res.json();
+    })
     .then(() => {
-      // show success modal (your existing logic)
       showSuccessModal();
     })
     .catch((err) => {
@@ -79,3 +88,7 @@ form.addEventListener("submit", (e) => {
       showError("Could not submit availability.");
     });
 });
+
+document.getElementById("exitButton").onclick = () => {
+  window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
+};
