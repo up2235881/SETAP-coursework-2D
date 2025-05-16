@@ -1,181 +1,120 @@
 const entriesContainer = document.querySelector("#entries");
 const suggestedTime = document.querySelector("#suggested-time");
 const suggestedLocations = document.querySelector("#suggested-locations");
+const editBtn = document.getElementById("editAvailabilityBtn");
+const confirmBtn = document.getElementById("confirmMeetingBtn");
+const confirmedBanner = document.getElementById("confirmed-meeting");
 
-let entries = [];
-let roomUsers = [];
-let currentUserId = null;
-let roomCreatorId = null;
+const confirmModal = document.getElementById("confirmModal");
+const confirmPromptText = document.getElementById("confirmPromptText");
+const confirmLocationInput = document.getElementById("confirmLocationInput");
+const confirmOkBtn = document.getElementById("confirmOkBtn");
+const confirmCancelBtn = document.getElementById("confirmCancelBtn");
 
-const confirmedDisplay = document.createElement("div");
-confirmedDisplay.classList.add("highlight");
-confirmedDisplay.style.marginBottom = "20px";
-document.querySelector(".dashboard").prepend(confirmedDisplay);
+const confirmedModal = document.getElementById("confirmedModal");
+const confirmedCloseBtn = document.getElementById("confirmedCloseBtn");
 
-// Fetch confirmed meeting (if any)
-fetch(`/api/meetings/confirmed?roomId=${roomId}`, { credentials: "include" })
-  .then((res) => res.json())
-  .then((data) => {
-    if (data && data.day && data.time && data.location) {
-      confirmedDisplay.textContent = `📢 Confirmed Meeting: ${data.day} at ${data.time}, Location: ${data.location}`;
-    }
-  })
-  .catch((err) => {
-    console.warn("No confirmed meeting yet.");
-  });
-
-// Get roomId from URL
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("roomId");
-
+const roomId = new URLSearchParams(window.location.search).get("roomId");
 if (!roomId) {
-  alert("Room ID missing in URL. Please access this page via a room link.");
+  entriesContainer.innerHTML = "<p style='color:red;'>Room ID missing.</p>";
   throw new Error("Missing roomId");
 }
 
-// Fetch all availability entries for the room
-// Step 1: Get current user ID (assumes session is active)
-fetch("/api/users/me", { credentials: "include" })
-  .then((res) => res.json())
-  .then((user) => {
-    currentUserId = user.user_id;
+let currentUserId = null;
+let roomCreatorId = null;
+let mostCommonTime = "";
+let mostCommonPlace = "";
 
-    // Step 2: Fetch creator
-    return fetch(`/api/rooms/${roomId}/creator`);
+// ✅ Get current user & room details
+Promise.all([
+  fetch("/api/users/me", { credentials: "include" }).then((res) => res.json()),
+  fetch(`/api/rooms/${roomId}`, { credentials: "include" }).then((res) =>
+    res.json()
+  ),
+]).then(([user, room]) => {
+  currentUserId = user.user_id;
+  roomCreatorId = room.user_id;
+  fetchAvailabilities();
+});
+
+// ✅ Load availability entries
+function fetchAvailabilities() {
+  fetch(`/api/availability/${roomId}`, {
+    credentials: "include",
+    cache: "no-store",
   })
-  .then((res) => res.json())
-  .then((data) => {
-    roomCreatorId = data.creator_id;
-
-    // Step 3: Fetch room members
-    return fetch(`/api/rooms/${roomId}/users`);
+    .then((res) => res.json())
+    .then((entries) => {
+      renderEntries(entries);
+      suggestMeeting(entries);
+      showConfirmIfEligible(entries);
+    })
+    .catch((err) => {
+      console.error("Error fetching entries:", err);
+    });
+  fetch(`/api/meeting/${roomId}/confirmed`, {
+    credentials: "include",
   })
-  .then((res) => res.json())
-  .then((users) => {
-    roomUsers = users.map((u) => u.user_id);
+    .then((res) => {
+      if (!res.ok) throw new Error("No confirmed meeting");
+      return res.json();
+    })
 
-    // Step 4: Fetch availability entries
-    return fetch(`/api/availability/${roomId}`, { credentials: "include" });
-  })
-  .then((res) => res.json())
-  .then((data) => {
-    entries = data;
+    .catch((err) => {
+      console.error("No confirmed meeting:", err);
+    });
+}
 
-    displayEntries(entries);
-    displayLocations(entries);
-
-    if (entries.length >= 3) {
-      displayBestTime(entries);
-    }
-
-    // ✅ If all users have submitted and current user is creator
-    const submittedUserIds = new Set(entries.map((e) => e.user_id));
-    const allSubmitted = roomUsers.every((uid) => submittedUserIds.has(uid));
-
-    if (currentUserId === roomCreatorId && allSubmitted) {
-      showConfirmButton(entries);
-    }
-  })
-  .catch((err) => {
-    console.error("Scheduler setup error:", err);
-    entriesContainer.innerHTML = "<p>Failed to load scheduler data.</p>";
-  });
-
-function displayEntries(entries) {
+// ✅ Render each entry with user names
+function renderEntries(entries) {
   entriesContainer.innerHTML = "";
-  entries.forEach((entry, index) => {
-    const name = entry.name?.trim() || `User #${entry.user_id}`;
+  if (entries.length === 0) {
+    entriesContainer.innerHTML = "<p>No availabilities submitted yet.</p>";
+    return;
+  }
+
+  const userEntry = entries.find((entry) => entry.user_id === currentUserId);
+  if (userEntry) {
+    editBtn.style.display = "inline-flex";
+    editBtn.onclick = () => {
+      window.location.href = `/rooms/availability/availability.html?roomId=${roomId}&edit=true`;
+    };
+  }
+
+  entries.forEach((entry) => {
     const div = document.createElement("div");
     div.classList.add("entry");
-    div.innerHTML = `
-        <p><strong>${index + 1}. ${name}</strong> – ${entry.day}, ${
-      entry.time
-    } @ ${entry.location}</p>
-      `;
+    const timeRange = `${entry.start_time} - ${entry.end_time}`;
+    div.textContent = `👤 ${entry.user_username} — 🕒 ${entry.day}, ${timeRange} @ ${entry.location}`;
     entriesContainer.appendChild(div);
   });
 }
 
-function displayLocations(entries) {
-  const locations = [...new Set(entries.map((e) => e.location))];
-  suggestedLocations.innerHTML = `<strong>Suggested Locations:</strong> ${locations.join(
-    ", "
-  )}`;
-}
+// ✅ Count and suggest meeting time/location
+function suggestMeeting(entries) {
+  const countMap = {};
+  const locationMap = {};
+  const locations = new Set();
 
-function displayBestTime(entries) {
-  const timeMap = {};
-  entries.forEach((e) => {
-    const key = `${e.day}-${e.time}`;
-    timeMap[key] = (timeMap[key] || 0) + 1;
+  entries.forEach(({ day, start_time, location }) => {
+    const key = `${day} ${start_time}`;
+    countMap[key] = (countMap[key] || 0) + 1;
+    locationMap[location] = (locationMap[location] || 0) + 1;
+    locations.add(location);
   });
 
-  const [bestSlot, count] = Object.entries(timeMap).sort(
-    (a, b) => b[1] - a[1]
-  )[0];
-  const [day, time] = bestSlot.split("-");
-  suggestedTime.textContent = `✅ Best Time: ${day} at ${time} (${count} votes)`;
-}
+  const sortedTimes = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
+  const sortedPlaces = Object.entries(locationMap).sort((a, b) => b[1] - a[1]);
 
-function showConfirmButton(entries) {
-  const confirmContainer = document.createElement("div");
-  confirmContainer.style.marginTop = "30px";
+  if (sortedTimes.length > 0) {
+    mostCommonTime = sortedTimes[0][0];
+    suggestedTime.textContent = `📌 Suggested: ${mostCommonTime} (${sortedTimes[0][1]} votes)`;
+  }
 
-  const label = document.createElement("label");
-  label.textContent = "Select Final Location:";
-  label.style.display = "block";
-  label.style.marginBottom = "10px";
-
-  const select = document.createElement("select");
-  select.style.padding = "10px";
-  select.style.fontSize = "16px";
-
-  const locations = [...new Set(entries.map((e) => e.location))];
-  locations.forEach((loc) => {
-    const option = document.createElement("option");
-    option.value = loc;
-    option.textContent = loc;
-    select.appendChild(option);
-  });
-
-  const button = document.createElement("button");
-  button.textContent = "Confirm Meeting";
-  button.classList.add("submit-btn");
-  button.style.marginTop = "15px";
-
-  button.onclick = () => {
-    const selectedLocation = select.value;
-    const timeMap = {};
-    entries.forEach((e) => {
-      const key = `${e.day}-${e.time}`;
-      timeMap[key] = (timeMap[key] || 0) + 1;
-    });
-    const [bestSlot] = Object.entries(timeMap).sort((a, b) => b[1] - a[1])[0];
-    const [day, time] = bestSlot.split("-");
-
-    fetch("/api/meetings/confirm", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ roomId, day, time, location: selectedLocation }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        alert(
-          `✅ Meeting confirmed: ${day} at ${time}, Location: ${selectedLocation}`
-        );
-        setTimeout(() => {
-          window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
-        }, 3000);
-      })
-      .catch((err) => {
-        console.error("Error confirming meeting:", err);
-        alert("Failed to confirm meeting.");
-      });
-  };
-
-  confirmContainer.appendChild(label);
-  confirmContainer.appendChild(select);
-  confirmContainer.appendChild(button);
-  document.querySelector(".dashboard").appendChild(confirmContainer);
+  if (sortedPlaces.length > 0) {
+    mostCommonPlace = sortedPlaces[0][0];
+    suggestedLocations.textContent = `📍 Suggested Locations: ${[
+      ...locations,
+    ].join(", ")}`;
+  }
 }

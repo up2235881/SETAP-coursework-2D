@@ -17,9 +17,12 @@ body {
 /* Blurred background image for the whole page */
 .bg-blur-image {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 0;
-  background: url('/SETAP-coursework/frontend/images/landing.jpg') no-repeat center center/cover;
+  background: url("/images/landing.jpg") no-repeat center center/cover;
   filter: blur(5px) brightness(0.75);
   width: 100vw;
   height: 100vh;
@@ -42,9 +45,15 @@ body {
 }
 
 @keyframes dreamyBackground {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Top Bar */
@@ -128,8 +137,11 @@ body {
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(41,32,84,0.23);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(41, 32, 84, 0.23);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,7 +213,8 @@ body {
     max-width: 99vw;
     padding: 0 0 30px 0;
   }
-  .top-bar, .menu-container {
+  .top-bar,
+  .menu-container {
     padding: 12px 2vw 0 2vw;
   }
 }

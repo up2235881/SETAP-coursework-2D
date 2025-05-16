@@ -4,62 +4,96 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Availability</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <!-- Styles -->
-    <link rel="stylesheet" href="/SETAP-coursework/frontend/rooms/availability/availability.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/rooms/availability/availability.css" />
   </head>
   <body>
-    <!-- Blurred background image -->
     <div class="bg-blur-image"></div>
-
     <div class="availability-container animated-gradient-bg">
       <header class="top-bar">
-        <div class="back-button" onclick="window.history.back()">
-          <span class="material-icons">arrow_back</span> Back
+        <div class="exit" id="exitButton">
+          <span class="material-icons">logout</span>
+          <span>Exit</span>
         </div>
+
         <h1>
           <span class="material-icons gradient-icon">calendar_month</span>
           Input Availability
         </h1>
       </header>
 
-      <form class="availability-form" id="availability-form">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" placeholder="Enter your name" required />
+      <form id="availability-form" class="form-layout">
+        <input type="text" id="name" placeholder="Your Name" required />
 
-        <label for="day">Select Day</label>
         <select id="day" required>
-          <option value="">Choose a day</option>
-          <option>Monday</option>
-          <option>Tuesday</option>
-          <option>Wednesday</option>
-          <option>Thursday</option>
-          <option>Friday</option>
+          <option value="">Select Day</option>
+          <option value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
         </select>
 
-        <label for="time">Select Time</label>
-        <select id="time" required>
-          <option value="">Choose a time</option>
-          <option>09:00 AM</option>
-          <option>10:00 AM</option>
-          <option>11:00 AM</option>
-          <option>12:00 PM</option>
-          <option>01:00 PM</option>
-          <option>02:00 PM</option>
-          <option>03:00 PM</option>
-          <option>04:00 PM</option>
+        <label for="start_time">Start Time:</label>
+        <select id="start_time" required>
+          <option value="">-- Select Start Time --</option>
+          <option value="10:00">10:00am</option>
+          <option value="12:00">12:00pm</option>
+          <option value="14:00">14:00pm</option>
+          <option value="16:00">16:00pm</option>
+          <option value="18:00">18:00pm</option>
         </select>
 
-        <label for="location">Location</label>
-        <input type="text" id="location" placeholder="Enter location" required />
+        <label for="end_time">End Time:</label>
+        <select id="end_time" required>
+          <option value="">-- Select End Time --</option>
+          <option value="12:00">12:00pm</option>
+          <option value="14:00">14:00pm</option>
+          <option value="16:00">16:00pm</option>
+          <option value="18:00">18:00pm</option>
+          <option value="20:00">20:00pm</option>
+        </select>
 
-        <button type="submit" class="submit-btn">
-          <span class="material-icons">send</span> Submit
-        </button>
+        <input type="text" id="location" placeholder="Location" required />
+
+        <div class="btn-group">
+          <button type="submit" class="submit-btn">Submit Availability</button>
+        </div>
       </form>
     </div>
-    <script type="module" src="availability.js"></script>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal-overlay" style="display: none">
+      <div class="modal">
+        <div class="modal-title" style="color: #e53935">Error</div>
+        <div class="modal-body" id="errorMessage">Something went wrong.</div>
+        <button id="errorOkBtn" class="modal-btn">OK</button>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+      <div class="modal-box">
+        <p>
+          ✅ Availability submitted!<br />Do you want to view it in the
+          Scheduler?
+        </p>
+        <div class="modal-actions">
+          <button id="viewSchedulerBtn" class="yes-btn">
+            View in Scheduler
+          </button>
+          <button id="successExitBtn" class="cancel-btn">Exit</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/rooms/availability/availability.js"></script>
   </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
-  <link rel="stylesheet" href="/SETAP-coursework/frontend/form.css">
+  <link rel="stylesheet" href="/form.css">
 </head>
 <body>
   <!-- Blurred background -->
@@ -12,12 +12,24 @@
   <div class="auth-container">
     <div class="auth-title">Sign In</div>
     <form class="auth-form" id="loginForm">
-      <input type="text" id="username" placeholder="Username" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit" class="auth-button">Login</button>
+      <input type="text" id="username" placeholder="Username or Email" required autocomplete="username" />
+      <input type="password" id="password" placeholder="Password" required autocomplete="current-password" />
+      <button type="submit" class="auth-button" id="loginBtn">Login</button>
     </form>
-    <a href="/SETAP-coursework/frontend/registerpage/register.html" class="auth-link">Don't have an account? Register</a>
+    <a href="/registerpage/register.html" class="auth-link">Don't have an account? Register</a>
   </div>
+
+  <!-- Login Error Modal -->
+  <div id="loginErrorModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-title" style="color:#e53935;">Login Failed</div>
+      <div class="modal-body" id="loginErrorMessage"></div>
+      <div class="modal-actions">
+        <button id="loginErrorOk" class="modal-btn">OK</button>
+      </div>
+    </div>
+  </div>
+
   <script src="login.js"></script>
 </body>
 </html>

@@ -1,23 +1,37 @@
-import express from 'express';
+import express from "express";
 import {
   createRoom,
   joinRoom,
   listRoomUsers,
-  getRoomCreator
-} from '../Controllers/roomController.js';
+  getRoomCreator,
+  getRoomsByUserId,
+  getRoomInfo,
+  updateRoomTheme,
+  leaveRoom,
+} from "../Controllers/roomController.js";
 
 const router = express.Router();
+router.get("/user/:id", getRoomsByUserId);
 
 // Create a room & auto-join creator
-router.post('/create', createRoom);
+router.post("/create", createRoom);
 
 // Join by invite code
-router.post('/join', joinRoom);
+router.post("/join", joinRoom);
 
 // List members of a room
-router.get('/:roomId/users', listRoomUsers);
+router.get("/:roomId/users", listRoomUsers);
 
 // Get the creator of a room
-router.get('/:roomId/creator', getRoomCreator);
+router.get("/:roomId/creator", getRoomCreator);
 
+router.delete("/:id/leave", leaveRoom);
+
+router.get("/:roomId", getRoomInfo);
+
+router.get("/:roomId/users", listRoomUsers);
+
+router.patch("/:roomId/theme", updateRoomTheme);
 export default router;
+
+

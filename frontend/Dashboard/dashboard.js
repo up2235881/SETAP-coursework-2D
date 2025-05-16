@@ -6,47 +6,137 @@ const noMeetingsMsg = document.querySelector("#no-meetings-message");
 const createForm = document.querySelector("#create-room-form");
 const joinForm = document.querySelector("#join-room-form");
 
+// Welcome modal elements
+const welcomeModal = document.getElementById("welcomeModal");
+const welcomeModalTitle = document.getElementById("welcomeModalTitle");
+const welcomeModalBody = document.getElementById("welcomeModalBody");
+const welcomeModalOk = document.getElementById("welcomeModalOk");
+
+// Room created modal elements
+const roomNameInput = document.querySelector("#create-room-name");
+const roomNameError = document.getElementById("roomNameError");
+const roomCreatedModal = document.getElementById("roomCreatedModal");
+const roomCreatedModalTitle = document.getElementById("roomCreatedModalTitle");
+const roomCreatedModalBody = document.getElementById("roomCreatedModalBody");
+const roomCreatedModalOk = document.getElementById("roomCreatedModalOk");
+
+// Validate room name: at least 4 letters, no numbers or special chars
+function isRoomNameValid(name) {
+  return /^[A-Za-z]{4,}$/.test(name);
+}
+
+// Hide error on typing
+roomNameInput.addEventListener("input", () => {
+  roomNameError.style.display = "none";
+});
+
 // Load current user, rooms, and confirmed meetings
 fetch("/api/users/me", { credentials: "include" })
   .then((res) => res.json())
   .then((user) => {
-    loadRooms(user.user_id);
-    loadMeetings(user.user_id);
+    const username = user.user_username || user.username || "";
+    const userId = user.user_id || user.id;
+
+    if (!userId || !username) {
+      welcomeModalTitle.textContent = "Session expired. Please log in again.";
+      welcomeModalBody.textContent = "";
+      welcomeModal.style.display = "flex";
+      if (welcomeModalOk) {
+        welcomeModalOk.onclick = () => {
+          welcomeModal.style.display = "none";
+          window.location.href = "/loginpage/login.html";
+        };
+      }
+      return;
+    }
+    if (sessionStorage.getItem("justLoggedIn") === "true") {
+      welcomeModalTitle.textContent = `Welcome back to Slotify, ${username}!`;
+      welcomeModalBody.textContent = "";
+      welcomeModal.style.display = "flex";
+      sessionStorage.removeItem("justLoggedIn");
+    }
+
+    window.SLOTIFY_USER_ID = userId;
+    loadRooms(userId);
+    loadMeetings(userId);
   })
   .catch((err) => {
     console.error("Error loading user info:", err);
+    welcomeModalTitle.textContent = "Session expired. Please log in again.";
+    welcomeModalBody.textContent = "";
+    welcomeModal.style.display = "flex";
+    welcomeModalOk.onclick = () => {
+      welcomeModal.style.display = "none";
+      window.location.href = "/loginpage/login.html";
+    };
   });
+function loadUpcomingMeetings(userId) {
+  fetch(`/meeting/upcoming/${userId}`, { credentials: "include" })
+    .then((res) => res.json())
+    .then((meetings) => {
+      const container = document.getElementById("upcomingContainer");
+      if (!meetings.length) {
+        container.innerHTML = "<p>No upcoming meetings.</p>";
+        return;
+      }
+
+      container.innerHTML = "";
+      meetings.forEach((m) => {
+        const div = document.createElement("div");
+        div.classList.add("upcoming-item");
+        div.innerHTML = `
+          <span class="material-icons">calendar_month</span>
+          <div><strong>${m.room_name}</strong><br>
+          ${m.day} at ${m.start_time} — @ ${m.location}</div>
+        `;
+        container.appendChild(div);
+      });
+    });
+}
 
 function loadRooms(userId) {
   fetch(`/api/rooms/user/${userId}`, { credentials: "include" })
     .then((res) => res.json())
     .then((rooms) => {
-      if (!rooms.length) {
+      roomsContainer.innerHTML = "";
+
+      if (!rooms || rooms.length === 0) {
         noRoomsMsg.style.display = "block";
         return;
       }
 
       noRoomsMsg.style.display = "none";
+
       rooms.forEach((room) => {
         const card = document.createElement("div");
         card.classList.add("card");
+        card.classList.add("room-card");
+
         card.innerHTML = `
           <h3>${room.room_name}</h3>
-          <p>Code: ${room.room_code}</p>
-          <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}'">
-            <span class="material-icons">meeting_room</span> Enter
-          </button>
+          <div class="room-actions">
+            <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}'">
+              <span class="material-icons">meeting_room</span> Enter
+            </button>
+            <button class="submit-btn delete-room-btn" data-room-id="${room.room_id}">
+              <span class="material-icons">delete</span> Delete
+            </button>
+          </div>
         `;
+
         roomsContainer.appendChild(card);
       });
     })
-    .catch((err) => console.error("Error loading rooms:", err));
+    .catch((err) => {
+      console.error("Error loading rooms:", err);
+    });
 }
 
 function loadMeetings(userId) {
   fetch(`/api/users/${userId}/confirmed-meetings`, { credentials: "include" })
     .then((res) => res.json())
     .then((meetings) => {
+      meetingsList.innerHTML = "";
       if (!meetings.length) {
         noMeetingsMsg.style.display = "block";
         return;
@@ -62,14 +152,23 @@ function loadMeetings(userId) {
         meetingsList.appendChild(li);
       });
     })
-    .catch((err) => console.error("Error loading meetings:", err));
+    .catch((err) => {
+      console.error("Error loading meetings:", err);
+    });
 }
 
-// Create room form
+// CREATE ROOM HANDLING
 createForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const name = document.querySelector("#create-room-name").value.trim();
-  if (!name) return;
+  const name = roomNameInput.value.trim();
+
+  if (!isRoomNameValid(name)) {
+    roomNameError.textContent =
+      "Room name must be at least 4 letters, with no numbers or special characters.";
+    roomNameError.style.display = "block";
+    return;
+  }
+  roomNameError.style.display = "none";
 
   fetch("/api/rooms/create", {
     method: "POST",
@@ -79,16 +178,25 @@ createForm.addEventListener("submit", (e) => {
   })
     .then((res) => res.json())
     .then((room) => {
-      alert(`✅ Room "${room.room_name}" created!`);
-      window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}`;
+      roomCreatedModalTitle.textContent = "Room created successfully!";
+      roomCreatedModalBody.textContent = `Room "${room.room_name}" has been created.`;
+      roomCreatedModal.style.display = "flex";
+      if (roomCreatedModalOk) {
+        roomCreatedModalOk.onclick = () => {
+          roomCreatedModal.style.display = "none";
+          loadRooms(window.SLOTIFY_USER_ID);
+          roomNameInput.value = "";
+        };
+      }
     })
     .catch((err) => {
       console.error(err);
-      alert("Failed to create room.");
+      roomNameError.textContent = "Failed to create room. Please try again.";
+      roomNameError.style.display = "block";
     });
 });
 
-// Join room form
+// JOIN ROOM HANDLING (Improved)
 joinForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const code = document.querySelector("#join-room-code").value.trim();
@@ -98,9 +206,98 @@ joinForm.addEventListener("submit", (e) => {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ roomCode: code }),
+    body: JSON.stringify({ inviteCode: code }),
   })
-    .then((res) => res.json())
-    .then(() => location.reload())
-    .catch((err) => alert("Failed to join room."));
+    .then((res) => {
+      if (!res.ok) {
+        return res.json().then((err) => {
+          throw new Error(err.message || "Failed to join room.");
+        });
+      }
+      return res.json();
+    })
+    .then((data) => {
+      roomCreatedModalTitle.textContent = "Room Joined!";
+      roomCreatedModalBody.textContent = `You've successfully joined a room with code "${code}".`;
+      roomCreatedModal.style.display = "flex";
+      if (roomCreatedModalOk) {
+        roomCreatedModalOk.onclick = () => {
+          roomCreatedModal.style.display = "none";
+          loadRooms(window.SLOTIFY_USER_ID);
+          document.querySelector("#join-room-code").value = "";
+        };
+      }
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
+});
+
+// Logout modal handlers
+const logoutBtn = document.getElementById("logout-button");
+const logoutModal = document.getElementById("logoutModal");
+const logoutSuccessModal = document.getElementById("logoutSuccessModal");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    logoutModal.style.display = "flex";
+  });
+}
+
+window.closeLogoutModal = function () {
+  logoutModal.style.display = "none";
+};
+
+window.confirmLogout = function () {
+  logoutModal.style.display = "none";
+  logoutSuccessModal.style.display = "flex";
+  setTimeout(() => {
+    window.location.href = "../../landingpage/index.html";
+  }, 2000);
+};
+
+let selectedRoomId = null;
+let selectedRoomCard = null;
+
+// capture selected room, then wait for user confirmation
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-room-btn")) {
+    selectedRoomCard = e.target.closest(".room-card");
+    selectedRoomId = e.target.dataset.roomId;
+    document.getElementById("deleteRoomModal").style.display = "flex";
+  }
+});
+
+function closeDeleteModal() {
+  document.getElementById("deleteRoomModal").style.display = "none";
+}
+
+document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+  if (!selectedRoomId || !selectedRoomCard) return;
+
+  fetch(`/api/rooms/${selectedRoomId}/leave`, {
+    method: "DELETE",
+    credentials: "include",
+  })
+    .then((res) => {
+      if (res.ok) {
+        selectedRoomCard.remove();
+        document.getElementById("deleteRoomModal").style.display = "none";
+        document.getElementById("deleteSuccessModal").style.display = "flex";
+        setTimeout(() => {
+          document.getElementById("deleteSuccessModal").style.display = "none";
+        }, 2000);
+      } else {
+        alert("Failed to leave room.");
+      }
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+      alert("An error occurred.");
+    });
+});
+
+welcomeModalOk.addEventListener("click", () => {
+  welcomeModal.style.display = "none";
 });

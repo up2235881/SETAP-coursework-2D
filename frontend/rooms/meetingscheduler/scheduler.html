@@ -2,16 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meeting Scheduler</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <!-- Styles -->
-    <link rel="stylesheet" href="scheduler.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/rooms/meetingscheduler/scheduler.css" />
   </head>
   <body>
-    <!-- Blurred background image slot -->
     <div class="bg-blur-image"></div>
 
     <div class="scheduler-wrapper animated-gradient-bg">
@@ -22,16 +24,31 @@
         </h1>
       </header>
 
+      <div class="exit" id="exit-btn">
+        <span class="material-icons">logout</span> Exit
+      </div>
+
       <section class="dashboard">
         <h2>Submitted Availabilities</h2>
         <div id="entries"></div>
+
         <div id="summary" class="summary-section">
+          <div id="suggested-time"></div>
           <div id="suggested-locations"></div>
-          <div id="suggested-time" class="highlight"></div>
+        </div>
+
+        <div class="btn-group">
+          <button
+            id="editAvailabilityBtn"
+            class="edit-btn"
+            style="display: none"
+          >
+            <span class="material-icons">edit</span>
+            Edit Your Availability
+          </button>
         </div>
       </section>
     </div>
-
-    <script type="module" src="scheduler.js"></script>
+    <script src="/rooms/meetingscheduler/scheduler.js"></script>
   </body>
 </html>

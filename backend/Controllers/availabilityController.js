@@ -1,52 +1,80 @@
-import db from '../configs/db_config.js';
+import db from "../configs/db_config.js";
 
-/**
- * GET /availability/:roomId
- * Fetch all availability slots for a given room.
- */
+// GET /availability/:roomId
 export const getAvailabilityByRoom = async (req, res) => {
   const roomId = parseInt(req.params.roomId, 10);
-  if (isNaN(roomId)) {
-    return res.status(400).json({ message: 'Invalid room ID' });
-  }
 
   try {
     const { rows } = await db.query(
-      'SELECT availability_id, user_id, day, time, location, submitted_at FROM availabilities WHERE room_id = $1',
+      `SELECT a.availability_id, a.user_id, u.user_username, a.day, a.start_time, a.end_time, a.location
+       FROM availability a
+       JOIN users u ON a.user_id = u.user_id
+       WHERE a.room_id = $1`,
       [roomId]
     );
-    return res.status(200).json(rows);
+
+    res.status(200).json(rows);
   } catch (err) {
-    console.error('Error fetching availability:', err);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Error fetching availability:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
-/**
- * POST /availability/:roomId
- * Save a new availability slot (must be logged in).
- */
+// POST /availability/:roomId
 export const createAvailability = async (req, res) => {
   const roomId = parseInt(req.params.roomId, 10);
   const userId = req.session.user_id;
+  const { day, start_time, end_time, location } = req.body;
 
-  if (!userId) {
-    return res.status(401).json({ message: 'Not logged in' });
-  }
-  if (!roomId || !req.body.day || !req.body.time || !req.body.location) {
-    return res.status(400).json({ message: 'Missing availability data' });
-  }
+  if (!userId) return res.status(401).json({ message: "Not logged in" });
 
-  const { day, time, location } = req.body;
   try {
-    await db.query(
-      `INSERT INTO availabilities (user_id, room_id, day, time, location)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [userId, roomId, day, time, location]
+    // check if this user already has availability for this room
+    const { rowCount } = await db.query(
+      `SELECT 1 FROM availability WHERE user_id = $1 AND room_id = $2`,
+      [userId, roomId]
     );
-    return res.status(201).json({ message: 'Availability saved' });
+
+    if (rowCount > 0) {
+      // update
+      await db.query(
+        `UPDATE availability SET day = $1, start_time = $2, end_time = $3, location = $4, updated_at = NOW()
+         WHERE user_id = $5 AND room_id = $6`,
+        [day, start_time, end_time, location, userId, roomId]
+      );
+    } else {
+      // insert
+      await db.query(
+        `INSERT INTO availability (user_id, room_id, day, start_time, end_time, location)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [userId, roomId, day, start_time, end_time, location]
+      );
+    }
+
+    res.status(200).json({ message: "Availability saved" });
   } catch (err) {
-    console.error('Error saving availability:', err);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error("Create error:", err);
+    res.status(500).json({ message: "Error saving availability" });
+  }
+};
+
+export const getMyAvailabilityInRoom = async (req, res) => {
+  const userId = req.session.user_id;
+  const roomId = parseInt(req.params.roomId, 10);
+
+  if (!userId) return res.status(401).json({ message: "Not logged in" });
+
+  try {
+    const { rows } = await db.query(
+      `SELECT day, start_time, end_time, location
+   FROM availability
+   WHERE user_id = $1 AND room_id = $2`,
+      [userId, roomId]
+    );
+
+    res.status(200).json(rows[0] || null);
+  } catch (err) {
+    console.error("Fetch error:", err);
+    res.status(500).json({ message: "Error loading availability" });
   }
 };
