@@ -37,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await res.json();
 
       if (res.ok) {
-        // Redirect to dashboard
+        // ✅ Set flag BEFORE redirect
+        sessionStorage.setItem("justLoggedIn", "true");
         window.location.href = "/Dashboard/dashboard.html";
       } else {
         // Show error modal

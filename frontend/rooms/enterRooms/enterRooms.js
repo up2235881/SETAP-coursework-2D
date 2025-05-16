@@ -69,3 +69,11 @@ window.addEventListener("keydown", (e) => {
   if (modal.style.display === "flex" && e.key === "Escape")
     modal.style.display = "none";
 });
+
+const exitBtn = document.getElementById("exitBtn");
+
+if (exitBtn) {
+  exitBtn.onclick = () => {
+    window.location.href = "/Dashboard/dashboard.html"; // ✅ change to your actual dashboard path
+  };
+}

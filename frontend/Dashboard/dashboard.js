@@ -49,20 +49,11 @@ fetch("/api/users/me", { credentials: "include" })
       }
       return;
     }
-
-    const welcomeKey = "slotify-welcomed-" + userId;
-    const firstVisit = !localStorage.getItem(welcomeKey);
-    if (firstVisit) {
-      welcomeModalTitle.textContent = `Welcome to Slotify, ${username}!`;
-      welcomeModalBody.textContent = `We hope you enjoy.`;
-      localStorage.setItem(welcomeKey, "1");
-    } else {
+    if (sessionStorage.getItem("justLoggedIn") === "true") {
       welcomeModalTitle.textContent = `Welcome back to Slotify, ${username}!`;
       welcomeModalBody.textContent = "";
-    }
-    welcomeModal.style.display = "flex";
-    if (welcomeModalOk) {
-      welcomeModalOk.onclick = () => (welcomeModal.style.display = "none");
+      welcomeModal.style.display = "flex";
+      sessionStorage.removeItem("justLoggedIn");
     }
 
     window.SLOTIFY_USER_ID = userId;

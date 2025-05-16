@@ -139,16 +139,16 @@ confirmCancelBtn.onclick = () => {
 
 confirmOkBtn.onclick = () => {
   const location = confirmLocationInput.value || mostCommonPlace;
-  const [day, start_time] = mostCommonTime.split(" ");
+  const [day, time] = mostCommonTime.split(" ");
 
-  fetch("/meeting/confirm", {
+  fetch("/api/meeting/confirm", {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      room_id: roomId,
+      roomId: roomId,
       day: day,
-      start_time: start_time,
+      time: time,
       location: location,
     }),
   })
@@ -159,15 +159,13 @@ confirmOkBtn.onclick = () => {
     .then((confirmedMeeting) => {
       confirmModal.style.display = "none";
       confirmedModal.style.display = "flex";
-
       confirmedBanner.style.display = "flex";
       document.getElementById(
         "confirmedText"
-      ).textContent = `✅ Meeting at ${confirmedMeeting.day} ${confirmedMeeting.start_time} @ ${confirmedMeeting.location}`;
+      ).textContent = `✅ Meeting at ${confirmedMeeting.day} ${confirmedMeeting.time} @ ${confirmedMeeting.location}`;
     })
     .catch((err) => {
       console.error("Confirm failed:", err);
-      alert("Something went wrong confirming the meeting.");
     });
 };
 
