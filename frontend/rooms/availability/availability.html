@@ -4,16 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Availability</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <!-- Styles -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./rooms/availability/availability.css" />
   </head>
   <body>
-    <!-- Blurred background image -->
     <div class="bg-blur-image"></div>
-
     <div class="availability-container animated-gradient-bg">
       <header class="top-bar">
         <div class="back-button" onclick="window.history.back()">
@@ -25,41 +27,27 @@
         </h1>
       </header>
 
-      <form class="availability-form" id="availability-form">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" placeholder="Enter your name" required />
-
-        <label for="day">Select Day</label>
+      <form id="availability-form">
+        <input type="text" id="name" placeholder="Your Name" required />
         <select id="day" required>
-          <option value="">Choose a day</option>
-          <option>Monday</option>
-          <option>Tuesday</option>
-          <option>Wednesday</option>
-          <option>Thursday</option>
-          <option>Friday</option>
+          <option value="">Select Day</option>
+          <option value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
         </select>
-
-        <label for="time">Select Time</label>
         <select id="time" required>
-          <option value="">Choose a time</option>
-          <option>09:00 AM</option>
-          <option>10:00 AM</option>
-          <option>11:00 AM</option>
-          <option>12:00 PM</option>
-          <option>01:00 PM</option>
-          <option>02:00 PM</option>
-          <option>03:00 PM</option>
-          <option>04:00 PM</option>
+          <option value="">Select Time</option>
+          <option value="09:00">09:00</option>
+          <option value="12:00">12:00</option>
+          <option value="15:00">15:00</option>
         </select>
-
-        <label for="location">Location</label>
-        <input type="text" id="location" placeholder="Enter location" required />
-
-        <button type="submit" class="submit-btn">
-          <span class="material-icons">send</span> Submit
-        </button>
+        <input type="text" id="location" placeholder="Location" required />
+        <button type="submit" class="submit-btn">Submit Availability</button>
       </form>
     </div>
-    <script type="module" src="availability.js"></script>
+
+    <script src="availability.js"></script>
   </body>
 </html>

@@ -2,16 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meeting Scheduler</title>
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <!-- Styles -->
     <link rel="stylesheet" href="scheduler.css" />
   </head>
   <body>
-    <!-- Blurred background image slot -->
     <div class="bg-blur-image"></div>
 
     <div class="scheduler-wrapper animated-gradient-bg">
@@ -26,12 +22,12 @@
         <h2>Submitted Availabilities</h2>
         <div id="entries"></div>
         <div id="summary" class="summary-section">
+          <div id="suggested-time"></div>
           <div id="suggested-locations"></div>
-          <div id="suggested-time" class="highlight"></div>
         </div>
       </section>
     </div>
 
-    <script type="module" src="scheduler.js"></script>
+    <script src="scheduler.js"></script>
   </body>
 </html>

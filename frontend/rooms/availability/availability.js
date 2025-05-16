@@ -4,7 +4,6 @@ const daySelect = document.querySelector("#day");
 const timeSelect = document.querySelector("#time");
 const locationInput = document.querySelector("#location");
 
-// 🔍 Get roomId from URL
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("roomId");
 
@@ -14,7 +13,7 @@ if (!roomId) {
   throw new Error("Missing roomId");
 }
 
-// ⏎ Load existing availability
+// Load existing availability if any
 fetch(`/api/availability/${roomId}/me`, { credentials: "include" })
   .then((res) => res.json())
   .then((data) => {
@@ -29,44 +28,27 @@ fetch(`/api/availability/${roomId}/me`, { credentials: "include" })
     console.error("Failed to load availability:", err);
   });
 
-// 📨 Submit availability
+// Submit availability
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const name = nameInput.value.trim();
   const day = daySelect.value;
   const time = timeSelect.value;
-  const location = locationInput.value.trim();
+  const location = locationInput.value;
 
-  if (!name || !day || !time || !location) {
-    return alert("Please fill out all fields");
-  }
-
-  fetch("/api/availability/submit", {
+  fetch(`/api/availability/${roomId}`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ roomId, name, day, time, location }),
+    body: JSON.stringify({ day, time, location }),
   })
     .then((res) => res.json())
-    .then((data) => {
-      alert("Availability submitted successfully!");
-      showSchedulerButton();
+    .then(() => {
+      alert("✅ Availability submitted!");
+      window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
     })
     .catch((err) => {
-      console.error("Submission error:", err);
-      alert("Failed to submit availability.");
+      console.error("Error submitting:", err);
+      alert("❌ Submission failed.");
     });
 });
-
-// 👀 Show button to view the scheduler after submission
-function showSchedulerButton() {
-  const btn = document.createElement("button");
-  btn.textContent = "View in Meeting Scheduler";
-  btn.classList.add("submit-btn");
-  btn.style.marginTop = "20px";
-  btn.onclick = () => {
-    window.location.href = `/rooms/meetingscheduler/scheduler.html?roomId=${roomId}`;
-  };
-  form.appendChild(btn);
-}
