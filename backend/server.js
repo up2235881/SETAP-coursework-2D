@@ -22,7 +22,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const HOST = config.HOST || "localhost";
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.HOST || 5000;
 
 // ─── SERVE FRONTEND STATIC ASSETS ─────────────────────────────────────────────
 app.use(express.static("../frontend", { extensions: ["html"] }));

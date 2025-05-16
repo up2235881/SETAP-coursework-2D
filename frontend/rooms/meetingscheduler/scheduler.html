@@ -46,47 +46,9 @@
             <span class="material-icons">edit</span>
             Edit Your Availability
           </button>
-
-          <!-- 🔘 Confirm meeting button -->
-          <button
-            id="confirmMeetingBtn"
-            class="submit-btn"
-            style="display: none"
-          >
-            <span class="material-icons">check_circle</span>
-            Confirm Meeting
-          </button>
         </div>
       </section>
     </div>
-
-    <!-- 🟩 Confirm meeting modal -->
-    <div id="confirmModal" class="modal-overlay" style="display: none">
-      <div class="modal-box">
-        <p id="confirmPromptText">Have meeting at Tuesday 10:00?</p>
-        <input
-          id="confirmLocationInput"
-          type="text"
-          placeholder="Most suggested location"
-          class="modal-location-input"
-        />
-        <div class="modal-actions">
-          <button id="confirmOkBtn" class="yes-btn">OK</button>
-          <button id="confirmCancelBtn" class="cancel-btn">Cancel</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ✅ Meeting confirmed modal -->
-    <div id="confirmedModal" class="modal-overlay" style="display: none">
-      <div class="modal-box">
-        <p>✅ Meeting Confirmed!</p>
-        <div class="modal-actions">
-          <button id="confirmedCloseBtn" class="yes-btn">Close</button>
-        </div>
-      </div>
-    </div>
-
     <script src="/rooms/meetingscheduler/scheduler.js"></script>
   </body>
 </html>

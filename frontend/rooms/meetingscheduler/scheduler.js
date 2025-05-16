@@ -118,17 +118,3 @@ function suggestMeeting(entries) {
     ].join(", ")}`;
   }
 }
-
-// ✅ Show confirm button for creator if 2+ entries
-function showConfirmIfEligible(entries) {
-  if (entries.length >= 2 && currentUserId === roomCreatorId) {
-    confirmBtn.style.display = "inline-flex";
-    confirmBtn.onclick = () => {
-      confirmPromptText.textContent = `Have meeting at ${mostCommonTime}?`;
-      confirmLocationInput.placeholder = mostCommonPlace;
-      confirmLocationInput.value = "";
-      confirmModal.style.display = "flex";
-    };
-  }
-}
-
