@@ -48,23 +48,8 @@ if (roomId && confirmedDisplay) {
     });
 }
 
-// --- Add Participants Modal Logic ---
-const addBtn = document.getElementById("addParticipantsBtn");
-const modal = document.getElementById("addParticipantsModal");
-const confirmBtn = document.getElementById("confirmAddFriend");
-const cancelBtn = document.getElementById("cancelAddFriend");
-const input = document.getElementById("friend-username");
 
-addBtn.onclick = () => {
-  modal.style.display = "flex";
-  input.value = "";
-  input.focus();
-};
-cancelBtn.onclick = () => (modal.style.display = "none");
-confirmBtn.onclick = () => {
-  alert("Friend added: " + input.value);
-  modal.style.display = "none";
-};
+
 window.addEventListener("keydown", (e) => {
   if (modal.style.display === "flex" && e.key === "Escape")
     modal.style.display = "none";

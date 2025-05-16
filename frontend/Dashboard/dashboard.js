@@ -297,3 +297,7 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
       alert("An error occurred.");
     });
 });
+
+welcomeModalOk.addEventListener("click", () => {
+  welcomeModal.style.display = "none";
+});

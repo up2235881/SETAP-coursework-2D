@@ -13,13 +13,13 @@ dotenv.config({
 });
 
 const config = {
-  DB_URL: process.env.DATABASE_URL || process.env.DATABASE_PUBLIC_URL,
-  DB_USER: process.env.DB_USER,
-  DB_HOST: process.env.DB_HOST,
-  DB_NAME: process.env.DB_NAME,
-  DB_PASSWORD: process.env.DB_PASSWORD,
-  DB_PORT: process.env.DB_PORT,
-  API_URL: process.env.API_URL,
+  DB_URL: config.HOST.DATABASE_URL || config.HOST.DATABASE_PUBLIC_URL,
+  DB_USER: config.HOST.DB_USER,
+  DB_HOST: config.HOST.DB_HOST,
+  DB_NAME: config.HOST.DB_NAME,
+  DB_PASSWORD: config.HOST.DB_PASSWORD,
+  DB_PORT: config.HOST.DB_PORT,
+  API_URL: config.HOST.API_URL,
 };
 
 export default config;

@@ -220,20 +220,7 @@ select {
   color: #4a148c;
 }
 
-.confirmed-banner {
-  background-color: #d1ffd1;
-  color: #2e7d32;
-  font-weight: bold;
-  font-size: 16px;
-  border-radius: 8px;
-  padding: 14px 18px;
-  margin: 20px auto -20px auto;
-  max-width: 800px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
-}
+
 
 .modal-location-input {
   width: 100%;
