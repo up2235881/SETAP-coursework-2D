@@ -259,8 +259,8 @@ document.addEventListener("click", (e) => {
   }
 });
 
-let selectedRoomCard = null;
 let selectedRoomId = null;
+let selectedRoomCard = null;
 
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete-room-btn")) {
@@ -298,7 +298,3 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
       alert("An error occurred.");
     });
 });
-
-function closeDeleteModal() {
-  document.getElementById("deleteRoomModal").style.display = "none";
-}
