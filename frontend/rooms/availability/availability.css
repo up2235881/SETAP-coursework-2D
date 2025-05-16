@@ -151,3 +151,30 @@ select {
     font-size: 19px;
   }
 }
+
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.modal-btn.danger {
+  background: #e53935;
+  color: white;
+}
+.form-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}

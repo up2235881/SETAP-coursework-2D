@@ -1,54 +1,81 @@
 const form = document.querySelector("#availability-form");
-const nameInput = document.querySelector("#name");
 const daySelect = document.querySelector("#day");
-const timeSelect = document.querySelector("#time");
+const startSelect = document.querySelector("#start_time");
+const endSelect = document.querySelector("#end_time");
 const locationInput = document.querySelector("#location");
+
+const successModal = document.getElementById("successModal");
+const errorModal = document.getElementById("errorModal");
+const errorMessage = document.getElementById("errorMessage");
+
+// ✅ Fix these missing buttons:
+const viewSchedulerBtn = document.getElementById("viewSchedulerBtn");
+const successExitBtn = document.getElementById("successExitBtn");
+const errorOkBtn = document.getElementById("errorOkBtn");
 
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("roomId");
 
 if (!roomId) {
-  alert("Room ID is missing. Please access this page via a room link.");
+  showError("Room ID is missing. Please access this page via a room link.");
   form.style.display = "none";
   throw new Error("Missing roomId");
 }
 
-// Load existing availability if any
+function showError(message) {
+  errorMessage.textContent = message;
+  errorModal.style.display = "flex";
+}
+
+function showSuccessModal() {
+  successModal.style.display = "flex";
+
+  viewSchedulerBtn.onclick = () => {
+    window.location.href = `/rooms/meetingscheduler/scheduler.html?roomId=${roomId}`;
+  };
+
+  successExitBtn.onclick = () => {
+    successModal.style.display = "none";
+    window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
+  };
+}
+
+sessionStorage.removeItem("justLoggedIn");
+
+// Load existing availability
 fetch(`/api/availability/${roomId}/me`, { credentials: "include" })
   .then((res) => res.json())
   .then((data) => {
     if (data) {
-      nameInput.value = data.name || "";
       daySelect.value = data.day;
-      timeSelect.value = data.time;
+      startSelect.value = data.start_time;
+      endSelect.value = data.end_time;
       locationInput.value = data.location;
     }
-  })
-  .catch((err) => {
-    console.error("Failed to load availability:", err);
   });
 
-// Submit availability
+// Submit
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const day = daySelect.value;
-  const time = timeSelect.value;
+  const start_time = startSelect.value;
+  const end_time = endSelect.value;
   const location = locationInput.value;
 
   fetch(`/api/availability/${roomId}`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ day, time, location }),
+    body: JSON.stringify({ day, start_time, end_time, location }),
   })
     .then((res) => res.json())
     .then(() => {
-      alert("✅ Availability submitted!");
-      window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
+      // show success modal (your existing logic)
+      showSuccessModal();
     })
     .catch((err) => {
-      console.error("Error submitting:", err);
-      alert("❌ Submission failed.");
+      console.error("Submit error:", err);
+      showError("Could not submit availability.");
     });
 });
