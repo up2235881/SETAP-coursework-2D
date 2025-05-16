@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const HOST = process.env.HOST || "localhost";
+const HOST = config.HOST || "localhost";
 const PORT = process.env.PORT || 5000;
 
 // ─── SERVE FRONTEND STATIC ASSETS ─────────────────────────────────────────────
