@@ -3,22 +3,20 @@ import db from "../configs/db_config.js";
 // GET /availability/:roomId
 export const getAvailabilityByRoom = async (req, res) => {
   const roomId = parseInt(req.params.roomId, 10);
-  if (isNaN(roomId)) {
-    return res.status(400).json({ message: "Invalid room ID" });
-  }
 
   try {
     const { rows } = await db.query(
-      `SELECT availability_id, user_id, day, start_time, end_time, location, created_at
-FROM availability
-WHERE room_id = $1
-`,
+      `SELECT a.availability_id, a.user_id, u.user_username, a.day, a.start_time, a.end_time, a.location
+       FROM availability a
+       JOIN users u ON a.user_id = u.user_id
+       WHERE a.room_id = $1`,
       [roomId]
     );
-    return res.status(200).json(rows);
+
+    res.status(200).json(rows);
   } catch (err) {
     console.error("Error fetching availability:", err);
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 

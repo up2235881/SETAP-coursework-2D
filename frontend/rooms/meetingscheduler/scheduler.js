@@ -54,7 +54,7 @@ function renderEntries(entries) {
     const div = document.createElement("div");
     div.classList.add("entry");
     const timeRange = `${entry.start_time} - ${entry.end_time}`;
-    div.textContent = `🕒 ${entry.day}, ${timeRange} @ ${entry.location}`;
+    div.textContent = `👤 ${entry.user_username} — 🕒 ${entry.day}, ${timeRange} @ ${entry.location}`;
     entriesContainer.appendChild(div);
   });
 }
@@ -72,8 +72,16 @@ function suggestMeeting(entries) {
   const sorted = Object.entries(countMap).sort((a, b) => b[1] - a[1]);
   if (sorted.length > 0) {
     const [bestSlot, count] = sorted[0];
-    suggestedTime.textContent = `📌 Suggested: ${bestSlot} (${count} vote${count > 1 ? "s" : ""})`;
+    suggestedTime.textContent = `📌 Suggested: ${bestSlot} (${count} vote${
+      count > 1 ? "s" : ""
+    })`;
   }
 
-  suggestedLocations.textContent = `📍 Suggested Locations: ${[...locations].join(", ")}`;
+  suggestedLocations.textContent = `📍 Suggested Locations: ${[
+    ...locations,
+  ].join(", ")}`;
 }
+
+document.getElementById("exit-btn").onclick = () => {
+  window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
+};

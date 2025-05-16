@@ -246,3 +246,22 @@ select {
   font-weight: 600;
   cursor: pointer;
 }
+
+.exit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #722fbb;
+  transition: color 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.exit .material-icons {
+  font-size: 24px;
+}
+
+.exit:hover {
+  color: #4a148c;
+}

@@ -201,3 +201,21 @@ select {
 .edit-btn:hover {
   background-color: #d81b60;
 }
+
+.exit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #722fbb;
+  transition: color 0.3s ease;
+}
+
+.exit .material-icons {
+  font-size: 24px;
+}
+
+.exit:hover {
+  color: #4a148c;
+}

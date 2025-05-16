@@ -18,6 +18,12 @@
 
     <div class="scheduler-wrapper animated-gradient-bg">
       <header class="top-bar">
+        <!-- ✅ Cute Exit Button (same style as enterRooms.html) -->
+        <div class="exit" id="exit-btn">
+          <span class="material-icons">logout</span>
+          <span>Exit</span>
+        </div>
+
         <h1>
           <span class="material-icons gradient-icon">event</span>
           Meeting Scheduler
@@ -27,22 +33,24 @@
       <section class="dashboard">
         <h2>Submitted Availabilities</h2>
         <div id="entries"></div>
+
         <div id="summary" class="summary-section">
           <div id="suggested-time"></div>
           <div id="suggested-locations"></div>
         </div>
+
+        <div class="btn-group">
+          <button
+            id="editAvailabilityBtn"
+            class="edit-btn"
+            style="display: none"
+          >
+            <span class="material-icons">edit</span>
+            Edit Your Availability
+          </button>
+        </div>
       </section>
     </div>
-    <div class="btn-group">
-  <button
-    id="editAvailabilityBtn"
-    class="edit-btn"
-    style="display: none;"
-  >
-    <span class="material-icons">edit</span>
-    Edit Your Availability
-  </button>
-</div>
 
     <script src="/rooms/meetingscheduler/scheduler.js"></script>
   </body>

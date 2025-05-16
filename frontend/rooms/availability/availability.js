@@ -7,8 +7,6 @@ const locationInput = document.querySelector("#location");
 const successModal = document.getElementById("successModal");
 const errorModal = document.getElementById("errorModal");
 const errorMessage = document.getElementById("errorMessage");
-
-// ✅ Fix these missing buttons:
 const viewSchedulerBtn = document.getElementById("viewSchedulerBtn");
 const successExitBtn = document.getElementById("successExitBtn");
 const errorOkBtn = document.getElementById("errorOkBtn");
@@ -22,41 +20,29 @@ if (!roomId) {
   throw new Error("Missing roomId");
 }
 
+document.getElementById("exitButton").onclick = () => {
+  window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
+};
+
 function showError(message) {
   errorMessage.textContent = message;
   errorModal.style.display = "flex";
 }
 
 function showSuccessModal() {
-  const successModal = document.getElementById("successModal");
+  successModal.style.display = "flex";
 
-  // Wrap in setTimeout to ensure DOM is fully rendered
-  setTimeout(() => {
-    const yesBtn = document.getElementById("successYesBtn");
-    const cancelBtn = document.getElementById("successCancelBtn");
+  viewSchedulerBtn.onclick = () => {
+    const timestamp = Date.now(); // force reload
+    window.location.href = `/rooms/meetingscheduler/scheduler.html?roomId=${roomId}&t=${timestamp}`;
+  };
 
-    if (!yesBtn || !cancelBtn || !successModal) {
-      console.error("Modal or buttons not found in DOM.");
-      return;
-    }
-
-    successModal.style.display = "flex";
-
-    yesBtn.onclick = () => {
-      successModal.style.display = "none";
-      window.location.href = `/rooms/meetingscheduler/scheduler.html?roomId=${roomId}`;
-    };
-
-    cancelBtn.onclick = () => {
-      successModal.style.display = "none";
-      window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
-    };
-  }, 0); // Let the browser finish rendering
+  successExitBtn.onclick = () => {
+    successModal.style.display = "none";
+    window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
+  };
 }
 
-sessionStorage.removeItem("justLoggedIn");
-
-// Load existing availability
 const isEditMode = urlParams.get("edit") === "true";
 
 if (isEditMode) {
@@ -75,7 +61,6 @@ if (isEditMode) {
     });
 }
 
-// Submit
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -91,7 +76,10 @@ form.addEventListener("submit", (e) => {
     body: JSON.stringify({ day, start_time, end_time, location }),
   })
     .then((res) => {
-      if (!res.ok) throw new Error("Server responded with error");
+      if (!res.ok) {
+        if (res.status === 401) throw new Error("You are not logged in.");
+        throw new Error("Server responded with error");
+      }
       return res.json();
     })
     .then(() => {
