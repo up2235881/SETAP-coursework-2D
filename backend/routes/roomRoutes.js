@@ -6,7 +6,8 @@ import {
   getRoomCreator,
   getRoomsByUserId,
   getRoomInfo,
-  updateRoomTheme
+  updateRoomTheme,
+  leaveRoom,
 } from "../Controllers/roomController.js";
 
 const router = express.Router();
@@ -18,12 +19,13 @@ router.post("/create", createRoom);
 // Join by invite code
 router.post("/join", joinRoom);
 
-
 // List members of a room
 router.get("/:roomId/users", listRoomUsers);
 
 // Get the creator of a room
 router.get("/:roomId/creator", getRoomCreator);
+
+router.delete("/:id/leave", leaveRoom);
 
 router.get("/:roomId", getRoomInfo);
 
@@ -31,3 +33,5 @@ router.get("/:roomId/users", listRoomUsers);
 
 router.patch("/:roomId/theme", updateRoomTheme);
 export default router;
+
+

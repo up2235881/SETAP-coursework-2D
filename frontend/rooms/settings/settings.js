@@ -91,6 +91,6 @@ confirmLogout.onclick = () => {
   success.style.display = "flex";
 
   setTimeout(() => {
-    window.location.href = "/frontend/landinpage/index.html"; // ✅ updated
+    window.location.href = "../../landingpage/index.html";
   }, 2000);
 };

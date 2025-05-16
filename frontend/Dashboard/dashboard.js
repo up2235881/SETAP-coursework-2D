@@ -94,15 +94,20 @@ function loadRooms(userId) {
       rooms.forEach((room) => {
         const card = document.createElement("div");
         card.classList.add("card");
+        card.classList.add("room-card"); // for delete targeting
+
         card.innerHTML = `
-          <h3>${room.room_name}</h3>
-          <p>Code: ${room.invite_code || ""}</p>
-          <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${
-            room.room_id
-          }'">
-            <span class="material-icons">meeting_room</span> Enter
-          </button>
-        `;
+    <h3>${room.room_name}</h3>
+    <div class="room-actions">
+      <button class="submit-btn" onclick="window.location.href='/rooms/enterRooms/enterRooms.html?roomId=${room.room_id}'">
+        <span class="material-icons">meeting_room</span> Enter
+      </button>
+      <button class="submit-btn delete-room-btn" data-room-id="${room.room_id}">
+        <span class="material-icons">delete</span> Delete
+      </button>
+    </div>
+  `;
+
         roomsContainer.appendChild(card);
       });
     })
@@ -211,3 +216,89 @@ joinForm.addEventListener("submit", (e) => {
       alert(err.message);
     });
 });
+
+// Logout modal handlers
+const logoutBtn = document.getElementById("logout-button");
+const logoutModal = document.getElementById("logoutModal");
+const logoutSuccessModal = document.getElementById("logoutSuccessModal");
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    logoutModal.style.display = "flex";
+  });
+}
+
+window.closeLogoutModal = function () {
+  logoutModal.style.display = "none";
+};
+
+window.confirmLogout = function () {
+  logoutModal.style.display = "none";
+  logoutSuccessModal.style.display = "flex";
+  setTimeout(() => {
+    window.location.href = "../../landingpage/index.html";
+  }, 2000);
+};
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-room-btn")) {
+    const roomId = e.target.dataset.roomId;
+    fetch(`/api/rooms/${roomId}/leave`, {
+      method: "DELETE",
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.ok) {
+          e.target.closest(".room-card").remove();
+        } else {
+          alert("Failed to leave room.");
+        }
+      })
+      .catch(() => alert("An error occurred."));
+  }
+});
+
+let selectedRoomCard = null;
+let selectedRoomId = null;
+
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-room-btn")) {
+    selectedRoomCard = e.target.closest(".room-card");
+    selectedRoomId = e.target.dataset.roomId;
+    document.getElementById("deleteRoomModal").style.display = "flex";
+  }
+});
+
+function closeDeleteModal() {
+  document.getElementById("deleteRoomModal").style.display = "none";
+}
+
+document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+  if (!selectedRoomId || !selectedRoomCard) return;
+
+  fetch(`/api/rooms/${selectedRoomId}/leave`, {
+    method: "DELETE",
+    credentials: "include",
+  })
+    .then((res) => {
+      if (res.ok) {
+        selectedRoomCard.remove();
+        document.getElementById("deleteRoomModal").style.display = "none";
+        document.getElementById("deleteSuccessModal").style.display = "flex";
+        setTimeout(() => {
+          document.getElementById("deleteSuccessModal").style.display = "none";
+        }, 2000);
+      } else {
+        alert("Failed to leave room.");
+      }
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+      alert("An error occurred.");
+    });
+});
+
+function closeDeleteModal() {
+  document.getElementById("deleteRoomModal").style.display = "none";
+}
