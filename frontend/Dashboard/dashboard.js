@@ -262,6 +262,7 @@ document.addEventListener("click", (e) => {
 let selectedRoomId = null;
 let selectedRoomCard = null;
 
+// capture selected room, then wait for user confirmation
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete-room-btn")) {
     selectedRoomCard = e.target.closest(".room-card");

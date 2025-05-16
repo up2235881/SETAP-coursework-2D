@@ -205,49 +205,6 @@ export const updateRoomTheme = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
-let selectedRoomId = null;
-let selectedRoomCard = null;
-
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete-room-btn")) {
-    selectedRoomCard = e.target.closest(".room-card");
-    selectedRoomId = e.target.dataset.roomId;
-    document.getElementById("deleteRoomModal").style.display = "flex";
-  }
-});
-
-function closeDeleteModal() {
-  document.getElementById("deleteRoomModal").style.display = "none";
-}
-
-document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
-  if (!selectedRoomId || !selectedRoomCard) return;
-
-  fetch(`/api/rooms/${selectedRoomId}/leave`, {
-    method: "DELETE",
-    credentials: "include",
-  })
-    .then((res) => {
-      if (res.ok) {
-        selectedRoomCard.remove();
-        document.getElementById("deleteRoomModal").style.display = "none";
-        document.getElementById("deleteSuccessModal").style.display = "flex";
-        setTimeout(() => {
-          document.getElementById("deleteSuccessModal").style.display = "none";
-        }, 2000);
-      } else {
-        alert("Failed to leave room.");
-      }
-    })
-    .catch((err) => {
-      console.error("Error:", err);
-      alert("An error occurred.");
-    });
-});
-
-import db from "../configs/db_config.js";
-
 export async function leaveRoom(req, res) {
   const userId = req.session.userId;
   const roomId = req.params.roomId;
