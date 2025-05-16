@@ -5,7 +5,7 @@ import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
 import db from "./configs/db_config.js";
-import config from "./config.js";
+import config from "../config.js";
 
 import availabilityRoute from "./routes/availabilityRoute.js";
 import dashboardRoute from "./routes/dashboardRoutes.js";
