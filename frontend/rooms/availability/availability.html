@@ -18,7 +18,7 @@
     <div class="bg-blur-image"></div>
     <div class="availability-container animated-gradient-bg">
       <header class="top-bar">
-        <div class="exit-button" onclick="handleExit()">
+        <div class="exit-button">
           <span class="material-icons">logout</span> Exit
         </div>
 
@@ -68,28 +68,31 @@
       </form>
     </div>
 
+
+    <!-- Success Modal -->
+    <section id="successModal" style="display: none" class="modal-overlay">
+      <section class="modal-box">
+        <p>
+          Availability inputted successfully. Do you wish to see it in meeting
+          scheduler?
+        </p>
+        <section class="modal-actions">
+          <button id="successYesBtn" class="yes-btn">Yes</button>
+          <button id="successCancelBtn" class="cancel-btn">Cancel</button>
+        </section>
+      </section>
+    </section>
+
     <!-- Error Modal -->
-    <div id="errorModal" class="modal-overlay" style="display: none">
-      <div class="modal">
-        <div class="modal-title" style="color: #e53935">Error</div>
-        <div class="modal-body" id="errorMessage">Something went wrong.</div>
-        <button id="errorOkBtn" class="modal-btn">OK</button>
-      </div>
-    </div>
-    <div id="successModal" class="modal-overlay" style="display: none">
-      <div class="modal">
-        <div class="modal-title">Success</div>
-        <div class="modal-body">
-          ✅ Availability submitted! Do you want to view it in the Scheduler?
-        </div>
-        <div class="modal-footer">
-          <button id="viewSchedulerBtn" class="modal-btn">
-            View in Scheduler
-          </button>
-          <button id="successExitBtn" class="modal-btn danger">Exit</button>
-        </div>
-      </div>
-    </div>
+    <section id="errorModal" style="display: none" class="modal-overlay">
+      <section class="modal-content">
+        <h2>Error</h2>
+        <p id="errorMessage">Something went wrong</p>
+        <section class="modal-actions">
+          <button id="errorOkBtn">Okay</button>
+        </section>
+      </section>
+    </section>
 
     <script src="/rooms/availability/availability.js"></script>
   </body>

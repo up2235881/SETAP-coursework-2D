@@ -28,16 +28,30 @@ function showError(message) {
 }
 
 function showSuccessModal() {
-  successModal.style.display = "flex";
+  const successModal = document.getElementById("successModal");
 
-  viewSchedulerBtn.onclick = () => {
-    window.location.href = `/rooms/meetingscheduler/scheduler.html?roomId=${roomId}`;
-  };
+  // Wrap in setTimeout to ensure DOM is fully rendered
+  setTimeout(() => {
+    const yesBtn = document.getElementById("successYesBtn");
+    const cancelBtn = document.getElementById("successCancelBtn");
 
-  successExitBtn.onclick = () => {
-    successModal.style.display = "none";
-    window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
-  };
+    if (!yesBtn || !cancelBtn || !successModal) {
+      console.error("Modal or buttons not found in DOM.");
+      return;
+    }
+
+    successModal.style.display = "flex";
+
+    yesBtn.onclick = () => {
+      successModal.style.display = "none";
+      window.location.href = `/rooms/meetingscheduler/scheduler.html?roomId=${roomId}`;
+    };
+
+    cancelBtn.onclick = () => {
+      successModal.style.display = "none";
+      window.location.href = `/rooms/enterRooms/enterRooms.html?roomId=${roomId}`;
+    };
+  }, 0); // Let the browser finish rendering
 }
 
 sessionStorage.removeItem("justLoggedIn");
