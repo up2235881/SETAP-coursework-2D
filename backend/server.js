@@ -8,8 +8,6 @@ import db from "./configs/db_config.js";
 import config from "../config.js";
 
 import availabilityRoute from "./routes/availabilityRoute.js";
-import meetingRoute from "./routes/meetingRoutes.js";
-import notesRoute from "./routes/notesRoutes.js";
 import dashboardRoute from "./routes/dashboardRoutes.js";
 import roomRoute from "./routes/roomRoutes.js";
 import userRoute from "./routes/userRoutes.js";
